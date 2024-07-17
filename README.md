@@ -45,7 +45,7 @@ Before you begin, ensure you have the following installed:
 
 4. Prebuild the native project optimized for TV:
    ```
-   export EXPO_TV=1; npx npx expo prebuild 
+   export EXPO_TV=1; npx expo prebuild 
    ```
 5. Copy the Podfile for tvOS
    ```
