@@ -90,6 +90,8 @@ Stay Tuned for more!
 If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](../../issues).
 
 If you have questions, comments, or need help with code, we're here to help:
+
+- Join the [Amazon Developer community](https://community.amazondeveloper.com/c/amazon-appstore/17)
 - on Twitter at [@AmazonAppDev](https://twitter.com/AmazonAppDev)
 - on Stack Overflow at the [amazon-appstore](https://stackoverflow.com/questions/tagged/amazon-appstore) tag
 
