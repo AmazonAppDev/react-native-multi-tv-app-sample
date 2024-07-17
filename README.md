@@ -47,15 +47,6 @@ Before you begin, ensure you have the following installed:
    ```
    export EXPO_TV=1; npx expo prebuild 
    ```
-5. Copy the Podfile for tvOS
-   ```
-   cp Podfile ios/
-   ```
-
-6. Copy the build.gradle for Android TV and Fire Tv
-   ```
-   cp build.gradle android 
-   ```
 
 ## 📱 Running on Different Platforms
 
