@@ -6,7 +6,7 @@
 
 A versatile TV app developed in React Native, compatible with Android TV, Fire TV, tvOS, and Web. This sample project showcases best practices for TV app UI design and implementation.
 
-![Demo GIF](./demotv.gif)
+![Demo GIF](https://github.com/AmazonAppDev/react-native-multi-tv-app-sample/blob/main/tvdemo.gif)
 
 ## 🌟 Features
 
@@ -72,7 +72,7 @@ Before you begin, ensure you have the following installed:
 
 ## 🛠️ Customization
 
-- **Drawer Navigation**: Modify `./app/components/CustomDrawerContent.tsx` to customize the left-side menu.
+- **Drawer Navigation**: Modify `./components/CustomDrawerContent.tsx` to customize the left-side menu.
 - **Content Grid**: Adjust `./app/(drawer)/index.tsx` to change the layout or style of the content cards.
 - **Detail Screen**: Customize `./app/details.tsx` for different content details display options.
 - **Video Player**: Enhance `./app/player.tsx` to customize the Video Player Screen
