@@ -40,7 +40,7 @@ Before you begin, ensure you have the following installed:
 
 3. Install dependencies:
    ```
-   npm install
+   npm install --legacy-peer-deps
    ```
 
 4. Prebuild the native project optimized for TV:
