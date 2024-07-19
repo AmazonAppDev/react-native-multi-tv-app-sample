@@ -16,12 +16,13 @@ A versatile TV app developed in React Native, compatible with Android TV, Fire T
 - 🦸‍♂️ Dynamic hero image header that follows the focused card
 - 🎬 Detailed content screen
 - 🎥 Video player screen
-- 🎯 Efficient focus management with [React TV Space Navigation](https://github.com/bamlab/react-tv-space-navigation) 
+- 🎯 Efficient focus management with [React TV Space Navigation](https://github.com/bamlab/react-tv-space-navigation)
 - 🔧 Fully customizable screens and components
 
 ## 📋 Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - [Node.js](https://nodejs.org/) (v14 or later)
 - [npm](https://www.npmjs.com/)
 - [JDK 17](https://developer.android.com/build/jdks)
@@ -29,36 +30,45 @@ Before you begin, ensure you have the following installed:
 ## 🚀 Quick Start
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/amazonappdev/react-native-multi-tv-app-sample.git
    ```
 
 2. Navigate to the project directory:
+
    ```
    cd react-native-multi-tv-app-sample
    ```
 
 3. Install dependencies:
+
    ```
-   npm install --legacy-peer-deps
+   npm i
    ```
 
-4. Prebuild the native project optimized for TV:
-   ```
-   export EXPO_TV=1; npx expo prebuild 
-   ```
+## Note
+
+To build the TV version of the project set isTV to be true in your [app.json](./app.json).
+
+```
+ "isTV": true
+```
 
 ## 📱 Running on Different Platforms
 
 ### Android TV / Fire TV
+
 - Ensure you have an Android TV emulator set up or a physical device connected.
 - Run `npx expo run:android --device <Your Device or Emulator>` to build and install the app.
 
 ### tvOS
+
 - Make sure you have Xcode installed with tvOS Simulator.
 - Run `expo run:ios` to build and install the app on the tvOS Simulator.
 
 ### Web
+
 - Run `expo start:web` to start the app in your default web browser.
 
 ## 🛠️ Customization
@@ -92,7 +102,6 @@ Sign up to [stay updated with the developer newsletter](https://m.amazonappservi
 
 - [@efahsl](https://github.com/efahsl)
 - [@giolaq](https://github.com/giolaq)
-
 
 ## 📄 License
 
