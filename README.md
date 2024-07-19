@@ -24,7 +24,7 @@ A versatile TV app developed in React Native, compatible with Android TV, Fire T
 Before you begin, ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (v14 or later)
-- [npm](https://www.npmjs.com/)
+- [yarn](https://yarnpkg.com/)
 - [JDK 17](https://developer.android.com/build/jdks)
 
 ## 🚀 Quick Start
@@ -60,7 +60,7 @@ To build the TV version of the project set isTV to be true in your [app.json](./
 ### Android TV / Fire TV
 
 - Ensure you have an Android TV emulator set up or a physical device connected.
-- Run `npx expo run:android --device <Your Device or Emulator>` to build and install the app.
+- Run `yarn expo run:android --device <Your Device or Emulator>` to build and install the app.
 
 ### tvOS
 
