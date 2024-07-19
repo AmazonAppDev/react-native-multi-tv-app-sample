@@ -44,7 +44,7 @@ Before you begin, ensure you have the following installed:
 3. Install dependencies:
 
    ```
-   npm i
+   yarn
    ```
 
 ## Note
