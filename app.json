@@ -14,7 +14,8 @@
             "topShelf2x": "./assets/tv_icons/icon-1920x720.png",
             "topShelfWide": "./assets/tv_icons/icon-1920x720.png",
             "topShelfWide2x": "./assets/tv_icons/icon-1920x720.png"
-          }
+          },
+          "isTV": true
         }
       ],
       [
