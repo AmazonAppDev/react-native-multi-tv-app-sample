@@ -22,7 +22,7 @@ A versatile TV app developed in React Native, compatible with Android TV, Fire T
 ## 📋 Prerequisites
 
 Before you begin, ensure you have the following installed:
-- [Node.js](https://nodejs.org/) (v14 or later)
+- [Node.js](https://nodejs.org/) (v18 or later)
 - [npm](https://www.npmjs.com/)
 - [JDK 17](https://developer.android.com/build/jdks)
 
