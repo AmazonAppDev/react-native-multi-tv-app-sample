@@ -3,7 +3,7 @@ import { useNavigation, useRouter } from 'expo-router';
 import React, { useCallback, useRef, useState } from 'react';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { useMenuContext } from '../../components/MenuContext';
-import { SpatialNavigationFocusableView, SpatialNavigationRoot, SpatialNavigationScrollView, SpatialNavigationView, SpatialNavigationNode, SpatialNavigationVirtualizedList, SpatialNavigationVirtualizedListRef } from 'react-tv-space-navigation';
+import { SpatialNavigationFocusableView, SpatialNavigationRoot, SpatialNavigationScrollView, SpatialNavigationView, SpatialNavigationNode, SpatialNavigationVirtualizedList, SpatialNavigationVirtualizedListRef, DefaultFocus } from 'react-tv-space-navigation';
 import { Direction } from '@bam.tech/lrud';
 import { scaledPixels } from '@/hooks/useScale';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -103,15 +103,17 @@ export default function IndexScreen() {
       <View style={styles.highlightsContainer}>
         <Text style={styles.highlightsTitle}>{title}</Text>
           <SpatialNavigationNode>
-          <SpatialNavigationVirtualizedList 
-            data={moviesData} 
-            orientation="horizontal" 
-            renderItem={renderItem}
-            itemSize={scaledPixels(425)}
-            numberOfRenderedItems={6}
-            numberOfItemsVisibleOnScreen={4}
-            onEndReachedThresholdItemsNumber={3}
-            />
+          <DefaultFocus>
+            <SpatialNavigationVirtualizedList 
+              data={moviesData} 
+              orientation="horizontal" 
+              renderItem={renderItem}
+              itemSize={scaledPixels(425)}
+              numberOfRenderedItems={6}
+              numberOfItemsVisibleOnScreen={4}
+              onEndReachedThresholdItemsNumber={3}
+              />
+            </DefaultFocus>
           </SpatialNavigationNode>
       </View>
     );

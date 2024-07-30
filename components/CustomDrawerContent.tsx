@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function CustomDrawerContent(props: any) {
   const router = useRouter();
-  const { isOpen: isMenuOpen } = useMenuContext();
+  const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const styles = useDrawerStyles();
   const {top, right, bottom, left} = useSafeAreaInsets();
   const drawerItems = [
@@ -28,7 +28,7 @@ export default function CustomDrawerContent(props: any) {
         {drawerItems.map((item, index) => (
          index === 0 ? (
           <DefaultFocus key={index}>
-            <SpatialNavigationFocusableView onSelect={() => { console.log(item.name); router.push(item.name); }}>
+            <SpatialNavigationFocusableView onSelect={() => { console.log(item.name); toggleMenu(false); router.push(item.name); }}>
               {({ isFocused }) => (
                 <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
                   <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
@@ -37,7 +37,7 @@ export default function CustomDrawerContent(props: any) {
             </SpatialNavigationFocusableView>
           </DefaultFocus>
         ) : (
-          <SpatialNavigationFocusableView key={index} onSelect={() => { console.log(item.name); router.push(item.name); }}>
+          <SpatialNavigationFocusableView key={index} onSelect={() => { console.log(item.name); toggleMenu(false);  router.push(item.name); }}>
             {({ isFocused }) => (
               <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
                 <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
