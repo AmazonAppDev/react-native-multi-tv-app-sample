@@ -7,6 +7,7 @@ import { useCallback, useEffect } from 'react';
 import { MenuProvider } from '../components/MenuContext';
 import { GoBackConfiguration } from './remote-control/GoBackConfiguration';
 
+import "./configureRemoteControl"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
