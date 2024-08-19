@@ -1,0 +1,14 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/laquigi/Projects/repositories/github/react-native-multi-tv-app-sample/logs/.e687568348acb690e0e964520b706c7a6deea344-audit.json",
+    "files": [
+        {
+            "date": 1724084092587,
+            "name": "/Users/laquigi/Projects/repositories/github/react-native-multi-tv-app-sample/logs/keplerCliNative-2024-08-19.log",
+            "hash": "46a7d37ae349f5dec97830e9b9d53bcb"
+        }
+    ]
+}
