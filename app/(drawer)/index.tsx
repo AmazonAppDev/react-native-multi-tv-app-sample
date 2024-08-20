@@ -1,6 +1,6 @@
-import { StyleSheet, ScrollView, ListRenderItemInfo, FlatList, View, Image, ViewToken, Text } from 'react-native';
+import { StyleSheet, FlatList, View, Image, Text } from 'react-native';
 import { useNavigation, useRouter } from 'expo-router';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { useMenuContext } from '../../components/MenuContext';
 import { SpatialNavigationFocusableView, SpatialNavigationRoot, SpatialNavigationScrollView, SpatialNavigationView, SpatialNavigationNode, SpatialNavigationVirtualizedList, SpatialNavigationVirtualizedListRef, DefaultFocus } from 'react-tv-space-navigation';
@@ -25,17 +25,16 @@ export default function IndexScreen() {
   const classicsRef = useRef<SpatialNavigationVirtualizedListRef>(null);
   const hipAndModernRef = useRef<SpatialNavigationVirtualizedListRef>(null);
   const [focusedIndex, setFocusedIndex] = useState(0);
-  const [headerImage, setHeaderImage] = useState(require('@/assets/images/movie.png'));
-  const [headerTitle, setHeaderTitle] = useState("");
-  const [headerDescription, setHeaderDescription] = useState("");
   const isFocused = useIsFocused();
   const isActive = isFocused && !isMenuOpen;
 
-  const renderHeader = () => (
+  const focusedItem = useMemo(() => moviesData[focusedIndex], [focusedIndex]);
+
+  const renderHeader = useCallback(() => (
     <View style={styles.header}>
       <Image 
         style={styles.headerImage}
-        source={headerImage}
+        source={focusedItem.headerImage}
         resizeMode="cover"
       />
       <LinearGradient
@@ -45,11 +44,11 @@ export default function IndexScreen() {
         style={styles.gradient}
       />
       <View style={styles.headerTextContainer}>
-        <Text style={styles.headerTitle}>{headerTitle}</Text>
-        <Text style={styles.headerDescription}>{headerDescription}</Text>
+        <Text style={styles.headerTitle}>{focusedItem.title}</Text>
+        <Text style={styles.headerDescription}>{focusedItem.description}</Text>
       </View>
     </View>
-  );
+  ), [focusedItem, styles]);
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
@@ -62,14 +61,8 @@ export default function IndexScreen() {
     [toggleMenu, focusedIndex, navigation],
   );
 
-  const renderScrollableRow = (title: string, ref: React.RefObject<FlatList>) => {
-    const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      if (viewableItems.length > 0) {
-        setFocusedIndex(viewableItems[0].index || 0);
-      }
-    };
-
-    const renderItem = ({ item, index }: { item: CardData; index: number }) => (
+  const renderScrollableRow = useCallback((title: string, ref: React.RefObject<FlatList>) => {
+    const renderItem = useCallback(({ item, index }: { item: CardData; index: number }) => (
       <SpatialNavigationFocusableView
         onSelect={() => { 
           router.push({
@@ -81,12 +74,7 @@ export default function IndexScreen() {
             }         
            });
         }}
-        onFocus={() => {
-          setFocusedIndex(index);
-          setHeaderImage(item.headerImage);
-          setHeaderTitle(item.title);
-          setHeaderDescription(item.description);
-        }}
+        onFocus={() => setFocusedIndex(index)}
       >
         {({ isFocused }) => (
           <View style={[styles.highlightThumbnail, isFocused && styles.highlightThumbnailFocused]}>
@@ -97,7 +85,7 @@ export default function IndexScreen() {
           </View>
         )}
       </SpatialNavigationFocusableView>
-    );
+    ), [router, styles]);
 
     return (
       <View style={styles.highlightsContainer}>
@@ -117,7 +105,7 @@ export default function IndexScreen() {
           </SpatialNavigationNode>
       </View>
     );
-  };
+  }, [styles]);
 
   return (
     <SpatialNavigationRoot
@@ -136,6 +124,7 @@ export default function IndexScreen() {
     </SpatialNavigationRoot> 
   );
 }
+
 
 const useGridStyles = function () {
   return StyleSheet.create({
