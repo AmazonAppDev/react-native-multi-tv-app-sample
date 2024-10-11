@@ -6,6 +6,8 @@ import { useCallback, useEffect } from 'react';
 
 import { MenuProvider } from '../components/MenuContext';
 import { GoBackConfiguration } from './remote-control/GoBackConfiguration';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '@/components/i18n'; // Initialize i18n
 
 import "./configureRemoteControl"
 
@@ -33,6 +35,7 @@ export default function RootLayout() {
   
   return (
     <MenuProvider>
+    <I18nextProvider i18n={i18n}>
     <ThemeProvider value={DarkTheme}>
     <GoBackConfiguration />
       <Stack>
@@ -42,6 +45,7 @@ export default function RootLayout() {
         <Stack.Screen name="player" />
       </Stack>
     </ThemeProvider>
+    </I18nextProvider>
     </MenuProvider>
   );
 }

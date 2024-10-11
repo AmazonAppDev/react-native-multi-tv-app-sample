@@ -1,0 +1,13 @@
+
+{
+    "drawer": {
+      "index": "Home",
+      "explore": "Explore",
+      "tv": "TV"
+    },
+    "categories": {
+        "trending_movies": "Trending Movies",
+        "classics": "Classics",
+        "hip_and_modern": "Hip and Modern"
+    }
+  }
