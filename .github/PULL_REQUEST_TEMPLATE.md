@@ -39,3 +39,5 @@ Fixes # (issue)
 **Snapshot of the test-cases that are passing:**
 
 **Does this PR introduce a breaking change?** (What changes might users need to make in their application due to this PR?)
+
+"By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of your choice."
