@@ -7,7 +7,7 @@ import { useCallback, useEffect } from 'react';
 import { MenuProvider } from '../components/MenuContext';
 import { GoBackConfiguration } from './remote-control/GoBackConfiguration';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '@/components/i18n'; // Initialize i18n
+import i18n from '@/components/i18n';
 
 import "./configureRemoteControl"
 
