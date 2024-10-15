@@ -1,22 +1,27 @@
 import { scaledPixels } from "@/hooks/useScale";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { View, StyleSheet, Image, Platform, Text } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from "react-tv-space-navigation";
 import { useRouter } from "expo-router";
 import { useMenuContext } from "@/components/MenuContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from 'react-i18next';
 
 export default function CustomDrawerContent(props: any) {
   const router = useRouter();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const styles = useDrawerStyles();
   const {top, right, bottom, left} = useSafeAreaInsets();
+  const { t, i18n } = useTranslation();
   const drawerItems = [
-    { name: '/', label: 'Home' },
-    { name: 'explore', label: 'Explore'},
-    { name: 'tv', label: 'TV'},
+    { name: '/', label: t('drawer.index') },
+    { name: 'explore', label: t('drawer.explore')},
+    { name: 'tv', label: t('drawer.tv')},
   ];
-
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language);
+  };
   return (
     <SpatialNavigationRoot isActive={isMenuOpen}>
       <DrawerContentScrollView {...props} style={styles.container} scrollEnabled={false}>
@@ -24,6 +29,16 @@ export default function CustomDrawerContent(props: any) {
           <Image source={require('@/assets/images/logo.png')} style={styles.profilePic} />
           <Text style={styles.userName}>Pioneer Tom</Text>
           <Text style={styles.switchAccount}>Switch account</Text>
+          <Text style={styles.switchLanguage}>Switch Language</Text>
+          <Picker
+            selectedValue={i18n.language}
+            onValueChange={(itemValue: string) => changeLanguage(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="English" value="en" />
+            <Picker.Item label="Français" value="fr" />
+            <Picker.Item label="Español" value="es" />
+      </Picker>
         </View>
         {drawerItems.map((item, index) => (
          index === 0 ? (
@@ -108,5 +123,15 @@ const useDrawerStyles = function () {
     menuTextFocused: {
       color: 'black',
     },
+    switchLanguage: {
+      paddingTop: scaledPixels(10),
+      paddingBottom: scaledPixels(6),
+      color: 'white',
+      fontSize: scaledPixels(26),
+    },
+    picker: {
+      height: 40,
+      width: '60%'
+    }
   });
 };

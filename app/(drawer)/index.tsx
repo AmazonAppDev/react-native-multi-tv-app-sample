@@ -7,6 +7,7 @@ import { SpatialNavigationFocusableView, SpatialNavigationRoot, SpatialNavigatio
 import { Direction } from '@bam.tech/lrud';
 import { scaledPixels } from '@/hooks/useScale';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 
 
 interface CardData {
@@ -29,6 +30,8 @@ export default function IndexScreen() {
   const isActive = isFocused && !isMenuOpen;
 
   const focusedItem = useMemo(() => moviesData[focusedIndex], [focusedIndex]);
+
+  const { t } = useTranslation();
 
   const renderHeader = useCallback(() => (
     <View style={styles.header}>
@@ -116,9 +119,9 @@ export default function IndexScreen() {
         <SpatialNavigationScrollView  
           offsetFromStart={scaledPixels(60)}  
           style={styles.scrollContent}>   
-          {renderScrollableRow("Trending Movies", trendingRef)}
-          {renderScrollableRow("Classics", classicsRef)}
-          {renderScrollableRow("Hip and Modern", hipAndModernRef)}
+          {renderScrollableRow(t('categories.trending_movies'), trendingRef)}
+          {renderScrollableRow(t('categories.classics'), classicsRef)}
+          {renderScrollableRow(t('categories.hip_and_modern'), hipAndModernRef)}
         </SpatialNavigationScrollView>
         </View>
     </SpatialNavigationRoot> 
