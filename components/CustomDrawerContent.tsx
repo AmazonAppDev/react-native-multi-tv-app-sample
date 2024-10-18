@@ -15,6 +15,7 @@ export default function CustomDrawerContent(props: any) {
     { name: '/', label: 'Home' },
     { name: 'explore', label: 'Explore'},
     { name: 'tv', label: 'TV'},
+    { name: 'settings', label: 'Settings'}
   ];
 
   return (

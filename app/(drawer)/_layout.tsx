@@ -65,6 +65,13 @@ export default function DrawerLayout() {
               title: 'tv',
             }}
           />
+          <Drawer.Screen
+            name="settings"
+            options={{
+              drawerLabel: 'Settings',
+              title: 'Settings',
+            }}
+          />
         </Drawer>
       </SpatialNavigationRoot>
     </GestureHandlerRootView>
