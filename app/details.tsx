@@ -64,27 +64,6 @@ export default function DetailsScreen() {
               onSelect={navigate}
               style={{ paddingHorizontal: scaledPixels(30) }}
             />
-            {/*<SpatialNavigationFocusableView onSelect={navigate}>*/}
-            {/*  {({ isFocused }) => (*/}
-            {/*    <Pressable*/}
-            {/*      style={[*/}
-            {/*        styles.watchButton,*/}
-            {/*        isFocused && styles.watchButtonFocused,*/}
-            {/*      ]}*/}
-            {/*      onPress={() => {}}*/}
-            {/*    >*/}
-            {/*      <Text*/}
-            {/*        style={*/}
-            {/*          isFocused*/}
-            {/*            ? styles.watchButtonTextFocused*/}
-            {/*            : styles.watchButtonText*/}
-            {/*        }*/}
-            {/*      >*/}
-            {/*        Watch now*/}
-            {/*      </Text>*/}
-            {/*    </Pressable>*/}
-            {/*  )}*/}
-            {/*</SpatialNavigationFocusableView>*/}
           </View>
         </View>
       </View>
