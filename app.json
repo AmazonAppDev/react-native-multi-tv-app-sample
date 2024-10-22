@@ -50,6 +50,7 @@
     },
     "name": "MultiTVSample",
     "slug": "MultiTVSample",
+    "scheme": "com.anonymous.MultiTVSample",
     "android": {
       "package": "com.anonymous.MultiTVSample"
     },
