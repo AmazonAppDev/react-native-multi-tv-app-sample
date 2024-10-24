@@ -84,6 +84,7 @@ const useDrawerStyles = function () {
       width: scaledPixels(300),
       backgroundColor: '#2c3e50', // Dark blue background
       paddingTop: scaledPixels(0), // Add some top padding
+      height: '100%',
     },
     drawerLabelStyle: {
       fontSize: scaledPixels(18),

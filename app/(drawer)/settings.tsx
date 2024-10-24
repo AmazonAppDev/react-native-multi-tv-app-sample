@@ -9,6 +9,7 @@ import { useMenuContext } from '../../components/MenuContext';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { Direction } from '@bam.tech/lrud';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function TVScreen() {
   const styles = useTVStyles();
@@ -29,32 +30,70 @@ export default function TVScreen() {
     [toggleMenu, focusedIndex, navigation],
   );
 
-  const languages = [
-    { name: 'English', code: 'en' },
-    { name: 'French', code: 'fr' },
-    { name: 'Spanish', code: 'es' },
-  ]
+  const menuItems = [
+    { id: 'language', label: 'Language' },
+    { id: 'sound', label: 'Sound' },
+    { id: 'display', label: 'Display' },
+  ];
+
+  const submenus = {
+    language: ['English', 'French', 'Spanish'],
+  };
+  const [selectedMenuItem, setSelectedMenuItem] = useState('language'); 
+  const [focusedMenuItem, setFocusedMenuItem] = useState('language'); 
+  const [selectedSubmenuItem, setSelectedSubmenuItem] = useState("English");
 
   return (
     <SpatialNavigationRoot isActive={isActive}
       onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
       <Stack.Screen options={{ headerShown: false }} />
+      <Text style={styles.heading}>Account</Text>
       <View style={styles.container}>
-      <Text style={styles.title}>Setting Screen</Text>
-      <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Language</Text>
-      {languages.map((language, index) =>
-       (
-        <SpatialNavigationFocusableView key={index} onSelect={() => { console.log(language.name)}}>
-          <TouchableOpacity style={styles.settingItem}>
-            <Text style={styles.settingText}>{language.name}</Text>
-            <Text style={styles.optionText}>{language.code}</Text>
+        
+      <DefaultFocus>
+      <SpatialNavigationFocusableView>
+      <View style={styles.container}>
+       
+      {/* Main Menu (Left) */}
+      <View style={styles.mainMenu}>
+        {menuItems.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            style={[
+              styles.menuItem,
+              focusedMenuItem === item.id && styles.focusedMenuItem,
+              selectedMenuItem === item.id && styles.selectedMenu,
+            ]}
+            onPress={() => setSelectedMenuItem(item.id)} 
+            onFocus={() => setFocusedMenuItem(item.id)} 
+            onBlur={() => setFocusedMenuItem(null)} 
+          >
+            <Text style={[styles.menuText, selectedMenuItem === item.id && styles.selectedMenuItem]}>{item.label}</Text>
           </TouchableOpacity>
-          </SpatialNavigationFocusableView>
-        )
-      )}   
-       </View> 
-      </View> 
+        ))}
+      </View>
+
+      {/* Submenu (Right) */}
+     {submenus[selectedMenuItem] && <View style={styles.submenu}>
+      <Text style={styles.title}>Settings</Text>
+        {selectedMenuItem && submenus[selectedMenuItem]?.map((option, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[styles.submenuItem, selectedSubmenuItem === option && styles.focusedSubMenuItem]}
+            onPress={() => console.log(`Selected: ${option}`)} 
+          >
+            <Text style={[styles.submenuText, selectedSubmenuItem === option && styles.selectedSubmenuText]}>{option}</Text>
+          {selectedSubmenuItem === option &&
+              <Icon name="check" size={20} color="#00FF00" style={[styles.checkIcon, selectedSubmenuItem === option && styles.selectedCheckIcon]} />
+          }
+          </TouchableOpacity>
+        ))}
+      </View>
+}
+    </View>
+      </SpatialNavigationFocusableView>
+      </DefaultFocus>
+      </View>
     </SpatialNavigationRoot>
   );
 }
@@ -62,10 +101,18 @@ export default function TVScreen() {
 const useTVStyles = function() {
   return StyleSheet.create({
     container: {
+        flexDirection: 'row',
         flex: 1,
         backgroundColor: '#000',
         justifyContent: 'center',
         alignItems: 'center',
+      },
+      heading: {
+        fontSize: scaledPixels(32),
+        fontWeight: 'bold',
+        color: '#fff',
+        textAlign: 'center',
+        marginTop: scaledPixels(80),
       },
       title: {
         fontSize: scaledPixels(32),
@@ -74,33 +121,75 @@ const useTVStyles = function() {
         textAlign: 'center',
         marginBottom: scaledPixels(20),
       },
-      section: {
-        width: '20%',
-        marginBottom: 30,
-      },
-      sectionTitle: {
-        fontSize: 24,
-        color: '#fefefe',
-        fontWeight: 800,
-        marginBottom: 15,
-      },
-      settingItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+      mainMenu: {
+        width: '40%',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingVertical: 15,
-        paddingHorizontal: 10,
-        backgroundColor: '#333',
-        borderRadius: 8,
-        marginBottom: 10,
+        verticalAlign: 'top',
+        marginRight: 20,
+        marginTop: 2,
       },
-      settingText: {
+      menuItem: {
+        width: '100%',
+        padding: 15,
+        marginBottom: 6,
+        backgroundColor: '#444',
+        borderRadius: 8,
+      },
+      menuText: {
         fontSize: 20,
         color: '#fff',
+        textAlign: 'center',
       },
-      optionText: {
-        fontSize: 20,
-        color: '#bbb',
+      focusedMenuItem: {
+        backgroundColor: '#FFFFFF', 
+        borderColor: '#fff',
+        borderWidth: 2,
+      },
+      selectedMenu: {
+        backgroundColor: '#fff', 
+        borderColor: '#fff',
+        borderWidth: 2,
+      },
+      selectedMenuItem: {
+        color: '#000', 
+      },
+      submenu: {
+        flex: 1, 
+        justifyContent: 'flex-start',
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        backgroundColor: '#222',
+        borderRadius: 8,
+      },
+      submenuItem: {
+        flexDirection: 'row',
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        backgroundColor: '#222',
+        borderRadius: 8,
+        marginBottom: 8,
+        justifyContent: 'space-between',
+      },
+      focusedSubMenuItem: {
+        backgroundColor: '#EEE',
+        borderColor: '#fff',
+        borderWidth: 2,
+        color: '#000',
+      },
+      submenuText: {
+        fontSize: 18,
+        color: '#fff',
+      },
+      checkIcon: {
+        justifyContent: 'flex-end',
+        color: '#FFF',
+      },
+      selectedSubmenuText: {
+        color: '#000',
+      },
+      selectedCheckIcon: {
+        color: '#000',
       },
   });
 };

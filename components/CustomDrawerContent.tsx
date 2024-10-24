@@ -5,6 +5,7 @@ import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } f
 import { useRouter } from "expo-router";
 import { useMenuContext } from "@/components/MenuContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function CustomDrawerContent(props: any) {
   const router = useRouter();
@@ -14,18 +15,20 @@ export default function CustomDrawerContent(props: any) {
   const drawerItems = [
     { name: '/', label: 'Home' },
     { name: 'explore', label: 'Explore'},
-    { name: 'tv', label: 'TV'},
-    { name: 'settings', label: 'Settings'}
+    { name: 'tv', label: 'TV'}
   ];
 
   return (
     <SpatialNavigationRoot isActive={isMenuOpen}>
       <DrawerContentScrollView {...props} style={styles.container} scrollEnabled={false}>
+      <View style={styles.content}>
+        <View style={styles.contentTop}>
         <View style={styles.header}>
           <Image source={require('@/assets/images/logo.png')} style={styles.profilePic} />
           <Text style={styles.userName}>Pioneer Tom</Text>
           <Text style={styles.switchAccount}>Switch account</Text>
         </View>
+        
         {drawerItems.map((item, index) => (
          index === 0 ? (
           <DefaultFocus key={index}>
@@ -40,13 +43,24 @@ export default function CustomDrawerContent(props: any) {
         ) : (
           <SpatialNavigationFocusableView key={index} onSelect={() => { console.log(item.name); toggleMenu(false);  router.push(item.name); }}>
             {({ isFocused }) => (
-              <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
+              <View style={[styles.contentBottom, isFocused && styles.menuItemFocused]}>
                 <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
               </View>
             )}
           </SpatialNavigationFocusableView>
         )
       ))}
+      
+      </View>
+      <SpatialNavigationFocusableView key={4} onSelect={() => {toggleMenu(false); router.push('settings'); }}>
+        {({ isFocused }: { isFocused: boolean }) => (
+           <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
+            <Icon name="cog" size={30} color="#000" style={[styles.cogIcon, isFocused && styles.menuTextFocused]} />
+            <Text style={[styles.footerText, isFocused && styles.menuTextFocused]}>Settings</Text>
+          </View>
+        )}
+      </SpatialNavigationFocusableView>
+    </View>
       </DrawerContentScrollView>
     </SpatialNavigationRoot>
   );
@@ -56,10 +70,20 @@ const useDrawerStyles = function () {
   return StyleSheet.create({
     container: {
       left: Platform.OS === "ios" ? -80: 0,
-      flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
       paddingTop: scaledPixels(20),
+      height: '100%',
     },
+    content: {
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '90%',
+      flex: 1,
+      marginBottom: scaledPixels(20),
+  },
+  contentTop: {
+    flex: 1,
+},
     header: {
       padding: scaledPixels(16),
     },
@@ -108,6 +132,24 @@ const useDrawerStyles = function () {
     },
     menuTextFocused: {
       color: 'black',
+    },
+    contentBottom: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingTop: scaledPixels(16),
+      paddingBottom: scaledPixels(8),
+      paddingStart: scaledPixels(32),
+      fontSize: scaledPixels(16),
+    },
+    footerText: {
+      color: '#FFF',
+      fontSize: scaledPixels(20),
+    },
+    cogIcon: {
+      paddingRight: scaledPixels(6),
+      color: '#FFF',
+      fontSize: scaledPixels(20),
     },
   });
 };
