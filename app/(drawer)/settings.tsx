@@ -11,7 +11,7 @@ import { useCallback, useState } from 'react';
 import { Direction } from '@bam.tech/lrud';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function TVScreen() {
+export default function SettingScreen() {
   const styles = useTVStyles();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const isFocused = useIsFocused();
