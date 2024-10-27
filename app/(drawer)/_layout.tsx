@@ -38,7 +38,7 @@ export default function DrawerLayout() {
           defaultStatus="open"
           screenOptions={{
             headerShown: false,
-            drawerActiveBackgroundColor: '#3498db', // Changed to a blue color
+            drawerActiveBackgroundColor: '#3498db', 
             drawerActiveTintColor: '#ffffff',
             drawerInactiveTintColor: '#bdc3c7',
             drawerStyle: styles.drawerStyle,
@@ -82,14 +82,14 @@ const useDrawerStyles = function () {
   return StyleSheet.create({
     drawerStyle: {
       width: scaledPixels(300),
-      backgroundColor: '#2c3e50', // Dark blue background
-      paddingTop: scaledPixels(0), // Add some top padding
+      backgroundColor: '#2c3e50', 
+      paddingTop: scaledPixels(0), 
       height: '100%',
     },
     drawerLabelStyle: {
       fontSize: scaledPixels(18),
       fontWeight: 'bold',
-      marginLeft: scaledPixels(10), // Add some left margin
+      marginLeft: scaledPixels(10), 
     },
   });
 };

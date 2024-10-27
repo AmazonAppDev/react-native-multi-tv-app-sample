@@ -12,7 +12,7 @@ import { Direction } from '@bam.tech/lrud';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function SettingScreen() {
-  const styles = useTVStyles();
+  const styles = useSettingStyles();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const isFocused = useIsFocused();
   const isActive = isFocused && !isMenuOpen;
@@ -39,6 +39,7 @@ export default function SettingScreen() {
   const submenus = {
     language: ['English', 'French', 'Spanish'],
   };
+  
   const [selectedMenuItem, setSelectedMenuItem] = useState('language'); 
   const [focusedMenuItem, setFocusedMenuItem] = useState('language'); 
   const [selectedSubmenuItem, setSelectedSubmenuItem] = useState("English");
@@ -98,7 +99,7 @@ export default function SettingScreen() {
   );
 }
 
-const useTVStyles = function() {
+const useSettingStyles = function() {
   return StyleSheet.create({
     container: {
         flexDirection: 'row',
@@ -142,7 +143,7 @@ const useTVStyles = function() {
         textAlign: 'center',
       },
       focusedMenuItem: {
-        backgroundColor: '#FFFFFF', 
+        backgroundColor: '#fff', 
         borderColor: '#fff',
         borderWidth: 2,
       },
@@ -157,8 +158,7 @@ const useTVStyles = function() {
       submenu: {
         flex: 1, 
         justifyContent: 'flex-start',
-        paddingVertical: 20,
-        paddingHorizontal: 20,
+        padding: 20,
         backgroundColor: '#222',
         borderRadius: 8,
       },
@@ -172,7 +172,7 @@ const useTVStyles = function() {
         justifyContent: 'space-between',
       },
       focusedSubMenuItem: {
-        backgroundColor: '#EEE',
+        backgroundColor: '#eee',
         borderColor: '#fff',
         borderWidth: 2,
         color: '#000',
@@ -183,7 +183,7 @@ const useTVStyles = function() {
       },
       checkIcon: {
         justifyContent: 'flex-end',
-        color: '#FFF',
+        color: '#fff',
       },
       selectedSubmenuText: {
         color: '#000',

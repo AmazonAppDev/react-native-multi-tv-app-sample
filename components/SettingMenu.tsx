@@ -1,16 +1,14 @@
 import { scaledPixels } from "@/hooks/useScale";
-import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { View, StyleSheet, Image, Platform, Text } from "react-native";
-import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from "react-tv-space-navigation";
+import { View, StyleSheet, Text } from "react-native";
+import { SpatialNavigationFocusableView} from "react-tv-space-navigation";
 import { useRouter } from "expo-router";
 import { useMenuContext } from "@/components/MenuContext";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function SettingMenu(props: any) {
-  const router = useRouter();
-  const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
-  const styles = useDrawerStyles();
+    const styles = useDrawerStyles();
+    const router = useRouter();
+     const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
 
   return (
       <SpatialNavigationFocusableView key={4} onSelect={() => {toggleMenu(false); router.push('settings'); }}>
@@ -31,12 +29,22 @@ const useDrawerStyles = function () {
       height: scaledPixels(24),
       marginRight: scaledPixels(16),
     },
+    menuItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: scaledPixels(16),
+        paddingBottom: scaledPixels(8),
+        paddingStart: scaledPixels(32),
+      },
+      menuItemFocused: {
+        backgroundColor: 'white',
+      },
     menuText: {
-      color: 'white',
+      color: '#fff',
       fontSize: scaledPixels(32),
     },
     menuTextFocused: {
-      color: 'black',
+      color: '#000',
     },
     contentBottom: {
       display: 'flex',
