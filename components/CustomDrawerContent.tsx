@@ -66,19 +66,17 @@ const useDrawerStyles = function () {
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
       paddingTop: scaledPixels(20),
       height: '100%',
-      minHeight: '100%',
     },
     content: {
       display: 'flex',
       flexDirection: 'column',
-      height: '100%',
-      minHeight: '100%',
+      minHeight: '90%',
       flex: 1,
       marginBottom: scaledPixels(20),
-    },
-    contentTop: {
-      flex: 1,
-    },
+  },
+  contentTop: {
+    flex: 1,
+},
     header: {
       padding: scaledPixels(16),
     },
@@ -127,6 +125,15 @@ const useDrawerStyles = function () {
     },
     menuTextFocused: {
       color: 'black',
+    },
+    contentBottom: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingTop: scaledPixels(16),
+      paddingBottom: scaledPixels(8),
+      paddingStart: scaledPixels(32),
+      fontSize: scaledPixels(16),
     }
   });
 };
