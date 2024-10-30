@@ -19,7 +19,10 @@ export default function CustomDrawerContent(props: any) {
 
   return (
     <SpatialNavigationRoot isActive={isMenuOpen}>
-      <DrawerContentScrollView {...props} style={styles.container} scrollEnabled={false}>
+      <DrawerContentScrollView {...props} style={styles.container} scrollEnabled={false} contentContainerStyle={{
+          ...(Platform.OS === "ios" &&
+            Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
+        }}>
         <View style={styles.header}>
           <Image source={require('@/assets/images/logo.png')} style={styles.profilePic} />
           <Text style={styles.userName}>Pioneer Tom</Text>
@@ -54,7 +57,6 @@ export default function CustomDrawerContent(props: any) {
 const useDrawerStyles = function () {
   return StyleSheet.create({
     container: {
-      left: Platform.OS === "ios" ? -80: 0,
       flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
       paddingTop: scaledPixels(20),
