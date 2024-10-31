@@ -9,30 +9,32 @@ Fixes # (issue)
 ## Type of change
 <!-- Please delete options that are not relevant. -->
 
-- [ ] 🍕 Feature
-- [ ] 🐛 Bug Fix
-- [ ] 📝 Documentation Update
-- [ ] 🎨 Style
-- [ ] 🧑‍💻 Code Refactor
-- [ ] 🔥 Performance Improvements
-- [ ] ✅ Test
-- [ ] 🤖 Build
-- [ ] 🔁 CI
-- [ ] 📦 Chore (Release)
-- [ ] ⏩ Revert
-- [ ] ✏️ Updated Test Cases
+-  🍕 Feature
+-  🐛 Bug Fix
+-  📝 Documentation Update
+-  🎨 Style
+-  🧑‍💻 Code Refactor
+-  🔥 Performance Improvements
+-  ✅ Test
+-  🤖 Build
+-  🔁 CI
+-  📦 Chore (Release)
+-  ⏩ Revert
+-  ✏️ Updated Test Cases
 
 ## Added tests?
+<!-- Please choose one -->
 
-- [ ] 👍 Yes
-- [ ] 🙅 No, because they aren't needed
-- [ ] 🙋 No, because I need help
+-  👍 Yes
+-  🙅 No, because they aren't needed
+-  🙋 No, because I need help
 
 ## Internationalization Support?
+<!-- Please choose one -->
 
-- [ ] 👍 Yes, Added text tokens
-- [ ] 🙅 No, because they aren't needed
-- [ ] 🙋 No, because I need help
+-  👍 Yes, Added text tokens
+-  🙅 No, because they aren't needed
+-  🙋 No, because I need help
 
 **Steps to test the feature:**
 
