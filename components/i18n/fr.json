@@ -1,0 +1,12 @@
+{
+    "drawer": {
+      "index": "Accueil",
+      "explore": "Explorer",
+      "tv": "Télévision"
+    },
+    "categories": {
+        "trending_movies": "Films Tendance",
+        "classics": "Classiques",
+        "hip_and_modern": "À la mode et moderne"
+    }
+  }
