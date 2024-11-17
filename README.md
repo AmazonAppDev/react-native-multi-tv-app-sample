@@ -59,7 +59,7 @@ Before you begin, ensure you have the following installed:
 - Run `npx expo run:ios` to build and install the app on the tvOS Simulator.
 
 ### Web
-- Run `npx expo start:web` to start the app in your default web browser.
+- Run `npx expo start --web` to start the app in your default web browser.
 
 - Run `npx expo export -p web` if you want to build the app for web. After a successful build all the needed files for web will be in the ```dist``` directory
 
