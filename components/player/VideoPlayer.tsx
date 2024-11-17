@@ -1,9 +1,5 @@
 import React from "react";
-import Video, {
-  OnLoadData,
-  OnProgressData,
-  VideoRef,
-} from "react-native-video";
+import Video, { VideoRef } from "react-native-video";
 import {
   StyleSheet,
   Dimensions,
@@ -48,16 +44,18 @@ const VideoPlayer = React.forwardRef<VideoRef, VideoPlayerProps>(
           controls={controls}
           paused={paused}
           onBuffer={({ isBuffering }) => onBuffer(isBuffering)}
-          onProgress={({ currentTime }: OnProgressData) =>
-            onProgress(currentTime)
-          }
-          onLoad={({ duration }: OnLoadData) => onLoad(duration)}
+          onProgress={({ currentTime }) => onProgress(currentTime)}
+          onLoad={({ duration }) => onLoad(duration)}
           onEnd={onEnd}
-          poster={{
-            source: { uri: headerImage },
-            resizeMode: "cover",
-            style: { width: "100%", height: "100%" },
-          }}
+          poster={
+            Platform.OS === "web"
+              ? {}
+              : {
+                  source: { uri: headerImage },
+                  resizeMode: "cover",
+                  style: { width: "100%", height: "100%" },
+                }
+          }
           resizeMode="cover"
         />
       </TouchableWithoutFeedback>

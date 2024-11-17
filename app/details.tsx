@@ -1,9 +1,6 @@
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { StyleSheet, View, Image, Pressable, Text } from "react-native";
-import {
-  SpatialNavigationFocusableView,
-  SpatialNavigationRoot,
-} from "react-tv-space-navigation";
+import { StyleSheet, View, Image, Text } from "react-native";
+import { SpatialNavigationRoot } from "react-tv-space-navigation";
 import { scaledPixels } from "@/hooks/useScale";
 import { useCallback } from "react";
 import { useIsFocused } from "@react-navigation/native";
