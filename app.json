@@ -28,13 +28,29 @@
           }
         }
       ],
-      "expo-router"
+      "expo-router",
+      [
+        "react-native-video",
+        {
+          "enableNotificationControls": false,
+          "enableBackgroundAudio": false,
+          "enableADSExtension": false,
+          "enableCacheExtension": false,
+          "androidExtensions": {
+            "useExoplayerRtsp": false,
+            "useExoplayerSmoothStreaming": true,
+            "useExoplayerHls": false,
+            "useExoplayerDash": false
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
     },
     "name": "MultiTVSample",
     "slug": "MultiTVSample",
+    "scheme": "com.anonymous.MultiTVSample",
     "android": {
       "package": "com.anonymous.MultiTVSample"
     },
