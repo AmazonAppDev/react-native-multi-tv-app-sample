@@ -57,7 +57,14 @@ export default function IndexScreen() {
           ]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          style={styles.gradient}
+          style={styles.gradientLeft}
+        />
+        <LinearGradient
+          colors={["rgb(0,0,0)", "rgba(0,0,0, 0.3)", "transparent"]}
+          locations={[0, 0.4, 1]}
+          start={{ x: 0, y: 1 }}
+          end={{ x: 0, y: 0 }}
+          style={styles.gradientBottom}
         />
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerTitle}>{focusedItem.title}</Text>
@@ -72,7 +79,8 @@ export default function IndexScreen() {
       focusedItem.title,
       focusedItem.description,
       styles.header,
-      styles.gradient,
+      styles.gradientLeft,
+      styles.gradientBottom,
     ],
   );
 
@@ -176,7 +184,6 @@ const useGridStyles = function () {
     },
     scrollContent: {
       flex: 1,
-      marginTop: scaledPixels(10),
       marginBottom: scaledPixels(48),
     },
     highlightsTitle: {
@@ -184,7 +191,7 @@ const useGridStyles = function () {
       fontSize: scaledPixels(34),
       fontWeight: "bold",
       marginBottom: scaledPixels(10),
-      marginTop: scaledPixels(30),
+      marginTop: scaledPixels(15),
       textShadowColor: "rgba(0, 0, 0, 0.75)",
       textShadowOffset: { width: -1, height: 1 },
       textShadowRadius: 10,
@@ -252,12 +259,19 @@ const useGridStyles = function () {
       height: "100%",
       resizeMode: "cover",
     },
-    gradient: {
+    gradientLeft: {
       position: "absolute",
       left: 0,
       right: 0,
       top: 0,
       height: "100%",
+    },
+    gradientBottom: {
+      position: "absolute",
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: "15%",
     },
     headerTextContainer: {
       position: "absolute",
@@ -282,28 +296,6 @@ const useGridStyles = function () {
 const moviesData = [
   {
     id: 0,
-    title: "Big Buck Bunny",
-    description:
-      "Big Buck Bunny tells the story of a giant rabbit with a heart bigger than himself. When one sunny day three rodents rudely harass him, something snaps... and the rabbit ain't no bunny anymore! In the typical cartoon tradition, he prepares the nasty rodents a comical revenge.",
-    headerImage:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
-    movie:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    duration: 130,
-  },
-  {
-    id: 1,
-    title: "Volkswagen GTI Review",
-    description:
-      "The Smoking Tire heads out to Adams Motorsports Park in Riverside, CA to test the most requested car of 2010, the Volkswagen GTI.",
-    headerImage:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/VolkswagenGTIReview.jpg",
-    movie:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
-    duration: 110,
-  },
-  {
-    id: 2,
     title: "Sintel",
     description:
       "Sintel is an independently produced short film, initiated by the Blender Foundation as a means to further improve and validate the free/open source 3D creation suite Blender.",
@@ -314,7 +306,18 @@ const moviesData = [
     duration: 100,
   },
   {
-    id: 3,
+    id: 1,
+    title: "Big Buck Bunny",
+    description:
+      "Big Buck Bunny tells the story of a giant rabbit with a heart bigger than himself. When one sunny day three rodents rudely harass him, something snaps... and the rabbit ain't no bunny anymore! In the typical cartoon tradition, he prepares the nasty rodents a comical revenge.",
+    headerImage:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
+    movie:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    duration: 130,
+  },
+  {
+    id: 2,
     title: "We Are Going On Bullrun",
     description:
       "The Smoking Tire is going on the 2010 Bullrun Live Rally in a 2011 Shelby GT500, and posting a video from the road every single day!",
@@ -325,7 +328,7 @@ const moviesData = [
     duration: 95,
   },
   {
-    id: 4,
+    id: 3,
     title: "Tears of Steel",
     description:
       "Tears of Steel was realized with crowd-funding by users of the open source 3D creation tool Blender. The goal was to test a complete open and free pipeline for visual effects in film.",
@@ -334,6 +337,17 @@ const moviesData = [
     movie:
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
     duration: 115,
+  },
+  {
+    id: 4,
+    title: "Volkswagen GTI Review",
+    description:
+      "The Smoking Tire heads out to Adams Motorsports Park in Riverside, CA to test the most requested car of 2010, the Volkswagen GTI.",
+    headerImage:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/VolkswagenGTIReview.jpg",
+    movie:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
+    duration: 110,
   },
   {
     id: 5,
