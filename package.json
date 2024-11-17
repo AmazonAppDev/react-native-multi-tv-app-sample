@@ -10,7 +10,7 @@
     "test": "jest --watchAll",
     "lint": "expo lint",
     "prebuild": "EXPO_TV=1 expo prebuild --clean",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "jest": {
     "preset": "jest-expo"
