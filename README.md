@@ -15,7 +15,7 @@ A versatile TV app developed in React Native, compatible with Android TV, Fire T
 - 🖼️ Grid layout for content selection
 - 🦸‍♂️ Dynamic hero image header that follows the focused card
 - 🎬 Detailed content screen
-- 🎥 Video player screen
+- 🎥 Video player with [react-native-video](https://github.com/TheWidlarzGroup/react-native-video) Thank you [@moskalakamil](https://github.com/moskalakamil)
 - 🎯 Efficient focus management with [React TV Space Navigation](https://github.com/bamlab/react-tv-space-navigation) 
 - 🔧 Fully customizable screens and components
 
