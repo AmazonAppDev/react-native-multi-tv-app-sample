@@ -9,6 +9,10 @@ const KEY_MAPPING: Record<string, SupportedKeys> = {
   up: SupportedKeys.Up,
   down: SupportedKeys.Down,
   select: SupportedKeys.Enter,
+  swipeLeft: SupportedKeys.Left,
+  swipeRight: SupportedKeys.Right,
+  swipeUp: SupportedKeys.Up,
+  swipeDown: SupportedKeys.Down
 };
 
 class RemoteControlManager implements RemoteControlManagerInterface {
