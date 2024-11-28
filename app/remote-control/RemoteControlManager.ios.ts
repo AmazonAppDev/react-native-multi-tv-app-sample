@@ -9,6 +9,10 @@ const KEY_MAPPING: Record<string, SupportedKeys> = {
   up: SupportedKeys.Up,
   down: SupportedKeys.Down,
   select: SupportedKeys.Enter,
+  swipeLeft: SupportedKeys.Left,
+  swipeRight: SupportedKeys.Right,
+  swipeUp: SupportedKeys.Up,
+  swipeDown: SupportedKeys.Down
 };
 
 class RemoteControlManager implements RemoteControlManagerInterface {
@@ -20,6 +24,7 @@ class RemoteControlManager implements RemoteControlManagerInterface {
   }
 
   private handleKeyDown = (evt: HWEvent): void => {
+    console.log(evt);
     if (!evt) return;
 
     const mappedKey = KEY_MAPPING[evt.eventType];
