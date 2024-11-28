@@ -24,7 +24,6 @@ class RemoteControlManager implements RemoteControlManagerInterface {
   }
 
   private handleKeyDown = (evt: HWEvent): void => {
-    console.log(evt);
     if (!evt) return;
 
     const mappedKey = KEY_MAPPING[evt.eventType];
