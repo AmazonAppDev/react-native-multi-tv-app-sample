@@ -3,6 +3,8 @@ import { useNavigation, useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { useMenuContext } from '../../components/MenuContext';
+import { useWatchlist } from '../../components/WatchlistContext';
+import { WatchlistIndicator } from '../../components/WatchlistIndicator';
 import {
   SpatialNavigationFocusableView,
   SpatialNavigationRoot,
@@ -25,11 +27,64 @@ type CardData = {
   duration?: number;
 };
 
+// Memoized grid item component for better performance
+const GridItem = React.memo<{
+  item: CardData;
+  index: number;
+  onSelect: (item: CardData) => void;
+  onFocus: (index: number) => void;
+  isInWatchlist: boolean;
+}>(
+  ({ item, index, onSelect, onFocus, isInWatchlist }) => {
+    const styles = useGridStyles();
+
+    const handleSelect = useCallback(() => {
+      onSelect(item);
+    }, [item, onSelect]);
+
+    const handleFocus = useCallback(() => {
+      onFocus(index);
+    }, [index, onFocus]);
+
+    // Memoize image source to prevent unnecessary re-renders
+    const imageSource = useMemo(() => ({ uri: item.headerImage }), [item.headerImage]);
+
+    return (
+      <SpatialNavigationFocusableView onSelect={handleSelect} onFocus={handleFocus}>
+        {({ isFocused }) => (
+          <View style={[styles.highlightThumbnail, isFocused && styles.highlightThumbnailFocused]}>
+            <Image source={imageSource} style={styles.headerImage} />
+            <WatchlistIndicator isVisible={isInWatchlist} isFocused={isFocused} />
+            <View style={styles.thumbnailTextContainer}>
+              <Text style={styles.thumbnailText}>{item.title}</Text>
+            </View>
+          </View>
+        )}
+      </SpatialNavigationFocusableView>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison function for optimal performance
+    return (
+      prevProps.item.id === nextProps.item.id &&
+      prevProps.item.title === nextProps.item.title &&
+      prevProps.item.headerImage === nextProps.item.headerImage &&
+      prevProps.index === nextProps.index &&
+      prevProps.isInWatchlist === nextProps.isInWatchlist &&
+      prevProps.onSelect === nextProps.onSelect &&
+      prevProps.onFocus === nextProps.onFocus
+    );
+  },
+);
+
+GridItem.displayName = 'GridItem';
+
 export default function IndexScreen() {
   const styles = useGridStyles();
   const router = useRouter();
   const navigation = useNavigation();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
+  const { isInWatchlist, isLoading: watchlistLoading } = useWatchlist();
   const trendingRef = useRef<SpatialNavigationVirtualizedListRef>(null);
   const classicsRef = useRef<SpatialNavigationVirtualizedListRef>(null);
   const hipAndModernRef = useRef<SpatialNavigationVirtualizedListRef>(null);
@@ -89,35 +144,39 @@ export default function IndexScreen() {
     [toggleMenu, focusedIndex, navigation],
   );
 
+  const handleItemSelect = useCallback(
+    (item: CardData) => {
+      router.push({
+        pathname: '/details',
+        params: {
+          id: item.id.toString(),
+          title: item.title,
+          description: item.description,
+          headerImage: item.headerImage,
+          movie: item.movie,
+        },
+      });
+    },
+    [router],
+  );
+
+  const handleItemFocus = useCallback((index: number) => {
+    setFocusedIndex(index);
+  }, []);
+
   const renderScrollableRow = useCallback(
     (title: string, _ref: React.RefObject<FlatList>) => {
       const renderItem = useCallback(
         ({ item, index }: { item: CardData; index: number }) => (
-          <SpatialNavigationFocusableView
-            onSelect={() => {
-              router.push({
-                pathname: '/details',
-                params: {
-                  title: item.title,
-                  description: item.description,
-                  headerImage: item.headerImage,
-                  movie: item.movie,
-                },
-              });
-            }}
-            onFocus={() => setFocusedIndex(index)}
-          >
-            {({ isFocused }) => (
-              <View style={[styles.highlightThumbnail, isFocused && styles.highlightThumbnailFocused]}>
-                <Image source={{ uri: item.headerImage }} style={styles.headerImage} />
-                <View style={styles.thumbnailTextContainer}>
-                  <Text style={styles.thumbnailText}>{item.title}</Text>
-                </View>
-              </View>
-            )}
-          </SpatialNavigationFocusableView>
+          <GridItem
+            item={item}
+            index={index}
+            onSelect={handleItemSelect}
+            onFocus={handleItemFocus}
+            isInWatchlist={isInWatchlist(item.id)}
+          />
         ),
-        [router, styles],
+        [handleItemSelect, handleItemFocus, isInWatchlist],
       );
 
       return (
@@ -139,7 +198,7 @@ export default function IndexScreen() {
         </View>
       );
     },
-    [styles, router, styles.headerImage, styles.thumbnailText],
+    [styles],
   );
 
   return (

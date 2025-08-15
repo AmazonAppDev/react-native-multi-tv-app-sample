@@ -19,7 +19,7 @@ export default function DrawerLayout() {
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      console.log("Direction " + movement);
+      console.log('Direction ' + movement);
       if (movement === 'right') {
         navigation.dispatch(DrawerActions.closeDrawer());
         toggleMenu(false);
@@ -32,9 +32,10 @@ export default function DrawerLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SpatialNavigationRoot
         isActive={isMenuOpen}
-        onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
-        <Drawer 
-          drawerContent={CustomDrawerContent} 
+        onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}
+      >
+        <Drawer
+          drawerContent={CustomDrawerContent}
           defaultStatus="open"
           screenOptions={{
             headerShown: false,
@@ -43,7 +44,8 @@ export default function DrawerLayout() {
             drawerInactiveTintColor: '#bdc3c7',
             drawerStyle: styles.drawerStyle,
             drawerLabelStyle: styles.drawerLabelStyle,
-          }}>
+          }}
+        >
           <Drawer.Screen
             name="index"
             options={{
@@ -63,6 +65,13 @@ export default function DrawerLayout() {
             options={{
               drawerLabel: 'TV',
               title: 'tv',
+            }}
+          />
+          <Drawer.Screen
+            name="watchlist"
+            options={{
+              drawerLabel: 'Watchlist',
+              title: 'watchlist',
             }}
           />
         </Drawer>

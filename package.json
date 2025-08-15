@@ -18,6 +18,7 @@
   "dependencies": {
     "@bam.tech/react-native-keyevent-expo-config-plugin": "^1.0.50",
     "@expo/vector-icons": "^14.0.0",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/drawer": "^6.6.15",
     "@react-navigation/native": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.12.2",
@@ -56,7 +57,7 @@
     "@types/react": "~18.2.45",
     "@types/react-test-renderer": "^18.0.7",
     "babel-plugin-module-resolver": "^4.1.0",
-    "eslint": "^9.13.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-native": "^4.1.0",
@@ -66,7 +67,8 @@
     "prettier": "^3.3.3",
     "react-native-pixel-perfect": "^1.0.2",
     "react-test-renderer": "18.2.0",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "eslint-config-expo": "~7.1.2"
   },
   "lint-staged": {
     "*.js": [

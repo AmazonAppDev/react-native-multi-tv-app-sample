@@ -5,9 +5,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect } from 'react';
 
 import { MenuProvider } from '../components/MenuContext';
+import { WatchlistProvider } from '../components/WatchlistContext';
 import { GoBackConfiguration } from './remote-control/GoBackConfiguration';
+import ErrorBoundary from '../components/ErrorBoundary';
 
-import "./configureRemoteControl"
+import './configureRemoteControl';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,18 +32,26 @@ export default function RootLayout() {
     return null;
   }
 
-  
   return (
-    <MenuProvider>
-    <ThemeProvider value={DarkTheme}>
-    <GoBackConfiguration />
-      <Stack>
-        <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-        <Stack.Screen name="details" />
-        <Stack.Screen name="player" />
-      </Stack>
-    </ThemeProvider>
-    </MenuProvider>
+    <ErrorBoundary
+      onError={(error, errorInfo) => {
+        console.error('App Error Boundary caught error:', error, errorInfo);
+        // In production, you might want to send this to a crash reporting service
+      }}
+    >
+      <MenuProvider>
+        <WatchlistProvider>
+          <ThemeProvider value={DarkTheme}>
+            <GoBackConfiguration />
+            <Stack>
+              <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+              <Stack.Screen name="details" />
+              <Stack.Screen name="player" />
+            </Stack>
+          </ThemeProvider>
+        </WatchlistProvider>
+      </MenuProvider>
+    </ErrorBoundary>
   );
 }

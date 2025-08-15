@@ -1,54 +1,72 @@
-import { scaledPixels } from "@/hooks/useScale";
-import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { View, StyleSheet, Image, Platform, Text } from "react-native";
-import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from "react-tv-space-navigation";
-import { useRouter } from "expo-router";
-import { useMenuContext } from "@/components/MenuContext";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { scaledPixels } from '@/hooks/useScale';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { View, StyleSheet, Image, Platform, Text } from 'react-native';
+import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from 'react-tv-space-navigation';
+import { useRouter } from 'expo-router';
+import { useMenuContext } from '@/components/MenuContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function CustomDrawerContent(props: any) {
   const router = useRouter();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const styles = useDrawerStyles();
-  const {top, right, bottom, left} = useSafeAreaInsets();
+  const { top, right, bottom, left } = useSafeAreaInsets();
   const drawerItems = [
     { name: '/', label: 'Home' },
-    { name: 'explore', label: 'Explore'},
-    { name: 'tv', label: 'TV'},
+    { name: 'explore', label: 'Explore' },
+    { name: 'tv', label: 'TV' },
+    { name: 'watchlist', label: 'Watchlist' },
   ];
 
   return (
     <SpatialNavigationRoot isActive={isMenuOpen}>
-      <DrawerContentScrollView {...props} style={styles.container} scrollEnabled={false} contentContainerStyle={{
-          ...(Platform.OS === "ios" &&
-            Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
-        }}>
+      <DrawerContentScrollView
+        {...props}
+        style={styles.container}
+        scrollEnabled={false}
+        contentContainerStyle={{
+          ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
+        }}
+      >
         <View style={styles.header}>
           <Image source={require('@/assets/images/logo.png')} style={styles.profilePic} />
           <Text style={styles.userName}>Pioneer Tom</Text>
           <Text style={styles.switchAccount}>Switch account</Text>
         </View>
-        {drawerItems.map((item, index) => (
-         index === 0 ? (
-          <DefaultFocus key={index}>
-            <SpatialNavigationFocusableView onSelect={() => { console.log(item.name); toggleMenu(false); router.push(item.name); }}>
+        {drawerItems.map((item, index) =>
+          index === 0 ? (
+            <DefaultFocus key={index}>
+              <SpatialNavigationFocusableView
+                onSelect={() => {
+                  console.log(item.name);
+                  toggleMenu(false);
+                  router.push(item.name);
+                }}
+              >
+                {({ isFocused }) => (
+                  <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
+                    <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+                  </View>
+                )}
+              </SpatialNavigationFocusableView>
+            </DefaultFocus>
+          ) : (
+            <SpatialNavigationFocusableView
+              key={index}
+              onSelect={() => {
+                console.log(item.name);
+                toggleMenu(false);
+                router.push(item.name);
+              }}
+            >
               {({ isFocused }) => (
                 <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
                   <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
                 </View>
               )}
             </SpatialNavigationFocusableView>
-          </DefaultFocus>
-        ) : (
-          <SpatialNavigationFocusableView key={index} onSelect={() => { console.log(item.name); toggleMenu(false);  router.push(item.name); }}>
-            {({ isFocused }) => (
-              <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
-              </View>
-            )}
-          </SpatialNavigationFocusableView>
-        )
-      ))}
+          ),
+        )}
       </DrawerContentScrollView>
     </SpatialNavigationRoot>
   );
