@@ -1,0 +1,14 @@
+{
+  "id": "gamelift-streams",
+  "name": "GameLift Streams WebView",
+  "version": "1.0.0",
+  "description": "Stream games via Amazon GameLift Streams using WebView",
+  "configPath": "./config/plugin-config.json",
+  "menuItems": [],
+  "routes": [
+    { "name": "gamelift/stream", "component": "StreamingScreen" }
+  ],
+  "dependencies": {
+    "react-native-webview": "^13.0.0"
+  }
+}

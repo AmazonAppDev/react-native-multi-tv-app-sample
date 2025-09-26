@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameLift Streams TV</title>
+    <style>
+        /* Amplify UI Styles (minimal required) */
+        .amplify-authenticator {
+            --amplify-colors-font-primary: white;
+            --amplify-colors-background-primary: #000;
+            --amplify-colors-background-secondary: #1a1a1a;
+        }
+        
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+        
+        /* Navigation */
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            background-color: #101419;
+            height: 110px;
+        }
+        
+        .navbar-center {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .navbar-title {
+            color: white;
+            font-size: clamp(16px, 2.5vw, 36px);
+            font-weight: 500;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-image: url('./Amazon-GameLift-Streams-logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .navbar-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* Controls */
+        .controls {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .controls > div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .controls input, .controls select {
+            padding: 8px 12px;
+            font-size: 16px;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+            min-width: 150px;
+        }
+        
+        .controls input:focus, .controls select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        button:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+        }
+        
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Video */
+        #StreamVideoElement {
+            width: 100vw;
+            height: auto;
+            display: block;
+            margin-left: calc(-50vw + 50%);
+            margin-right: calc(-50vw + 50%);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+        
+        /* Fullscreen button */
+        .fullscreen {
+            display: flex;
+            align-items: center;
+        }
+        
+        .fullscreen-button {
+            background: #27ae60;
+        }
+        
+        .fullscreen-button:hover {
+            background: #229954;
+        }
+        
+        .fullscreen-button:disabled {
+            background: #7f8c8d;
+        }
+        
+        /* Authentication styles */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+            padding: 40px;
+        }
+        
+        .auth-form {
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .auth-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .auth-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .auth-form button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Authentication will be handled here -->
+    </div>
+
+    <!-- Load GameLift Streams SDK only -->
+    <script src="./gameliftstreams-1.0.0.js"></script>
+    <script>
+        // Configuration - will be set by React Native
+        let apiConfig = null;
+        let authToken = null;
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('GameLift Streams TV app starting...');
+            
+            // Listen for configuration and auth token from React Native
+            window.addEventListener('message', function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.type === 'configure' && data.apiConfig) {
+                        apiConfig = data.apiConfig;
+                        console.log('API configuration received');
+                    }
+                    
+                    if (data.type === 'auth-token' && data.token) {
+                        authToken = data.token;
+                        console.log('Auth token received');
+                        
+                        // If we have both config and token, initialize the app
+                        if (apiConfig && authToken) {
+                            initializeApp();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error parsing message:', error);
+                }
+            });
+            
+            // Request configuration and token from React Native
+            if (window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                    type: 'requestConfig'
+                }));
+            } else if (window.parent !== window) {
+                // For iframe (web platform), post message to parent
+                window.parent.postMessage(JSON.stringify({
+                    type: 'requestConfig'
+                }), '*');
+            } else {
+                // Show error if no communication method available
+                showError('No communication method available. Please check your setup.');
+            }
+        });
+        
+        function initializeApp() {
+            if (!apiConfig || !authToken) {
+                showError('Configuration or authentication not received');
+                return;
+            }
+            
+            try {
+                console.log('Initializing GameLift Streams app');
+                
+                // Show the streaming interface directly (no separate auth needed)
+                showStreamingInterface();
+                
+            } catch (error) {
+                console.error('Failed to initialize app:', error);
+                showError('Failed to initialize: ' + error.message);
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('app').innerHTML = `
+                <div class="auth-container">
+                    <div class="auth-form">
+                        <h2>Configuration Error</h2>
+                        <div class="error-message">${message}</div>
+                        <p style="text-align: center; color: #ccc;">
+                            Please check your AWS configuration and try again.
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showAuthentication() {
+            document.getElementById('app').innerHTML = `
+                <div class="navbar">
+                    <div class="navbar-center">
+                        <span class="navbar-title">Amazon GameLift Streams</span>
+                        <div class="logo"></div>
+                    </div>
+                </div>
+                
+                <div class="auth-container">
+                    <div class="auth-form">
+                        <h2>Sign In</h2>
+                        <div id="auth-error" class="error-message" style="display: none;"></div>
+                        <input type="email" id="email" placeholder="Email" required>
+                        <input type="password" id="password" placeholder="Password" required>
+                        <button onclick="signIn()" id="signin-btn">Sign In</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function signIn() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('auth-error');
+            const signInBtn = document.getElementById('signin-btn');
+            
+            if (!email || !password) {
+                showAuthError('Please enter both email and password');
+                return;
+            }
+            
+            signInBtn.disabled = true;
+            signInBtn.textContent = 'Signing in...';
+            errorDiv.style.display = 'none';
+            
+            try {
+                const result = await window.aws_amplify.signIn({
+                    username: email,
+                    password: password
+                });
+                
+                if (result.isSignedIn) {
+                    console.log('Sign in successful');
+                    showStreamingInterface();
+                }
+                
+            } catch (error) {
+                console.error('Sign in error:', error);
+                showAuthError(error.message || 'Sign in failed');
+            } finally {
+                signInBtn.disabled = false;
+                signInBtn.textContent = 'Sign In';
+            }
+        }
+        
+        function showAuthError(message) {
+            const errorDiv = document.getElementById('auth-error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function showStreamingInterface() {
+            document.getElementById('app').innerHTML = `
+                <div class="navbar">
+                    <div class="navbar-center">
+                        <span class="navbar-title">Amazon GameLift Streams</span>
+                        <div class="logo"></div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <div>
+                        Stream Group ID: <input type="text" id="sgId">
+                    </div>
+                    <div>
+                        Application ID: <input type="text" id="appId">
+                    </div>
+                    <div>
+                        Region: 
+                        <select id="region">
+                            <option value="ap-northeast-1">ap-northeast-1 (Tokyo)</option>
+                            <option value="eu-central-1">eu-central-1 (Frankfurt)</option>
+                            <option value="eu-west-1">eu-west-1 (Ireland)</option>
+                            <option value="us-east-1">us-east-1 (N. Virginia)</option>
+                            <option value="us-east-2">us-east-2 (Ohio)</option>
+                            <option value="us-west-2" selected>us-west-2 (Oregon)</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <button onclick="toggleStream()" id="stream-btn">Start Stream</button>
+                        <div id="spinner" class="spinner" style="display: none;"></div>
+                    </div>
+                    <div class="fullscreen" id="fullscreen-container" style="display: none;">
+                        <button class="fullscreen-button" onclick="enableFullScreen()" id="fullscreen-btn">Fullscreen</button>
+                    </div>
+                </div>
+                
+                <div style="width: 100vw; overflow: hidden; position: relative; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding: 20px;">
+                    <video id="StreamVideoElement" autoplay playsinline style="width: 100%; height: auto; display: block;"></video>
+                    <audio id="StreamAudioElement" autoplay></audio>
+                </div>
+            `;
+            
+            // Initialize GameLift Streams SDK
+            initializeGameLiftStreams();
+        }
+        
+        // GameLift Streams implementation (from working sample)
+        let gameliftStreams = null;
+        let isStreamStarting = false;
+        let currentState = 'STOPPED';
+        let lastSessionId = '';
+        
+        function initializeGameLiftStreams() {
+            try {
+                gameliftStreams = new gameliftstreams.GameLiftStreams({
+                    videoElement: document.getElementById('StreamVideoElement'),
+                    audioElement: document.getElementById('StreamAudioElement'),
+                    inputConfiguration: {
+                        setCursor: 'visibility',
+                        autoPointerLock: 'fullscreen'
+                    },
+                    clientConnection: {
+                        connectionState: (state) => console.log('Connection state:', state),
+                        channelError: (error) => {
+                            console.error('Channel error:', error);
+                            alert('Channel error: ' + error.message);
+                        },
+                        serverDisconnect: (reason) => console.log('Server disconnect:', reason)
+                    }
+                });
+                console.log('GameLift Streams SDK initialized');
+            } catch (error) {
+                console.error('Failed to initialize GameLift Streams SDK:', error);
+                alert('Failed to initialize GameLift Streams SDK: ' + error.message);
+            }
+        }
+        
+        async function toggleStream() {
+            if (currentState === 'RUNNING') {
+                stopStream();
+            } else {
+                await startStream();
+            }
+        }
+        
+        async function startStream() {
+            const sgId = document.getElementById('sgId').value.trim();
+            const appId = document.getElementById('appId').value.trim();
+            const region = document.getElementById('region').value;
+            
+            if (!sgId || !appId) {
+                alert('Please enter both Stream Group ID and Application ID');
+                return;
+            }
+            
+            if (isStreamStarting) return;
+            
+            isStreamStarting = true;
+            currentState = 'LOADING';
+            updateUI();
+            
+            try {
+                const signalRequest = await gameliftStreams.generateSignalRequest();
+                
+                const payload = {
+                    AppIdentifier: appId,
+                    SGIdentifier: sgId,
+                    SignalRequest: signalRequest,
+                    Regions: [region]
+                };
+                
+                const response = await fetch(apiConfig.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                await waitForACTIVE(data.arn, sgId);
+                
+            } catch (error) {
+                console.error('Failed to start stream:', error);
+                alert('Error: ' + (error.message || 'Unknown error'));
+                currentState = 'STOPPED';
+            } finally {
+                isStreamStarting = false;
+                updateUI();
+            }
+        }
+        
+        async function waitForACTIVE(arn, sg, timeoutMs = 600000) {
+            const startTime = Date.now();
+            
+            while (Date.now() - startTime < timeoutMs) {
+                console.log('Waiting for stream session:', arn);
+                
+                try {
+                    const response = await fetch(`${apiConfig.endpoint}/session/${encodeURIComponent(sg)}/${encodeURIComponent(arn)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'ACTIVE') {
+                        await startStreamConnection(data.signalResponse);
+                        lastSessionId = arn; // Keep for potential future auto-reconnect
+                        return;
+                    }
+                    
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                } catch (error) {
+                    console.error('Error polling session status:', error);
+                    throw error;
+                }
+            }
+            
+            throw new Error(`Stream session ${arn} did not become active within ${timeoutMs}ms`);
+        }
+        
+        async function startStreamConnection(signalResponse) {
+            await gameliftStreams.processSignalResponse(signalResponse);
+            gameliftStreams.attachInput();
+            currentState = 'RUNNING';
+            updateUI();
+        }
+        
+        function stopStream() {
+            currentState = 'STOPPED';
+            if (gameliftStreams) {
+                gameliftStreams.close();
+            }
+            
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+            
+            initializeGameLiftStreams();
+            updateUI();
+        }
+        
+        async function reconnectStream(sessionId) {
+            if (!sessionId) {
+                console.error('No session ID provided for reconnection');
+                return;
+            }
+            
+            if (isStreamStarting) return;
+            
+            isStreamStarting = true;
+            updateUI();
+            
+            try {
+                const signalRequest = await gameliftStreams.generateSignalRequest();
+                
+                const payload = {
+                    SessionIdentifier: sessionId,
+                    SignalRequest: signalRequest
+                };
+                
+                const session = await window.aws_amplify.fetchAuthSession();
+                const idToken = session.tokens?.idToken?.toString();
+                
+                const restOperation = window.aws_amplify.post({
+                    apiName: 'demo-api',
+                    path: '/reconnect',
+                    options: {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${idToken}`
+                        },
+                        body: payload
+                    }
+                });
+                
+                const { body } = await restOperation.response;
+                const data = JSON.parse(await body.text());
+                
+                await startStreamConnection(data.signalResponse);
+                
+            } catch (error) {
+                console.error('Failed to reconnect stream:', error);
+                alert('Error: ' + (error.message || 'Reconnection failed'));
+            } finally {
+                isStreamStarting = false;
+                updateUI();
+            }
+        }
+        
+        function enableFullScreen() {
+            const element = document.getElementById('StreamVideoElement');
+            if (element && currentState === 'RUNNING') {
+                gameliftStreams.attachInput();
+                element.requestFullscreen();
+                
+                if (navigator.keyboard) {
+                    navigator.keyboard.lock(["Escape"]);
+                }
+            }
+        }
+        
+        function updateUI() {
+            const streamBtn = document.getElementById('stream-btn');
+            const spinner = document.getElementById('spinner');
+            const fullscreenContainer = document.getElementById('fullscreen-container');
+            
+            if (currentState === 'RUNNING') {
+                streamBtn.textContent = 'End Stream';
+                fullscreenContainer.style.display = 'block';
+            } else {
+                streamBtn.textContent = 'Start Stream';
+                fullscreenContainer.style.display = 'none';
+            }
+            
+            streamBtn.disabled = isStreamStarting;
+            spinner.style.display = isStreamStarting ? 'inline-block' : 'none';
+        }
+    </script>
+</body>
+</html>

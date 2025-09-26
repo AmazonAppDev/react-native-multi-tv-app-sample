@@ -16,12 +16,14 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@aws-amplify/react-native": "^1.1.10",
     "@bam.tech/react-native-keyevent-expo-config-plugin": "^1.0.50",
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/drawer": "^6.6.15",
     "@react-navigation/native": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.12.2",
     "@typescript-eslint/parser": "^8.12.2",
+    "aws-amplify": "^6.15.6",
     "expo": "~51.0.13",
     "expo-build-properties": "~0.12.3",
     "expo-constants": "~16.0.2",
@@ -45,6 +47,7 @@
     "react-native-screens": "3.31.1",
     "react-native-video": "^6.8.0",
     "react-native-web": "~0.19.10",
+    "react-native-webview": "^13.16.0",
     "react-tv-space-navigation": "^3.6.1"
   },
   "devDependencies": {

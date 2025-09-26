@@ -15,11 +15,9 @@ export default function DrawerLayout() {
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const navigation = useNavigation();
 
-  console.log('isMenuOpen:', isMenuOpen);
-
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      console.log("Direction " + movement);
+      console.log('Direction ' + movement);
       if (movement === 'right') {
         navigation.dispatch(DrawerActions.closeDrawer());
         toggleMenu(false);
@@ -32,18 +30,20 @@ export default function DrawerLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SpatialNavigationRoot
         isActive={isMenuOpen}
-        onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
-        <Drawer 
-          drawerContent={CustomDrawerContent} 
+        onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}
+      >
+        <Drawer
+          drawerContent={CustomDrawerContent}
           defaultStatus="open"
           screenOptions={{
             headerShown: false,
-            drawerActiveBackgroundColor: '#3498db', // Changed to a blue color
+            drawerActiveBackgroundColor: '#3498db',
             drawerActiveTintColor: '#ffffff',
             drawerInactiveTintColor: '#bdc3c7',
             drawerStyle: styles.drawerStyle,
             drawerLabelStyle: styles.drawerLabelStyle,
-          }}>
+          }}
+        >
           <Drawer.Screen
             name="index"
             options={{
@@ -65,6 +65,13 @@ export default function DrawerLayout() {
               title: 'tv',
             }}
           />
+          <Drawer.Screen
+            name="games"
+            options={{
+              drawerLabel: 'Games',
+              title: 'games',
+            }}
+          />
         </Drawer>
       </SpatialNavigationRoot>
     </GestureHandlerRootView>
@@ -75,13 +82,13 @@ const useDrawerStyles = function () {
   return StyleSheet.create({
     drawerStyle: {
       width: scaledPixels(300),
-      backgroundColor: '#2c3e50', // Dark blue background
-      paddingTop: scaledPixels(0), // Add some top padding
+      backgroundColor: '#2c3e50',
+      paddingTop: scaledPixels(0),
     },
     drawerLabelStyle: {
       fontSize: scaledPixels(18),
       fontWeight: 'bold',
-      marginLeft: scaledPixels(10), // Add some left margin
+      marginLeft: scaledPixels(10),
     },
   });
 };

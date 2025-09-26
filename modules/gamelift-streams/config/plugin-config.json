@@ -1,0 +1,17 @@
+{
+  "aws": {
+    "cognito": {
+      "userPoolId": "PLACEHOLDER_USER_POOL_ID",
+      "userPoolClientId": "PLACEHOLDER_USER_POOL_CLIENT_ID",
+      "region": "PLACEHOLDER_COGNITO_REGION"
+    },
+    "api": {
+      "endpoint": "PLACEHOLDER_API_ENDPOINT",
+      "region": "PLACEHOLDER_API_REGION"
+    },
+    "gamelift": {
+      "defaultRegions": ["PLACEHOLDER_REGION_1", "PLACEHOLDER_REGION_2", "PLACEHOLDER_REGION_3"],
+      "connectionTimeout": 120
+    }
+  }
+}
