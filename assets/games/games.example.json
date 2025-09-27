@@ -1,0 +1,40 @@
+{
+  "games": [
+    {
+      "id": "racing-demo",
+      "name": "Racing Championship",
+      "description": "High-speed racing with stunning graphics and realistic physics",
+      "image": "./assets/games/images/racing.jpg",
+      "streamGroupId": "sample-sg-racing-123",
+      "applicationId": "sample-app-racing-456",
+      "region": "us-west-2"
+    },
+    {
+      "id": "adventure-demo",
+      "name": "Adventure Quest",
+      "description": "Epic adventure through mystical lands with challenging puzzles",
+      "image": "./assets/games/images/adventure.jpg",
+      "streamGroupId": "sample-sg-adventure-789",
+      "applicationId": "sample-app-adventure-012",
+      "region": "us-west-2"
+    },
+    {
+      "id": "shooter-demo",
+      "name": "Space Shooter",
+      "description": "Fast-paced space combat with multiplayer battles",
+      "image": "./assets/games/images/shooter.jpg",
+      "streamGroupId": "sample-sg-shooter-345",
+      "applicationId": "sample-app-shooter-678",
+      "region": "us-east-1"
+    },
+    {
+      "id": "puzzle-demo",
+      "name": "Mind Puzzles",
+      "description": "Brain-teasing puzzles that challenge your logic and creativity",
+      "image": "./assets/games/images/puzzle.jpg",
+      "streamGroupId": "sample-sg-puzzle-901",
+      "applicationId": "sample-app-puzzle-234",
+      "region": "us-west-2"
+    }
+  ]
+}

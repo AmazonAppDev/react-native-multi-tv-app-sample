@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameLift Streams TV</title>
     <style>
-        /* Amplify UI Styles (minimal required) */
-        .amplify-authenticator {
-            --amplify-colors-font-primary: white;
-            --amplify-colors-background-primary: #000;
-            --amplify-colors-background-secondary: #1a1a1a;
-        }
-        
         /* Base styles */
         * {
             margin: 0;
@@ -20,110 +13,168 @@
         }
         
         body {
-            background: #000;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
             color: white;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             overflow: hidden;
+            min-height: 100vh;
         }
         
-        /* Navigation */
-        .navbar {
+        /* Modern Gaming Header */
+        .header {
+            background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(26,26,46,0.8) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 20px 40px;
             display: flex;
             align-items: center;
-            padding: 0 20px;
-            background-color: #101419;
-            height: 110px;
+            justify-content: space-between;
+            position: relative;
         }
         
-        .navbar-center {
+        .logo-container {
             display: flex;
             align-items: center;
-            gap: 20px;
-            flex: 1;
+            gap: 16px;
+        }
+        
+        .brand-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
+            min-height: calc(100vh - 100px);
+            padding: 40px;
+            position: relative;
         }
         
-        .navbar-title {
-            color: white;
-            font-size: clamp(16px, 2.5vw, 36px);
-            font-weight: 500;
-        }
-        
-        .logo {
-            width: 80px;
-            height: 80px;
-            background-image: url('./Amazon-GameLift-Streams-logo.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        
-        .navbar-right {
-            display: flex;
-            justify-content: flex-end;
-        }
-        
-        /* Controls */
-        .controls {
+        /* Game Control Panel */
+        .game-panel {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
             width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 0 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
-        .controls > div {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .game-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        .controls input, .controls select {
-            padding: 8px 12px;
+        .game-subtitle {
             font-size: 16px;
-            background: #333;
-            color: white;
-            border: 1px solid #555;
-            border-radius: 4px;
-            min-width: 150px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 40px;
         }
         
-        .controls input:focus, .controls select:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-        
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background: #3498db;
-            color: white;
+        /* Unified Button System */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 36px;
+            font-size: 18px;
+            font-weight: 600;
             border: none;
-            border-radius: 4px;
+            border-radius: 50px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            min-width: 180px;
         }
         
-        button:hover {
-            background: #2980b9;
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
         
-        button:disabled {
-            background: #7f8c8d;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(44, 62, 80, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(44, 62, 80, 0.6);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(231, 76, 60, 0.6);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(39, 174, 96, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+            transform: none;
+            box-shadow: none;
             cursor: not-allowed;
+            opacity: 0.6;
         }
         
-        /* Spinner */
+        .btn-icon {
+            font-size: 20px;
+        }
+        
+        /* Loading Spinner */
         .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin-left: 10px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #667eea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin-left: 12px;
         }
         
         @keyframes spin {
@@ -131,86 +182,163 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Video */
-        #StreamVideoElement {
+        /* Controls Container */
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .controls-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        /* Custom Confirmation Modal */
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
-            height: auto;
-            display: block;
-            margin-left: calc(-50vw + 50%);
-            margin-right: calc(-50vw + 50%);
-            padding: 20px;
-            box-sizing: border-box;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        
+        .confirmation-dialog {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        
+        .confirmation-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+        
+        .confirmation-message {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+        
+        .confirmation-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
         }
         
         video::-webkit-media-controls {
             display: none !important;
         }
         
-        /* Fullscreen button */
-        .fullscreen {
-            display: flex;
-            align-items: center;
+        /* Hidden inputs */
+        .hidden {
+            display: none !important;
         }
         
-        .fullscreen-button {
-            background: #27ae60;
-        }
-        
-        .fullscreen-button:hover {
-            background: #229954;
-        }
-        
-        .fullscreen-button:disabled {
-            background: #7f8c8d;
-        }
-        
-        /* Authentication styles */
+        /* Auth Form */
         .auth-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 60vh;
+            min-height: calc(100vh - 100px);
             padding: 40px;
         }
         
         .auth-form {
-            background: #1a1a1a;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
             padding: 40px;
-            border-radius: 8px;
             width: 100%;
             max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
         .auth-form h2 {
             text-align: center;
             margin-bottom: 30px;
-            color: white;
+            font-size: 28px;
+            font-weight: 700;
         }
         
         .auth-form input {
             width: 100%;
-            padding: 12px;
+            padding: 16px 20px;
             margin-bottom: 20px;
-            background: #333;
+            background: rgba(255,255,255,0.1);
             color: white;
-            border: 1px solid #555;
-            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
             font-size: 16px;
+            transition: all 0.3s ease;
         }
         
-        .auth-form button {
-            width: 100%;
-            padding: 12px;
-            font-size: 18px;
+        .auth-form input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .auth-form input::placeholder {
+            color: rgba(255,255,255,0.6);
         }
         
         .error-message {
             color: #e74c3c;
             text-align: center;
             margin-bottom: 20px;
-            padding: 10px;
+            padding: 12px;
             background: rgba(231, 76, 60, 0.1);
-            border-radius: 4px;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            
+            .brand-text {
+                font-size: 20px;
+            }
+            
+            .game-logo {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .game-panel {
+                padding: 30px 20px;
+            }
+            
+            .controls-row {
+                flex-direction: column;
+                gap: 12px;
+            }
         }
     </style>
 </head>
@@ -247,6 +375,44 @@
                         // If we have both config and token, initialize the app
                         if (apiConfig && authToken) {
                             initializeApp();
+                        }
+                    }
+                    
+                    if (data.type === 'game-config' && data.game) {
+                        // Auto-fill form with game configuration
+                        document.getElementById('sgId').value = data.game.streamGroupId || '';
+                        document.getElementById('appId').value = data.game.applicationId || '';
+                        document.getElementById('region').value = data.game.region || 'us-west-2';
+                        console.log('Game configuration applied:', data.game);
+                    }
+                    
+                    if (data.type === 'check-stream-and-navigate') {
+                        // Check if streaming and handle navigation
+                        const streamBtn = document.getElementById('stream-btn');
+                        const isStreaming = streamBtn && streamBtn.textContent.includes('End Game');
+                        
+                        if (isStreaming) {
+                            showConfirmationModal(
+                                'End Game Session',
+                                'You have an active game session. Do you want to end it and return to games?',
+                                () => {
+                                    // User confirmed - end stream
+                                    toggleStream();
+                                    setTimeout(() => {
+                                        if (window.parent !== window) {
+                                            window.parent.postMessage(JSON.stringify({type: 'navigate-back'}), '*');
+                                        }
+                                    }, 1000);
+                                },
+                                () => {
+                                    // User cancelled - do nothing
+                                }
+                            );
+                        } else {
+                            // No active stream - navigate immediately
+                            if (window.parent !== window) {
+                                window.parent.postMessage(JSON.stringify({type: 'navigate-back'}), '*');
+                            }
                         }
                     }
                 } catch (error) {
@@ -290,11 +456,18 @@
         
         function showError(message) {
             document.getElementById('app').innerHTML = `
+                <div class="header">
+                    <div></div>
+                    <div class="logo-container">
+                        <div class="brand-text">Amazon GameLift Streams</div>
+                    </div>
+                </div>
+                
                 <div class="auth-container">
                     <div class="auth-form">
                         <h2>Configuration Error</h2>
                         <div class="error-message">${message}</div>
-                        <p style="text-align: center; color: #ccc;">
+                        <p style="text-align: center; color: rgba(255,255,255,0.7); line-height: 1.5;">
                             Please check your AWS configuration and try again.
                         </p>
                     </div>
@@ -304,20 +477,23 @@
         
         function showAuthentication() {
             document.getElementById('app').innerHTML = `
-                <div class="navbar">
-                    <div class="navbar-center">
-                        <span class="navbar-title">Amazon GameLift Streams</span>
-                        <div class="logo"></div>
+                <div class="header">
+                    <div></div>
+                    <div class="logo-container">
+                        <div class="brand-text">Amazon GameLift Streams</div>
                     </div>
                 </div>
                 
                 <div class="auth-container">
                     <div class="auth-form">
-                        <h2>Sign In</h2>
+                        <h2>Sign In to Play</h2>
                         <div id="auth-error" class="error-message" style="display: none;"></div>
                         <input type="email" id="email" placeholder="Email" required>
                         <input type="password" id="password" placeholder="Password" required>
-                        <button onclick="signIn()" id="signin-btn">Sign In</button>
+                        <button onclick="signIn()" id="signin-btn" class="btn btn-primary" style="width: 100%;">
+                            <span class="btn-icon">🔐</span>
+                            Sign In
+                        </button>
                     </div>
                 </div>
             `;
@@ -366,38 +542,40 @@
         
         function showStreamingInterface() {
             document.getElementById('app').innerHTML = `
-                <div class="navbar">
-                    <div class="navbar-center">
-                        <span class="navbar-title">Amazon GameLift Streams</span>
-                        <div class="logo"></div>
-                    </div>
-                </div>
-                
-                <div class="controls">
-                    <div>
-                        Stream Group ID: <input type="text" id="sgId">
-                    </div>
-                    <div>
-                        Application ID: <input type="text" id="appId">
-                    </div>
-                    <div>
-                        Region: 
-                        <select id="region">
-                            <option value="ap-northeast-1">ap-northeast-1 (Tokyo)</option>
-                            <option value="eu-central-1">eu-central-1 (Frankfurt)</option>
-                            <option value="eu-west-1">eu-west-1 (Ireland)</option>
-                            <option value="us-east-1">us-east-1 (N. Virginia)</option>
-                            <option value="us-east-2">us-east-2 (Ohio)</option>
-                            <option value="us-west-2" selected>us-west-2 (Oregon)</option>
-                        </select>
-                    </div>
-                    <div style="display: flex; align-items: center;">
-                        <button onclick="toggleStream()" id="stream-btn">Start Stream</button>
+                <div class="header">
+                    <div style="flex: 1;"></div>
+                    
+                    <div style="display: flex; align-items: center; gap: 20px; flex: 1; justify-content: center;">
+                        <!-- Centered controls -->
+                        <button onclick="toggleStream()" id="stream-btn" class="btn btn-primary">
+                            <span class="btn-icon">▶</span>
+                            Play Game
+                        </button>
                         <div id="spinner" class="spinner" style="display: none;"></div>
+                        
+                        <div id="fullscreen-container" style="display: none;">
+                            <button class="btn btn-success" onclick="enableFullScreen()" id="fullscreen-btn">
+                                <span class="btn-icon">⛶</span>
+                                Fullscreen
+                            </button>
+                        </div>
                     </div>
-                    <div class="fullscreen" id="fullscreen-container" style="display: none;">
-                        <button class="fullscreen-button" onclick="enableFullScreen()" id="fullscreen-btn">Fullscreen</button>
+                    
+                    <div class="logo-container" style="flex: 1; justify-content: flex-end; display: flex;">
+                        <div class="brand-text">Amazon GameLift Streams</div>
                     </div>
+                    
+                    <!-- Hidden inputs - auto-filled by game config -->
+                    <input type="text" id="sgId" class="hidden">
+                    <input type="text" id="appId" class="hidden">
+                    <select id="region" class="hidden">
+                        <option value="ap-northeast-1">ap-northeast-1 (Tokyo)</option>
+                        <option value="eu-central-1">eu-central-1 (Frankfurt)</option>
+                        <option value="eu-west-1">eu-west-1 (Ireland)</option>
+                        <option value="us-east-1">us-east-1 (N. Virginia)</option>
+                        <option value="us-east-2">us-east-2 (Ohio)</option>
+                        <option value="us-west-2" selected>us-west-2 (Oregon)</option>
+                    </select>
                 </div>
                 
                 <div style="width: 100vw; overflow: hidden; position: relative; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding: 20px;">
@@ -408,6 +586,60 @@
             
             // Initialize GameLift Streams SDK
             initializeGameLiftStreams();
+        }
+        
+        // Custom confirmation modal for TV-friendly UX
+        function showConfirmationModal(title, message, onConfirm, onCancel) {
+            const modal = document.createElement('div');
+            modal.className = 'confirmation-modal';
+            modal.innerHTML = `
+                <div class="confirmation-dialog">
+                    <h2 class="confirmation-title">${title}</h2>
+                    <p class="confirmation-message">${message}</p>
+                    <div class="confirmation-buttons">
+                        <button class="btn btn-secondary" id="cancel-btn">
+                            <span class="btn-icon">✕</span>
+                            Cancel
+                        </button>
+                        <button class="btn btn-danger" id="confirm-btn">
+                            <span class="btn-icon">⏹</span>
+                            End Game
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Focus the confirm button by default (TV-friendly)
+            const confirmBtn = modal.querySelector('#confirm-btn');
+            const cancelBtn = modal.querySelector('#cancel-btn');
+            
+            confirmBtn.focus();
+            
+            confirmBtn.onclick = () => {
+                document.body.removeChild(modal);
+                onConfirm();
+            };
+            
+            cancelBtn.onclick = () => {
+                document.body.removeChild(modal);
+                onCancel();
+            };
+            
+            // Handle keyboard navigation
+            modal.onkeydown = (e) => {
+                if (e.key === 'Escape') {
+                    document.body.removeChild(modal);
+                    onCancel();
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    if (document.activeElement === confirmBtn) {
+                        cancelBtn.focus();
+                    } else {
+                        confirmBtn.focus();
+                    }
+                }
+            };
         }
         
         // GameLift Streams implementation (from working sample)
@@ -626,10 +858,12 @@
             const fullscreenContainer = document.getElementById('fullscreen-container');
             
             if (currentState === 'RUNNING') {
-                streamBtn.textContent = 'End Stream';
+                streamBtn.innerHTML = '<span class="btn-icon">⏹</span>End Game';
+                streamBtn.className = 'btn btn-danger';
                 fullscreenContainer.style.display = 'block';
             } else {
-                streamBtn.textContent = 'Start Stream';
+                streamBtn.innerHTML = '<span class="btn-icon">▶</span>Play Game';
+                streamBtn.className = 'btn btn-primary';
                 fullscreenContainer.style.display = 'none';
             }
             
