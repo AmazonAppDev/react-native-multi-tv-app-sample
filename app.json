@@ -52,10 +52,19 @@
     "slug": "MultiTVSample",
     "scheme": "com.anonymous.MultiTVSample",
     "android": {
-      "package": "com.anonymous.MultiTVSample"
+      "package": "com.anonymous.MultiTVSample",
+      "permissions": []
     },
     "ios": {
       "bundleIdentifier": "com.anonymous.MultiTVSample"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "9ba7d13a-cd7c-4ade-a236-3dbcea58434a"
+      }
     }
   }
 }
