@@ -1,7 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SpatialNavigationFocusableView, SpatialNavigationScrollView, DefaultFocus } from 'react-tv-space-navigation';
+import {
+  SpatialNavigationFocusableView,
+  SpatialNavigationScrollView,
+  DefaultFocus,
+  SpatialNavigationVirtualizedList,
+  SpatialNavigationNode,
+} from 'react-tv-space-navigation';
 import { scaledPixels } from '@/hooks/useScale';
 import { Game } from '../utils/gamesConfig';
 
@@ -21,6 +27,21 @@ const CARD_MARGIN = scaledPixels(30);
 export default function GamesGrid({ games, onGameSelect, isActive = true }: GamesGridProps) {
   const [focusedGame, setFocusedGame] = useState<Game | null>(games[0] || null);
 
+  // Static image mapping - React Native requires static paths for bundling
+  const getImageSource = (imagePath: string) => {
+    const filename = imagePath.split('/').pop();
+
+    // Static mapping that React Native can bundle at build time
+    switch (filename) {
+      case 'sample1.png':
+        return require('../assets/games/images/sample1.png');
+      case 'sample2.jpg':
+        return require('../assets/games/images/sample2.jpg');
+      default:
+        return require('../assets/games/images/placeholder.png');
+    }
+  };
+
   const renderGameCard = useCallback(
     (game: Game, index: number) => (
       <SpatialNavigationFocusableView
@@ -32,7 +53,7 @@ export default function GamesGrid({ games, onGameSelect, isActive = true }: Game
           <View style={[styles.gameCard, isFocused && styles.gameCardFocused]}>
             <View style={styles.imageContainer}>
               <Image
-                source={{ uri: game.image }}
+                source={getImageSource(game.image)}
                 style={styles.gameImage}
                 defaultSource={require('../assets/games/images/placeholder.png')}
               />
@@ -58,7 +79,7 @@ export default function GamesGrid({ games, onGameSelect, isActive = true }: Game
       {focusedGame && (
         <View style={styles.heroSection}>
           <Image
-            source={{ uri: focusedGame.image }}
+            source={getImageSource(focusedGame.image)}
             style={styles.heroImage}
             defaultSource={require('../assets/games/images/placeholder.png')}
           />
@@ -76,9 +97,19 @@ export default function GamesGrid({ games, onGameSelect, isActive = true }: Game
       {/* Horizontal Games Row - 60% of screen */}
       <View style={styles.gamesRowContainer}>
         <Text style={styles.sectionTitle}>Available Games</Text>
-        <View style={styles.gamesWrapper}>
-          <DefaultFocus>{games.map((game, index) => renderGameCard(game, index))}</DefaultFocus>
-        </View>
+        <SpatialNavigationNode>
+          <DefaultFocus>
+            <SpatialNavigationVirtualizedList
+              data={games}
+              orientation="horizontal"
+              renderItem={({ item: game, index }) => renderGameCard(game, index)}
+              itemSize={CARD_WIDTH + CARD_MARGIN}
+              numberOfRenderedItems={6}
+              numberOfItemsVisibleOnScreen={3}
+              onEndReachedThresholdItemsNumber={2}
+            />
+          </DefaultFocus>
+        </SpatialNavigationNode>
       </View>
     </View>
   );
@@ -144,6 +175,7 @@ const styles = StyleSheet.create({
   gamesRowContainer: {
     height: GAMES_ROW_HEIGHT,
     paddingTop: scaledPixels(50),
+    paddingLeft: scaledPixels(80),
     justifyContent: 'center',
   },
   sectionTitle: {

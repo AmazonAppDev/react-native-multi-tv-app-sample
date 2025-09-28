@@ -19,6 +19,69 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
   const router = useRouter();
   const webViewRef = useRef<any>(null);
 
+  // Handle web platform messages - must be at top level before any conditional returns
+  React.useEffect(() => {
+    if (Platform.OS !== 'web') return;
+
+    const handleMessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log('Message from iframe:', data);
+
+        if (data.type === 'requestConfig') {
+          sendConfigurationToIframe();
+        } else if (data.type === 'navigate-back') {
+          onBack?.();
+        }
+      } catch (error) {
+        console.error('Error handling iframe message:', error);
+      }
+    };
+
+    const sendConfigurationToIframe = () => {
+      const iframe = document.querySelector('iframe[title="GameLift Streams"]') as HTMLIFrameElement;
+      if (iframe && iframe.contentWindow) {
+        // Send API config
+        iframe.contentWindow.postMessage(
+          JSON.stringify({
+            type: 'configure',
+            apiConfig: { endpoint: awsconfig.API.REST['gamelift-api'].endpoint },
+          }),
+          '*',
+        );
+
+        // Send auth token
+        iframe.contentWindow.postMessage(
+          JSON.stringify({
+            type: 'auth-token',
+            token: token,
+          }),
+          '*',
+        );
+
+        // Send game configuration if available
+        if (game) {
+          iframe.contentWindow.postMessage(
+            JSON.stringify({
+              type: 'game-config',
+              game: {
+                streamGroupId: game.streamGroupId,
+                applicationId: game.applicationId,
+                region: game.region,
+              },
+            }),
+            '*',
+          );
+        }
+
+        console.log('Configuration sent to iframe');
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [token, game, onBack]);
+
   const handleBackPress = () => {
     if (Platform.OS === 'web') {
       // For web platform, use iframe
@@ -100,67 +163,6 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
 
   // Check if WebView is supported on current platform
   if (Platform.OS === 'web') {
-    // For web platform, use iframe and handle messages
-    React.useEffect(() => {
-      const handleMessage = (event: MessageEvent) => {
-        try {
-          const data = JSON.parse(event.data);
-          console.log('Message from iframe:', data);
-
-          if (data.type === 'requestConfig') {
-            sendConfigurationToIframe();
-          } else if (data.type === 'navigate-back') {
-            onBack?.();
-          }
-        } catch (error) {
-          console.error('Error handling iframe message:', error);
-        }
-      };
-
-      window.addEventListener('message', handleMessage);
-      return () => window.removeEventListener('message', handleMessage);
-    }, [token, game]);
-
-    const sendConfigurationToIframe = () => {
-      const iframe = document.querySelector('iframe[title="GameLift Streams"]') as HTMLIFrameElement;
-      if (iframe && iframe.contentWindow) {
-        // Send API config
-        iframe.contentWindow.postMessage(
-          JSON.stringify({
-            type: 'configure',
-            apiConfig: { endpoint: awsconfig.API.REST['gamelift-api'].endpoint },
-          }),
-          '*',
-        );
-
-        // Send auth token
-        iframe.contentWindow.postMessage(
-          JSON.stringify({
-            type: 'auth-token',
-            token: token,
-          }),
-          '*',
-        );
-
-        // Send game configuration if available
-        if (game) {
-          iframe.contentWindow.postMessage(
-            JSON.stringify({
-              type: 'game-config',
-              game: {
-                streamGroupId: game.streamGroupId,
-                applicationId: game.applicationId,
-                region: game.region,
-              },
-            }),
-            '*',
-          );
-        }
-
-        console.log('Configuration sent to iframe');
-      }
-    };
-
     return (
       <View style={styles.container}>
         {onBack && (
@@ -264,7 +266,8 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
 
   const getWebViewSource = () => {
     if (Platform.OS === 'android') {
-      return { uri: 'file:///android_asset/gamelift-web/index.html' };
+      // React Native best practice - use require for bundled assets
+      return require('../../../assets/gamelift-web/index.html');
     } else if (Platform.OS === 'ios') {
       return require('../../../assets/gamelift-web/index.html');
     } else {

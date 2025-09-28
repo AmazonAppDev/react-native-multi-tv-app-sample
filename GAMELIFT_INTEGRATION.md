@@ -1,10 +1,27 @@
 # GameLift Streams Integration
 
-**Status**: Production Ready ✅
+**Status**: Development Ready ✅ (WebView loading works, GameLift JS loading needs production build)
 
 ## Overview
 
 GameLift Streams integration for React Native Multi-TV App with **content-first authentication**. Users can browse content without login - authentication only required for Games section.
+
+## Current Status
+
+### ✅ Working Features
+- **Navigation**: Games grid with left/right arrow navigation
+- **Menu Integration**: Left arrow on first game opens drawer menu
+- **Authentication Flow**: Login redirect and token management
+- **WebView Loading**: HTML loads successfully on all platforms
+- **API Communication**: WebView ↔ React Native message passing
+- **Image Loading**: Game images display correctly (sample1.png, sample2.jpg)
+- **Development Environment**: Live reload setup for Fire TV development
+
+### ⚠️ Known Issues
+- **GameLift JavaScript Loading**: Metro bundler blocks .js assets in development mode
+  - **Workaround**: Build production APK where Metro bundles assets properly
+  - **Impact**: WebView loads but GameLift SDK functions not available in development
+  - **Solution**: Use `eas build --platform android --profile production` for full testing
 
 ## Architecture
 
@@ -100,20 +117,159 @@ iframe.contentWindow.postMessage(JSON.stringify({
 }), '*');
 ```
 
-## Troubleshooting
+## Deployment, Testing and Troubleshooting
 
-### Configuration
-- **"Configuration not received"** → Check `aws-exports.js` exists
-- **HTTP 404 errors** → Verify API endpoint in aws-exports.js
+### Web Development
+```bash
+# Start web development server
+npx expo start --web
 
-### Authentication  
-- **Direct redirect not working** → Check GameLiftWebView useEffect
-- **Login errors** → Verify error handling in login screen
-- **Menu navigation** → Check onDirectionHandledWithoutMovement
+# Build for web deployment
+npx expo export -p web
+# Output: dist/ directory with web files
+```
 
-### Streaming
-- **Session timeout** → Check GameLift app/stream group config
-- **No video** → Verify WebRTC support and network
+### Android TV / Fire TV Development
+
+#### Local Development (Recommended for debugging)
+```bash
+# Set TV environment
+export EXPO_TV=1
+
+# Clean and prebuild for TV
+npx expo prebuild --clean
+
+# Connect to Fire TV via ADB
+adb connect [FIRE_TV_IP]:5555
+adb devices
+
+# Build and install locally
+npx expo run:android
+```
+
+#### EAS Build (Recommended for testing)
+```bash
+# Install EAS CLI
+npm install -g eas-cli
+
+# Login to Expo
+eas login
+
+# Configure EAS (first time only)
+eas build:configure
+
+# Build APK for Fire TV
+eas build --platform android --profile production
+
+# Install downloaded APK
+adb -s [FIRE_TV_IP]:5555 install downloaded-app.apk
+```
+
+### Dependencies for Fire TV
+```bash
+# Required for AWS Amplify on React Native
+npm install react-native-get-random-values --legacy-peer-deps
+npm install @react-native-async-storage/async-storage --legacy-peer-deps
+
+# Create .npmrc for EAS builds
+echo "legacy-peer-deps=true" > .npmrc
+```
+
+### Fire TV Connection Setup
+```bash
+# Enable Developer Options on Fire TV:
+# Settings → My Fire TV → About → Developer Options
+# Turn on: ADB Debugging, Apps from Unknown Sources
+
+# Find Fire TV IP:
+# Settings → My Fire TV → About → Network
+
+# Connect via ADB
+adb connect [FIRE_TV_IP]:5555
+adb devices
+```
+
+### Troubleshooting Commands
+
+#### Check Fire TV Logs
+```bash
+# General app errors
+adb -s [FIRE_TV_IP]:5555 logcat | grep -i "crash\|error\|exception"
+
+# Your app specific logs
+adb -s [FIRE_TV_IP]:5555 logcat | grep "MultiTVSample"
+
+# React Native JavaScript errors
+adb -s [FIRE_TV_IP]:5555 logcat | grep "ReactNativeJS"
+
+# Clear logs and monitor live
+adb -s [FIRE_TV_IP]:5555 logcat -c
+adb -s [FIRE_TV_IP]:5555 logcat
+```
+
+#### Common Issues
+
+**Missing Dependencies:**
+```bash
+# Error: "Requiring unknown module react-native-get-random-values"
+npm install react-native-get-random-values --legacy-peer-deps
+
+# Error: "Requiring unknown module @react-native-async-storage/async-storage"
+npm install @react-native-async-storage/async-storage --legacy-peer-deps
+```
+
+**EAS Build Issues:**
+```bash
+# Error: "Unable to resolve module ../aws-exports"
+# Solution: Comment out aws-exports.js in .gitignore
+# aws-exports.js → # aws-exports.js
+
+# Error: "ERESOLVE could not resolve"
+# Solution: Add .npmrc file
+echo "legacy-peer-deps=true" > .npmrc
+```
+
+**Fire TV Connection Issues:**
+```bash
+# Restart ADB
+adb kill-server
+adb start-server
+
+# Reconnect to Fire TV
+adb connect [FIRE_TV_IP]:5555
+
+# Check device status
+adb devices
+```
+
+**App Installation Issues:**
+```bash
+# Uninstall previous version
+adb -s [FIRE_TV_IP]:5555 uninstall com.anonymous.MultiTVSample
+
+# Install new APK
+adb -s [FIRE_TV_IP]:5555 install -r your-app.apk
+
+# Launch app manually
+adb -s [FIRE_TV_IP]:5555 shell am start -n com.anonymous.MultiTVSample/.MainActivity
+```
+
+### Build Profiles
+
+#### Development Build (for debugging)
+```bash
+# Requires development server running
+eas build --platform android --profile development
+
+# Start development server
+npx expo start --dev-client
+```
+
+#### Production Build (standalone)
+```bash
+# Self-contained APK
+eas build --platform android --profile production
+```
 
 ## Security
 
@@ -128,7 +284,9 @@ iframe.contentWindow.postMessage(JSON.stringify({
 {
   "aws-amplify": "^6.15.6",
   "react-native-webview": "^13.16.0",
-  "@aws-amplify/react-native": "^1.1.10"
+  "@aws-amplify/react-native": "^1.1.10",
+  "react-native-get-random-values": "^1.11.0",
+  "@react-native-async-storage/async-storage": "^2.2.0"
 }
 ```
 
@@ -137,8 +295,67 @@ iframe.contentWindow.postMessage(JSON.stringify({
 ### Development
 - Use `aws-exports.example.js` values → Shows config errors
 - Test auth flow and UI components
+- Use development builds with live reload
 
 ### Production  
 - Deploy AWS infrastructure via CDK
 - Update `aws-exports.js` with real values
-- Test end-to-end streaming flow
+- Test end-to-end streaming flow with production builds
+
+## Development Environment Setup
+
+For faster development without rebuilding APKs every time, set up a live development environment:
+
+### Prerequisites
+- Fire TV connected to same WiFi network as development machine
+- ADB installed and Fire TV in developer mode
+
+### Setup Steps
+
+1. **Build development APK (one time only)**
+   ```bash
+   export EXPO_TV=1
+   eas build --platform android --profile development_tv
+   ```
+
+2. **Install development APK on Fire TV**
+   ```bash
+   adb install path/to/development-build.apk
+   ```
+
+3. **Start development server**
+   ```bash
+   cd /path/to/react-native-multi-tv-app-sample
+   export EXPO_TV=1
+   npx expo start --dev-client --lan
+   ```
+
+4. **Set up port forwarding (if network issues)**
+   ```bash
+   adb connect <fire-tv-ip>
+   adb reverse tcp:8081 tcp:8081
+   ```
+
+5. **Open development app on Fire TV**
+   - Manually open the development app
+   - It should connect to localhost:8081 (forwarded to your machine)
+
+### Daily Development Workflow
+```bash
+# Start server
+export EXPO_TV=1
+npx expo start --dev-client --lan
+
+# Set up port forwarding (if needed)
+adb reverse tcp:8081 tcp:8081
+
+# Make code changes → Save → Press 'r' to reload → See changes instantly!
+```
+
+### Troubleshooting
+- **Connection refused**: Check firewall settings, try `--lan` mode
+- **Network issues**: Use `adb reverse tcp:8081 tcp:8081` for port forwarding
+- **Remote not working**: Use ADB commands to navigate development app UI
+- **App not found**: Check `adb shell pm list packages | grep -i expo`
+
+This setup eliminates the need for APK rebuilds during development, saving significant time.
