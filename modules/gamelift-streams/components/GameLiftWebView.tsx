@@ -28,7 +28,7 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
         const data = JSON.parse(event.data);
         console.log('Message from iframe:', data);
 
-        if (data.type === 'requestConfig') {
+        if (data.type === 'requestConfig' || data.type === 'webview-ready') {
           sendConfigurationToIframe();
         } else if (data.type === 'navigate-back') {
           onBack?.();
@@ -210,7 +210,7 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
       const data = JSON.parse(event.nativeEvent.data);
       console.log('Message from WebView:', data);
 
-      if (data.type === 'requestConfig') {
+      if (data.type === 'requestConfig' || data.type === 'webview-ready') {
         sendConfiguration();
       } else if (data.type === 'navigate-back') {
         onBack?.();
@@ -298,7 +298,7 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
         onMessage={handleMessage}
         javaScriptEnabled={true}
         domStorageEnabled={true}
-        allowsInlineMediaPlayback={true}
+        allowsInlineMediaPlaybook={true}
         mediaPlaybackRequiresUserAction={false}
         allowsFullscreenVideo={true}
         mixedContentMode="compatibility"

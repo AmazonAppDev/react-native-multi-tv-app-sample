@@ -347,7 +347,7 @@
         <!-- Authentication will be handled here -->
     </div>
 
-    <!-- Load GameLift Streams SDK only -->
+    <!-- Load GameLift Streams SDK -->
     <script src="./gameliftstreams-1.0.0.js"></script>
     <script>
         // Configuration - will be set by React Native
@@ -357,6 +357,15 @@
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
             console.log('GameLift Streams TV app starting...');
+            
+            // Signal that WebView is ready
+            setTimeout(() => {
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(JSON.stringify({type: 'webview-ready'}));
+                } else if (window.parent !== window) {
+                    window.parent.postMessage(JSON.stringify({type: 'webview-ready'}), '*');
+                }
+            }, 100);
             
             // Listen for configuration and auth token from React Native
             window.addEventListener('message', function(event) {
