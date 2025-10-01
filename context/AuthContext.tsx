@@ -84,7 +84,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (username: string, password: string) => {
     try {
       setIsLoading(true);
-      const result = await signIn({ username, password });
+
+      // Check if already signed in
+      try {
+        const currentUser = await getCurrentUser();
+        if (currentUser) {
+          console.log('User already authenticated');
+          await checkAuthState();
+          return;
+        }
+      } catch (e) {
+        // Not signed in, continue with login
+      }
+
+      await signIn({ username, password });
       await checkAuthState();
     } catch (error) {
       console.error('Error signing in:', error);

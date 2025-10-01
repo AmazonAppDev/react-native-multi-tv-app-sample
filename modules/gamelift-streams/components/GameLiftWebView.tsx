@@ -19,6 +19,83 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
   const router = useRouter();
   const webViewRef = useRef<any>(null);
 
+  // Load SDK content for native platforms (device can't load external scripts from require()'d HTML)
+  const [sdkContent, setSdkContent] = React.useState<string | null>(null);
+  const [webViewLoaded, setWebViewLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    if (Platform.OS !== 'web') {
+      // Fetch SDK from Metro server to inject inline
+      fetch('http://localhost:8081/gameliftstreams-1.0.0.js')
+        .then((res) => res.text())
+        .then((content) => setSdkContent(content))
+        .catch((err) => {
+          console.error('Failed to load SDK:', err);
+          onError?.('Failed to load GameLift SDK');
+        });
+    }
+  }, []);
+
+  // Inject SDK when both WebView and SDK content are ready (native only)
+  React.useEffect(() => {
+    if (webViewLoaded && sdkContent && Platform.OS !== 'web') {
+      // Override console to capture WebView logs via postMessage
+      webViewRef.current?.injectJavaScript(`
+        (function() {
+          const originalLog = console.log;
+          const originalError = console.error;
+          console.log = function(...args) {
+            originalLog.apply(console, args);
+            window.ReactNativeWebView?.postMessage(JSON.stringify({type: 'console-log', message: args.join(' ')}));
+          };
+          console.error = function(...args) {
+            originalError.apply(console, args);
+            window.ReactNativeWebView?.postMessage(JSON.stringify({type: 'console-error', message: args.join(' ')}));
+          };
+        })();
+        true;
+      `);
+
+      // Inject SDK inline (can't use <script src> with require()'d HTML)
+      setTimeout(() => {
+        webViewRef.current?.injectJavaScript(`
+          (function() {
+            try {
+              const script = document.createElement('script');
+              script.textContent = ${JSON.stringify(sdkContent)};
+              document.head.appendChild(script);
+              
+              // Initialize config variables and add TV remote support
+              setTimeout(() => {
+                if (typeof window.apiConfig === 'undefined') window.apiConfig = null;
+                if (typeof window.authToken === 'undefined') window.authToken = null;
+                
+                // Add TV remote key handling (Enter key triggers button clicks)
+                document.addEventListener('keydown', function(e) {
+                  if (e.keyCode === 23 || e.keyCode === 13 || e.key === 'Enter') {
+                    const streamBtn = document.getElementById('stream-btn');
+                    const fullscreenBtn = document.getElementById('fullscreen-btn');
+                    
+                    if (streamBtn && streamBtn.offsetParent !== null) {
+                      streamBtn.click();
+                      e.preventDefault();
+                    } else if (fullscreenBtn && fullscreenBtn.offsetParent !== null) {
+                      fullscreenBtn.click();
+                      e.preventDefault();
+                    }
+                  }
+                });
+              }, 50);
+            } catch (e) {
+              console.error('Failed to inject SDK: ' + e.message);
+            }
+          })();
+          true;
+        `);
+      }, 100);
+    }
+  }, [webViewLoaded, sdkContent]);
+
   // Handle web platform messages - must be at top level before any conditional returns
   React.useEffect(() => {
     if (Platform.OS !== 'web') return;
@@ -41,7 +118,6 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
     const sendConfigurationToIframe = () => {
       const iframe = document.querySelector('iframe[title="GameLift Streams"]') as HTMLIFrameElement;
       if (iframe && iframe.contentWindow) {
-        // Send API config
         iframe.contentWindow.postMessage(
           JSON.stringify({
             type: 'configure',
@@ -50,7 +126,6 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
           '*',
         );
 
-        // Send auth token
         iframe.contentWindow.postMessage(
           JSON.stringify({
             type: 'auth-token',
@@ -59,7 +134,6 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
           '*',
         );
 
-        // Send game configuration if available
         if (game) {
           iframe.contentWindow.postMessage(
             JSON.stringify({
@@ -73,8 +147,6 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
             '*',
           );
         }
-
-        console.log('Configuration sent to iframe');
       }
     };
 
@@ -208,6 +280,17 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
   const handleMessage = (event: any) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
+
+      // Handle console logs from WebView
+      if (data.type === 'console-log') {
+        console.log('WebView:', data.message);
+        return;
+      }
+      if (data.type === 'console-error') {
+        console.error('WebView Error:', data.message);
+        return;
+      }
+
       console.log('Message from WebView:', data);
 
       if (data.type === 'requestConfig' || data.type === 'webview-ready') {
@@ -222,41 +305,59 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
 
   const sendConfiguration = () => {
     try {
-      // Send API config and auth token separately
       const apiConfig = {
         endpoint: awsconfig.API.REST['gamelift-api'].endpoint,
       };
 
-      console.log('Sending API config:', apiConfig);
-
-      // Send configuration
-      webViewRef.current?.postMessage(
-        JSON.stringify({
-          type: 'configure',
-          apiConfig,
-        }),
-      );
-
-      // Send auth token
-      webViewRef.current?.postMessage(
-        JSON.stringify({
-          type: 'auth-token',
-          token: token,
-        }),
-      );
+      if (Platform.OS === 'web') {
+        // For web platform (iframe), use postMessage
+        webViewRef.current?.postMessage(JSON.stringify({ type: 'configure', apiConfig }));
+        webViewRef.current?.postMessage(JSON.stringify({ type: 'auth-token', token: token }));
+      } else {
+        // For native platforms (WebView), inject directly into window
+        // This is necessary because postMessage doesn't work reliably with require()'d HTML
+        webViewRef.current?.injectJavaScript(`
+          (function() {
+            window.apiConfig = ${JSON.stringify(apiConfig)};
+            window.authToken = ${JSON.stringify(token)};
+            
+            // Also set on globalThis for broader compatibility
+            if (typeof globalThis !== 'undefined') {
+              globalThis.apiConfig = window.apiConfig;
+              globalThis.authToken = window.authToken;
+            }
+            
+            // Call showStreamingInterface to display the UI
+            if (typeof showStreamingInterface === 'function') {
+              showStreamingInterface();
+            }
+          })();
+          true;
+        `);
+      }
 
       // Send game configuration if available
       if (game) {
-        webViewRef.current?.postMessage(
-          JSON.stringify({
-            type: 'game-config',
-            game: {
-              streamGroupId: game.streamGroupId,
-              applicationId: game.applicationId,
-              region: game.region,
-            },
-          }),
-        );
+        if (Platform.OS === 'web') {
+          webViewRef.current?.postMessage(
+            JSON.stringify({
+              type: 'game-config',
+              game: {
+                streamGroupId: game.streamGroupId,
+                applicationId: game.applicationId,
+                region: game.region,
+              },
+            }),
+          );
+        } else {
+          // For native, directly set form values
+          webViewRef.current?.injectJavaScript(`
+            document.getElementById('sgId').value = ${JSON.stringify(game.streamGroupId || '')};
+            document.getElementById('appId').value = ${JSON.stringify(game.applicationId || '')};
+            document.getElementById('region').value = ${JSON.stringify(game.region || 'us-west-2')};
+            true;
+          `);
+        }
       }
     } catch (error) {
       console.error('Failed to send configuration:', error);
@@ -303,6 +404,35 @@ export default function GameLiftWebView({ onError, game, onBack }: GameLiftWebVi
         allowsFullscreenVideo={true}
         mixedContentMode="compatibility"
         originWhitelist={['*']}
+        cacheEnabled={false}
+        incognito={true}
+        // Make WebView focusable for TV
+        focusable={true}
+        onConsoleMessage={(event) => {
+          console.log('WebView Console:', event.nativeEvent.message);
+        }}
+        onLoad={() => {
+          setWebViewLoaded(true);
+
+          // Request focus for TV remote
+          setTimeout(() => {
+            webViewRef.current?.requestFocus?.();
+          }, 500);
+
+          if (Platform.OS === 'web') {
+            // For web, inject script tag with relative path
+            webViewRef.current?.injectJavaScript(`
+              (function() {
+                const script = document.createElement('script');
+                script.src = './gameliftstreams-1.0.0.js';
+                script.onload = () => console.log('GameLift SDK loaded');
+                script.onerror = (e) => console.error('Failed to load SDK:', e);
+                document.head.appendChild(script);
+              })();
+              true;
+            `);
+          }
+        }}
         onError={(error: any) => {
           console.error('WebView error:', error);
           onError?.('WebView failed to load');

@@ -347,8 +347,51 @@
         <!-- Authentication will be handled here -->
     </div>
 
-    <!-- Load GameLift Streams SDK -->
-    <script src="./gameliftstreams-1.0.0.js"></script>
+    <!-- Load GameLift Streams SDK dynamically -->
+    <script>
+        console.log('HTML loaded, attempting to load GameLift SDK...');
+        
+        // Dynamically determine the correct path for the JS file
+        (function() {
+            const script = document.createElement('script');
+            
+            // Check if running in Metro dev server (device) or web
+            const isMetro = window.location.protocol === 'http:' && 
+                           (window.location.hostname === 'localhost' || 
+                            window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/));
+            
+            console.log('Loading mode:', isMetro ? 'Metro' : 'Web', 'Location:', window.location.href);
+            
+            if (isMetro) {
+                // For device via Metro - load from public folder
+                script.src = `${window.location.protocol}//${window.location.hostname}:8081/gameliftstreams-1.0.0.js`;
+            } else {
+                // For web build - use relative path
+                script.src = './gameliftstreams-1.0.0.js';
+            }
+            
+            console.log('Attempting to load SDK from:', script.src);
+            
+            script.onload = function() {
+                console.log('GameLift SDK loaded successfully');
+            };
+            
+            script.onerror = function() {
+                console.error('Failed to load GameLift Streams SDK from:', script.src);
+                // Fallback to relative path
+                if (isMetro) {
+                    console.log('Trying fallback to relative path...');
+                    const fallbackScript = document.createElement('script');
+                    fallbackScript.src = './gameliftstreams-1.0.0.js';
+                    fallbackScript.onload = () => console.log('Fallback SDK loaded');
+                    fallbackScript.onerror = () => console.error('Fallback also failed');
+                    document.head.appendChild(fallbackScript);
+                }
+            };
+            
+            document.head.appendChild(script);
+        })();
+    </script>
     <script>
         // Configuration - will be set by React Native
         let apiConfig = null;
@@ -374,14 +417,14 @@
                     
                     if (data.type === 'configure' && data.apiConfig) {
                         apiConfig = data.apiConfig;
-                        console.log('API configuration received');
+                        window.apiConfig = data.apiConfig; // Also set on window for native platform compatibility
                     }
                     
                     if (data.type === 'auth-token' && data.token) {
                         authToken = data.token;
-                        console.log('Auth token received');
+                        window.authToken = data.token; // Also set on window for native platform compatibility
                         
-                        // If we have both config and token, initialize the app
+                        // Initialize app when both config and token are received
                         if (apiConfig && authToken) {
                             initializeApp();
                         }
@@ -593,8 +636,15 @@
                 </div>
             `;
             
-            // Initialize GameLift Streams SDK
-            initializeGameLiftStreams();
+            // Wait for SDK to load before initializing (script loads asynchronously)
+            const initSDK = () => {
+                if (typeof gameliftstreams !== 'undefined') {
+                    initializeGameLiftStreams();
+                } else {
+                    setTimeout(initSDK, 100);
+                }
+            };
+            initSDK();
         }
         
         // Custom confirmation modal for TV-friendly UX
@@ -716,11 +766,11 @@
                     Regions: [region]
                 };
                 
-                const response = await fetch(apiConfig.endpoint, {
+                const response = await fetch(window.apiConfig.endpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
+                        'Authorization': `Bearer ${window.authToken}`
                     },
                     body: JSON.stringify(payload)
                 });
@@ -749,11 +799,11 @@
                 console.log('Waiting for stream session:', arn);
                 
                 try {
-                    const response = await fetch(`${apiConfig.endpoint}/session/${encodeURIComponent(sg)}/${encodeURIComponent(arn)}`, {
+                    const response = await fetch(`${window.apiConfig.endpoint}/session/${encodeURIComponent(sg)}/${encodeURIComponent(arn)}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authToken}`
+                            'Authorization': `Bearer ${window.authToken}`
                         }
                     });
                     
