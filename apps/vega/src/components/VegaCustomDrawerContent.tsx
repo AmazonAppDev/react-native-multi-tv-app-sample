@@ -86,6 +86,7 @@ const useDrawerStyles = function () {
       width: scaledPixels(180),
       height: scaledPixels(180),
       borderRadius: scaledPixels(20),
+      resizeMode: 'contain',
     },
     userName: {
       color: 'white',
