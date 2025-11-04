@@ -1,5 +1,10 @@
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import { SpatialNavigationRoot, SpatialNavigationNode, DefaultFocus } from 'react-tv-space-navigation';
+import { StyleSheet, View, Text } from 'react-native';
+import {
+  SpatialNavigationRoot,
+  SpatialNavigationNode,
+  SpatialNavigationScrollView,
+  DefaultFocus,
+} from 'react-tv-space-navigation';
 import { useIsFocused } from '@react-navigation/native';
 import { scaledPixels } from '../hooks/useScale';
 import { colors, safeZones } from '../theme';
@@ -17,21 +22,30 @@ export default function SettingsScreen() {
   return (
     <SpatialNavigationRoot isActive={isFocused}>
       <View style={styles.container}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-        >
-          <Text style={styles.title}>Settings</Text>
+        <SpatialNavigationScrollView style={styles.scrollView}>
+          <View style={styles.scrollContent}>
+            <Text style={styles.title}>Settings</Text>
 
-          {/* Video Quality Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Video Quality</Text>
-            <SpatialNavigationNode>
-              <View style={styles.optionsRow}>
-                {qualityOptions.map((quality, index) => (
-                  index === 0 ? (
-                    <DefaultFocus key={quality}>
+            {/* Video Quality Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Video Quality</Text>
+              <SpatialNavigationNode orientation="horizontal">
+                <View style={styles.optionsRow}>
+                  {qualityOptions.map((quality, index) => (
+                    index === 0 ? (
+                      <DefaultFocus key={quality}>
+                        <FocusablePressable
+                          text={quality}
+                          onSelect={() => setSelectedQuality(quality)}
+                          style={[
+                            styles.optionButton,
+                            selectedQuality === quality && styles.selectedOption,
+                          ]}
+                        />
+                      </DefaultFocus>
+                    ) : (
                       <FocusablePressable
+                        key={quality}
                         text={quality}
                         onSelect={() => setSelectedQuality(quality)}
                         style={[
@@ -39,75 +53,65 @@ export default function SettingsScreen() {
                           selectedQuality === quality && styles.selectedOption,
                         ]}
                       />
-                    </DefaultFocus>
-                  ) : (
-                    <FocusablePressable
-                      key={quality}
-                      text={quality}
-                      onSelect={() => setSelectedQuality(quality)}
-                      style={[
-                        styles.optionButton,
-                        selectedQuality === quality && styles.selectedOption,
-                      ]}
-                    />
-                  )
-                ))}
-              </View>
-            </SpatialNavigationNode>
-          </View>
+                    )
+                  ))}
+                </View>
+              </SpatialNavigationNode>
+            </View>
 
-          {/* Playback Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Playback</Text>
-            <SpatialNavigationNode>
-              <View style={styles.optionsColumn}>
-                <FocusablePressable
-                  text={`Autoplay: ${autoplay ? 'On' : 'Off'}`}
-                  onSelect={() => setAutoplay(!autoplay)}
-                  style={styles.toggleButton}
-                />
-                <FocusablePressable
-                  text={`Notifications: ${notifications ? 'On' : 'Off'}`}
-                  onSelect={() => setNotifications(!notifications)}
-                  style={styles.toggleButton}
-                />
-              </View>
-            </SpatialNavigationNode>
-          </View>
+            {/* Playback Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Playback</Text>
+              <SpatialNavigationNode orientation="vertical">
+                <View style={styles.optionsColumn}>
+                  <FocusablePressable
+                    text={`Autoplay: ${autoplay ? 'On' : 'Off'}`}
+                    onSelect={() => setAutoplay(!autoplay)}
+                    style={styles.toggleButton}
+                  />
+                  <FocusablePressable
+                    text={`Notifications: ${notifications ? 'On' : 'Off'}`}
+                    onSelect={() => setNotifications(!notifications)}
+                    style={styles.toggleButton}
+                  />
+                </View>
+              </SpatialNavigationNode>
+            </View>
 
-          {/* About Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>About</Text>
-            <View style={styles.infoContainer}>
-              <View style={styles.infoRow}>
-                <Text style={styles.infoLabel}>Version</Text>
-                <Text style={styles.infoValue}>1.0.0</Text>
-              </View>
-              <View style={styles.infoRow}>
-                <Text style={styles.infoLabel}>Build</Text>
-                <Text style={styles.infoValue}>2025.11.04</Text>
+            {/* About Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>About</Text>
+              <View style={styles.infoContainer}>
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoLabel}>Version</Text>
+                  <Text style={styles.infoValue}>1.0.0</Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoLabel}>Build</Text>
+                  <Text style={styles.infoValue}>2025.11.04</Text>
+                </View>
               </View>
             </View>
-          </View>
 
-          {/* Actions Section */}
-          <View style={styles.section}>
-            <SpatialNavigationNode>
-              <View style={styles.optionsColumn}>
-                <FocusablePressable
-                  text="Clear Cache"
-                  onSelect={() => console.log('Clear cache')}
-                  style={styles.actionButton}
-                />
-                <FocusablePressable
-                  text="Sign Out"
-                  onSelect={() => console.log('Sign out')}
-                  style={styles.actionButton}
-                />
-              </View>
-            </SpatialNavigationNode>
+            {/* Actions Section */}
+            <View style={styles.section}>
+              <SpatialNavigationNode orientation="vertical">
+                <View style={styles.optionsColumn}>
+                  <FocusablePressable
+                    text="Clear Cache"
+                    onSelect={() => console.log('Clear cache')}
+                    style={styles.actionButton}
+                  />
+                  <FocusablePressable
+                    text="Sign Out"
+                    onSelect={() => console.log('Sign out')}
+                    style={styles.actionButton}
+                  />
+                </View>
+              </SpatialNavigationNode>
+            </View>
           </View>
-        </ScrollView>
+        </SpatialNavigationScrollView>
       </View>
     </SpatialNavigationRoot>
   );
@@ -123,8 +127,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: scaledPixels(safeZones.titleSafe.horizontal),
-    paddingVertical: scaledPixels(safeZones.titleSafe.vertical),
-    paddingBottom: scaledPixels(100),
+    paddingTop: scaledPixels(safeZones.titleSafe.vertical),
+    paddingBottom: scaledPixels(safeZones.actionSafe.vertical + 100),
   },
   title: {
     fontSize: scaledPixels(56),
