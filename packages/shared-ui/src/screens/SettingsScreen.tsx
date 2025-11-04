@@ -127,23 +127,23 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: scaledPixels(safeZones.titleSafe.horizontal),
-    paddingTop: scaledPixels(safeZones.titleSafe.vertical),
-    paddingBottom: scaledPixels(safeZones.actionSafe.vertical + 100),
+    paddingTop: scaledPixels(safeZones.actionSafe.vertical + 20),
+    paddingBottom: scaledPixels(safeZones.actionSafe.vertical + 60),
   },
   title: {
-    fontSize: scaledPixels(56),
+    fontSize: scaledPixels(48),
     fontWeight: 'bold',
     color: colors.text,
-    marginBottom: scaledPixels(48),
+    marginBottom: scaledPixels(32),
   },
   section: {
-    marginBottom: scaledPixels(56),
+    marginBottom: scaledPixels(40),
   },
   sectionTitle: {
-    fontSize: scaledPixels(32),
+    fontSize: scaledPixels(28),
     fontWeight: '600',
     color: colors.text,
-    marginBottom: scaledPixels(24),
+    marginBottom: scaledPixels(20),
   },
   optionsRow: {
     flexDirection: 'row',
