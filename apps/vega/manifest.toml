@@ -1,0 +1,184 @@
+#
+# Copyright (c) 2022 Amazon.com, Inc. or its affiliates.  All rights reserved.
+#
+# PROPRIETARY/CONFIDENTIAL.  USE IS SUBJECT TO LICENSE TERMS.
+#
+schema-version = 1
+
+[package]
+title = "Multi TV Vega App"
+version = "0.1.0"
+id = "com.giolaq.multitv.vega"
+
+[components]
+[[components.interactive]]
+id = "com.giolaq.multitv.vega.main"
+runtime-module = "/com.amazon.kepler.keplerscript.runtime.loader_2@IKeplerScript_2_0"
+launch-type = "singleton"
+categories = [
+    "com.amazon.category.main",
+    "com.amazon.category.kepler.media"
+]
+
+## ------------------------------------------------------------------------------
+## Processes
+## ------------------------------------------------------------------------------
+[processes]
+[[processes.group]]
+component-ids = ["com.giolaq.multitv.vega.main"]
+
+## ------------------------------------------------------------------------------
+## Wants - Optional capabilities
+## ------------------------------------------------------------------------------
+[wants]
+[[wants.service]]
+id = "com.amazon.inputmethod.service"
+
+[[wants.service]]
+id = "com.amazon.drm.key" # Required for DRM video playback
+
+[[wants.service]]
+id = "com.amazon.drm.crypto" # Required for DRM video playback
+
+# ------------------------------------------------------------------------------
+# MediaPlayer/MediaTransform
+# ------------------------------------------------------------------------------
+[[wants.service]]
+id = "com.amazon.media.server"
+
+[[wants.service]]
+id = "com.amazon.mediametrics.service"
+
+# ------------------------------------------------------------------------------
+# Remote button events
+# ------------------------------------------------------------------------------
+[[wants.service]]
+id = "com.amazon.inputd.service"
+
+# ------------------------------------------------------------------------------
+# MediaControls
+# ------------------------------------------------------------------------------
+[[wants.service]]
+id = "com.amazon.media.playersession.service"
+
+[[wants.service]]
+id = "com.amazon.mediabuffer.service"
+
+[[wants.service]]
+id = "com.amazon.mediatransform.service"
+
+# ------------------------------------------------------------------------------
+# Accessibility
+# ------------------------------------------------------------------------------
+[[wants.privilege]]
+id = "com.amazon.devconf.privilege.accessibility"
+
+# ------------------------------------------------------------------------------
+# Required for GIPC SR - audio video playback
+# ------------------------------------------------------------------------------
+[[wants.service]]
+id = "com.amazon.gipc.uuid.*"
+
+# ------------------------------------------------------------------------------
+# Audio stream
+# ------------------------------------------------------------------------------
+[[wants.service]]
+id = "com.amazon.audio.stream"
+
+# ------------------------------------------------------------------------------
+# Volume and other audio controls
+# ------------------------------------------------------------------------------
+[[wants.service]]
+id = "com.amazon.audio.control"
+
+[[wants.service]]
+id = "com.amazon.audio.system"
+
+# ------------------------------------------------------------------------------
+# Network information
+# ------------------------------------------------------------------------------
+[[wants.service]]
+id = "com.amazon.network.service"
+
+## ------------------------------------------------------------------------------
+## Needs - Required capabilities
+## ------------------------------------------------------------------------------
+[needs]
+# ------------------------------------------------------------------------------
+# Media playback
+# ------------------------------------------------------------------------------
+[[needs.privilege]]
+id = "com.amazon.media.secureplayback"
+
+[[needs.privilege]]
+id = "com.amazon.privilege.security.file-sharing" # Required for DRM video playback
+
+# ------------------------------------------------------------------------------
+# Network information
+# ------------------------------------------------------------------------------
+[[needs.privilege]]
+id = "com.amazon.network.privilege.net-info"
+
+# ------------------------------------------------------------------------------
+# Content Launcher
+# ------------------------------------------------------------------------------
+[[needs.module]]
+id = "/com.amazon.kepler.media@IContentLauncher1"
+
+## ------------------------------------------------------------------------------
+## Offers
+## ------------------------------------------------------------------------------
+[offers]
+#Required for GIPC SR
+[[offers.service]]
+id = "com.amazon.gipc.uuid.*"
+
+[[offers.interaction]]
+id = "com.giolaq.multitv.vega.main"
+
+[[offers.module]]
+id = "/com.giolaq.multitv.vega.main@IMod1"
+includes-messages = [
+    "pkg://com.giolaq.multitv.vega.main"
+]
+
+## ------------------------------------------------------------------------------
+## Message
+## ------------------------------------------------------------------------------
+[[message]]
+uri = "pkg://com.giolaq.multitv.vega.main"
+sender-privileges = ["*"]
+receiver-privileges = ["self"]
+
+## ------------------------------------------------------------------------------
+## Extras - Custom configuration for Amazon feature integrations
+## ------------------------------------------------------------------------------
+[[extras]]
+key = "interface.provider"
+component-id = "com.giolaq.multitv.vega.main"
+
+[extras.value.application]
+# ------------------------------------------------------------------------------
+# Content Launcher
+# ------------------------------------------------------------------------------
+[[extras.value.application.interface]]
+interface_name = "com.amazon.kepler.media.IContentLauncherServer"
+attribute_options = ["partner-id"]
+static-values = { partner-id = "MULTI_TV" }
+
+# ------------------------------------------------------------------------------
+# Vega Media Controls (VMC)
+# ------------------------------------------------------------------------------
+[[extras.value.application.interface]]
+interface_name = "com.amazon.kepler.media.IMediaPlaybackServer"
+command_options = [
+    "Play",
+    "Pause",
+    "StartOver",
+    "Previous",
+    "Next",
+    "SkipForward",
+    "SkipBackward",
+]
+attribute_options = ["AudioAdvanceMuted"]
+features = ["AdvancedSeek", "VariableSpeed", "AudioTracks", "TextTracks"]
