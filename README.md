@@ -127,18 +127,7 @@ cd react-native-multi-tv-app-sample
 
 # Install all dependencies
 yarn install
-
-# Build shared packages
-yarn build:all
 ```
-
-Alternatively, use the bootstrap command:
-
-```bash
-yarn bootstrap
-```
-
-This will install dependencies and build all packages in one step.
 
 ## Building and Running
 
@@ -247,12 +236,9 @@ yarn build
 | `yarn dev:android` | Run on Android TV                 |
 | `yarn dev:ios`     | Run on Apple TV                   |
 | `yarn dev:web`     | Run on Web                        |
-| `yarn dev:vega`    | Build and run Fire TV app         |
-| `yarn build:all`   | Build all packages                |
+| `yarn dev:vega`    | Start vega Metro bundler          |
 | `yarn build:vega`  | Build vega for Fire TV            |
-| `yarn test:all`    | Run all tests                     |
 | `yarn lint:all`    | Lint all packages                 |
-| `yarn typecheck`   | Type check all packages           |
 | `yarn format`      | Format code with Prettier         |
 | `yarn clean:all`   | Clean all node_modules            |
 
