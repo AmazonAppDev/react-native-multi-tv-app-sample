@@ -85,14 +85,16 @@ const detailsStyles = StyleSheet.create({
     contentContainer: {
       flex: 1,
       paddingHorizontal: scaledPixels(safeZones.titleSafe.horizontal),
-      paddingVertical: scaledPixels(safeZones.titleSafe.vertical),
-      justifyContent: 'space-between',
+      paddingTop: scaledPixels(safeZones.titleSafe.vertical),
+      paddingBottom: scaledPixels(safeZones.actionSafe.vertical),
+      justifyContent: 'flex-end',
     },
     topContent: {
-      marginTop: scaledPixels(580),
+      flex: 1,
+      justifyContent: 'center',
     },
     bottomContent: {
-      marginBottom: scaledPixels(safeZones.actionSafe.vertical),
+      paddingBottom: scaledPixels(20),
     },
     title: {
       fontSize: scaledPixels(64),

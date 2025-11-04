@@ -81,7 +81,13 @@ export default function CustomDrawerContent(props: any) {
                 <View style={styles.cogIcon}>
                   <Text style={[styles.cogIconText, isFocused && styles.cogIconTextFocused]}>⚙</Text>
                 </View>
-                <Text style={[styles.settingsText, isFocused && styles.settingsTextFocused]}>Settings</Text>
+                <Text
+                  style={[styles.settingsText, isFocused && styles.settingsTextFocused]}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  Settings
+                </Text>
               </View>
             )}
           </SpatialNavigationFocusableView>
@@ -189,6 +195,7 @@ const drawerStyles = StyleSheet.create({
       minHeight: scaledPixels(72),
       borderWidth: scaledPixels(3),
       borderColor: 'transparent',
+      maxWidth: '100%',
     },
     settingsButtonFocused: {
       backgroundColor: colors.focusBackground,
@@ -221,6 +228,7 @@ const drawerStyles = StyleSheet.create({
       color: colors.text,
       fontSize: scaledPixels(36),
       fontWeight: '500',
+      flex: 1,
     },
     settingsTextFocused: {
       color: colors.textOnPrimary,

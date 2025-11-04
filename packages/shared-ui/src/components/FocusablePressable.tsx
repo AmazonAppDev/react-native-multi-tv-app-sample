@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     minWidth: scaledPixels(200),
     minHeight: scaledPixels(60),
+    maxWidth: '90%',
   },
   watchButtonFocused: {
     backgroundColor: colors.focusBackground,
