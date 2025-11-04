@@ -81,13 +81,6 @@ export default function CustomDrawerContent(props: any) {
                 <View style={styles.cogIcon}>
                   <Text style={[styles.cogIconText, isFocused && styles.cogIconTextFocused]}>⚙</Text>
                 </View>
-                <Text
-                  style={[styles.settingsText, isFocused && styles.settingsTextFocused]}
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  Settings
-                </Text>
               </View>
             )}
           </SpatialNavigationFocusableView>
@@ -189,13 +182,13 @@ const drawerStyles = StyleSheet.create({
     settingsButton: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
       paddingVertical: scaledPixels(20),
       paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
       borderRadius: scaledPixels(8),
       minHeight: scaledPixels(72),
       borderWidth: scaledPixels(3),
       borderColor: 'transparent',
-      maxWidth: '100%',
     },
     settingsButtonFocused: {
       backgroundColor: colors.focusBackground,
@@ -211,27 +204,16 @@ const drawerStyles = StyleSheet.create({
       elevation: 8,
     },
     cogIcon: {
-      width: scaledPixels(48),
-      height: scaledPixels(48),
-      marginRight: scaledPixels(20),
+      width: scaledPixels(64),
+      height: scaledPixels(64),
       justifyContent: 'center',
       alignItems: 'center',
     },
     cogIconText: {
-      fontSize: scaledPixels(40),
+      fontSize: scaledPixels(48),
       color: colors.text,
     },
     cogIconTextFocused: {
       color: colors.textOnPrimary,
-    },
-    settingsText: {
-      color: colors.text,
-      fontSize: scaledPixels(28),
-      fontWeight: '500',
-      flex: 1,
-    },
-    settingsTextFocused: {
-      color: colors.textOnPrimary,
-      fontWeight: '600',
     },
   });
