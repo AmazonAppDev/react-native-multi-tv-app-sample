@@ -17,20 +17,35 @@ import { Direction } from '@bam.tech/lrud';
 import { scaledPixels } from '../hooks/useScale';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from '../navigation/types';
-
-type CardData = {
-  id: string | number;
-  title: string;
-  description: string;
-  headerImage: string;
-  movie: string;
-  duration?: number;
-};
+import { moviesData, CardData } from '../data/moviesData';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DrawerNavigator'>;
 
+// Memoized MovieItem component to prevent unnecessary re-renders and optimize image source
+const MovieItem = React.memo(
+  ({
+    item,
+    isFocused,
+    styles,
+  }: {
+    item: CardData;
+    isFocused: boolean;
+    styles: any;
+  }) => {
+    const imageSource = useMemo(() => ({ uri: item.headerImage }), [item.headerImage]);
+
+    return (
+      <View style={[styles.highlightThumbnail, isFocused && styles.highlightThumbnailFocused]}>
+        <Image source={imageSource} style={styles.headerImage} />
+        <View style={styles.thumbnailTextContainer}>
+          <Text style={styles.thumbnailText}>{item.title}</Text>
+        </View>
+      </View>
+    );
+  },
+);
+
 export default function HomeScreen() {
-  const styles = gridStyles;
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const trendingRef = useRef<SpatialNavigationVirtualizedListRef>(null);
@@ -42,43 +57,40 @@ export default function HomeScreen() {
 
   const focusedItem = useMemo(() => moviesData[focusedIndex], [focusedIndex]);
 
+  // Memoize header image source to prevent unnecessary re-renders
+  const headerImageSource = useMemo(
+    () => ({ uri: focusedItem.headerImage }),
+    [focusedItem.headerImage],
+  );
+
   const renderHeader = useCallback(
     () => (
-      <View style={styles.header}>
+      <View style={gridStyles.header}>
         <Image
-          style={styles.headerImage}
-          source={{
-            uri: focusedItem.headerImage,
-          }}
+          style={gridStyles.headerImage}
+          source={headerImageSource}
           resizeMode="cover"
         />
         <LinearGradient
           colors={['rgba(0,0,0,0.9)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.3)', 'transparent']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          style={styles.gradientLeft}
+          style={gridStyles.gradientLeft}
         />
         <LinearGradient
           colors={['rgb(0,0,0)', 'rgba(0,0,0, 0.3)', 'transparent']}
           locations={[0, 0.4, 1]}
           start={{ x: 0, y: 1 }}
           end={{ x: 0, y: 0 }}
-          style={styles.gradientBottom}
+          style={gridStyles.gradientBottom}
         />
-        <View style={styles.headerTextContainer}>
-          <Text style={styles.headerTitle}>{focusedItem.title}</Text>
-          <Text style={styles.headerDescription}>{focusedItem.description}</Text>
+        <View style={gridStyles.headerTextContainer}>
+          <Text style={gridStyles.headerTitle}>{focusedItem.title}</Text>
+          <Text style={gridStyles.headerDescription}>{focusedItem.description}</Text>
         </View>
       </View>
     ),
-    [
-      focusedItem.headerImage,
-      focusedItem.title,
-      focusedItem.description,
-      styles.header,
-      styles.gradientLeft,
-      styles.gradientBottom,
-    ],
+    [headerImageSource, focusedItem.title, focusedItem.description],
   );
 
   const onDirectionHandledWithoutMovement = useCallback(
@@ -106,22 +118,15 @@ export default function HomeScreen() {
             }}
             onFocus={() => setFocusedIndex(index)}
           >
-            {({ isFocused }) => (
-              <View style={[styles.highlightThumbnail, isFocused && styles.highlightThumbnailFocused]}>
-                <Image source={{ uri: item.headerImage }} style={styles.headerImage} />
-                <View style={styles.thumbnailTextContainer}>
-                  <Text style={styles.thumbnailText}>{item.title}</Text>
-                </View>
-              </View>
-            )}
+            {({ isFocused }) => <MovieItem item={item} isFocused={isFocused} styles={gridStyles} />}
           </SpatialNavigationFocusableView>
         ),
-        [navigation, styles],
+        [navigation],
       );
 
       return (
-        <View style={styles.highlightsContainer}>
-          <Text style={styles.highlightsTitle}>{title}</Text>
+        <View style={gridStyles.highlightsContainer}>
+          <Text style={gridStyles.highlightsTitle}>{title}</Text>
           <SpatialNavigationNode>
             <DefaultFocus>
               <SpatialNavigationVirtualizedList
@@ -138,14 +143,14 @@ export default function HomeScreen() {
         </View>
       );
     },
-    [styles, navigation, styles.headerImage, styles.thumbnailText],
+    [navigation],
   );
 
   return (
     <SpatialNavigationRoot isActive={isActive} onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
-      <View style={styles.container}>
+      <View style={gridStyles.container}>
         {renderHeader()}
-        <SpatialNavigationScrollView offsetFromStart={scaledPixels(60)} style={styles.scrollContent}>
+        <SpatialNavigationScrollView offsetFromStart={scaledPixels(60)} style={gridStyles.scrollContent}>
           {renderScrollableRow('Trending Movies', trendingRef)}
           {renderScrollableRow('Classics', classicsRef)}
           {renderScrollableRow('Hip and Modern', hipAndModernRef)}
@@ -269,79 +274,3 @@ const gridStyles = StyleSheet.create({
       borderTopRightRadius: scaledPixels(10),
     },
   });
-
-const moviesData = [
-  {
-    id: 0,
-    title: 'Sintel',
-    description:
-      'Sintel is an independently produced short film, initiated by the Blender Foundation as a means to further improve and validate the free/open source 3D creation suite Blender.',
-    headerImage: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg',
-    movie: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-    duration: 100,
-  },
-  {
-    id: 1,
-    title: 'Big Buck Bunny',
-    description:
-      "Big Buck Bunny tells the story of a giant rabbit with a heart bigger than himself. When one sunny day three rodents rudely harass him, something snaps... and the rabbit ain't no bunny anymore! In the typical cartoon tradition, he prepares the nasty rodents a comical revenge.",
-    headerImage: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
-    movie: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    duration: 130,
-  },
-  {
-    id: 2,
-    title: 'We Are Going On Bullrun',
-    description:
-      'The Smoking Tire is going on the 2010 Bullrun Live Rally in a 2011 Shelby GT500, and posting a video from the road every single day!',
-    headerImage: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/WeAreGoingOnBullrun.jpg',
-    movie: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
-    duration: 95,
-  },
-  {
-    id: 3,
-    title: 'Tears of Steel',
-    description:
-      'Tears of Steel was realized with crowd-funding by users of the open source 3D creation tool Blender. The goal was to test a complete open and free pipeline for visual effects in film.',
-    headerImage: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg',
-    movie: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    duration: 115,
-  },
-  {
-    id: 4,
-    title: 'Volkswagen GTI Review',
-    description:
-      'The Smoking Tire heads out to Adams Motorsports Park in Riverside, CA to test the most requested car of 2010, the Volkswagen GTI.',
-    headerImage: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/VolkswagenGTIReview.jpg',
-    movie: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-    duration: 110,
-  },
-  {
-    id: 5,
-    title: 'Subaru Outback On Street And Dirt',
-    description:
-      'Smoking Tire takes the all-new Subaru Outback to the highest point we can find in hopes our customer-appreciation Balloon Launch will get some free T-shirts into the hands of our viewers.',
-    headerImage:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/SubaruOutbackOnStreetAndDirt.jpg',
-    movie: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-    duration: 105,
-  },
-  {
-    id: 6,
-    title: 'Elephant Dream',
-    description: 'The first Blender Open Movie from 2006.',
-    headerImage: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg',
-    movie: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    duration: 90,
-  },
-  {
-    id: 7,
-    title: 'What Car Can You Get For A Grand?',
-    description:
-      'The Smoking Tire meets up with Chris and Jorge from CarsForAGrand.com to see just how far $1,000 can go when looking for a car.',
-    headerImage:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/WhatCarCanYouGetForAGrand.jpg',
-    movie: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4',
-    duration: 90,
-  },
-];

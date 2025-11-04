@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Video, { VideoRef } from "react-native-video";
 import {
   StyleSheet,
-  Dimensions,
   Platform,
   TouchableWithoutFeedback,
+  useWindowDimensions,
 } from "react-native";
-
-const { width } = Dimensions.get("window");
 
 interface VideoPlayerProps {
   movie: string;
@@ -20,54 +18,73 @@ interface VideoPlayerProps {
   onEnd: () => void;
 }
 
-const VideoPlayer = React.forwardRef<VideoRef, VideoPlayerProps>(
-  (
-    {
-      movie,
-      headerImage,
-      paused,
-      controls,
-      onBuffer,
-      onProgress,
-      onLoad,
-      onEnd,
+const VideoPlayer = React.memo(
+  React.forwardRef<VideoRef, VideoPlayerProps>(
+    (
+      {
+        movie,
+        headerImage,
+        paused,
+        controls,
+        onBuffer,
+        onProgress,
+        onLoad,
+        onEnd,
+      },
+      ref,
+    ) => {
+      const { width } = useWindowDimensions();
+
+      // Memoize source object to prevent unnecessary re-renders
+      const videoSource = useMemo(() => ({ uri: movie }), [movie]);
+
+      // Memoize poster object to prevent unnecessary re-renders
+      const posterConfig = useMemo(
+        () =>
+          Platform.OS === "web"
+            ? {}
+            : {
+                source: { uri: headerImage },
+                resizeMode: "cover" as const,
+                style: { width: "100%", height: "100%" },
+              },
+        [headerImage],
+      );
+
+      // Calculate video style based on current dimensions
+      const videoStyle = useMemo(
+        () => [
+          videoPlayerStyles.video,
+          { height: width * (9 / 16) },
+        ],
+        [width],
+      );
+
+      return (
+        <TouchableWithoutFeedback>
+          <Video
+            ref={ref}
+            source={videoSource}
+            style={videoStyle}
+            controls={controls}
+            paused={paused}
+            onBuffer={({ isBuffering }) => onBuffer(isBuffering)}
+            onProgress={({ currentTime }) => onProgress(currentTime)}
+            onLoad={({ duration }) => onLoad(duration)}
+            onEnd={onEnd}
+            poster={posterConfig}
+            resizeMode="cover"
+          />
+        </TouchableWithoutFeedback>
+      );
     },
-    ref,
-  ) => {
-    const styles = videoPlayerStyles;
-    return (
-      <TouchableWithoutFeedback>
-        <Video
-          ref={ref}
-          source={{ uri: movie }}
-          style={styles.video}
-          controls={controls}
-          paused={paused}
-          onBuffer={({ isBuffering }) => onBuffer(isBuffering)}
-          onProgress={({ currentTime }) => onProgress(currentTime)}
-          onLoad={({ duration }) => onLoad(duration)}
-          onEnd={onEnd}
-          poster={
-            Platform.OS === "web"
-              ? {}
-              : {
-                  source: { uri: headerImage },
-                  resizeMode: "cover",
-                  style: { width: "100%", height: "100%" },
-                }
-          }
-          resizeMode="cover"
-        />
-      </TouchableWithoutFeedback>
-    );
-  },
+  ),
 );
 
 const videoPlayerStyles = StyleSheet.create({
-    video: {
-      width: "100%",
-      height: width * (9 / 16),
-    },
-  });
+  video: {
+    width: "100%",
+  },
+});
 
 export default VideoPlayer;

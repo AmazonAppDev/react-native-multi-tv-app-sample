@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, StrictMode } from 'react';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { Platform } from 'react-native';
 import { MenuProvider } from '../components/MenuContext';
@@ -33,11 +33,13 @@ export default function AppNavigator({ fontsLoaded = true, onReady }: AppNavigat
   }
 
   return (
-    <NavigationContainer theme={DarkTheme}>
-      <MenuProvider>
-        <GoBackConfiguration />
-        <RootNavigator />
-      </MenuProvider>
-    </NavigationContainer>
+    <StrictMode>
+      <NavigationContainer theme={DarkTheme}>
+        <MenuProvider>
+          <GoBackConfiguration />
+          <RootNavigator />
+        </MenuProvider>
+      </NavigationContainer>
+    </StrictMode>
   );
 }

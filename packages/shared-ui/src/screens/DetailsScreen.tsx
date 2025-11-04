@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { SpatialNavigationRoot } from 'react-tv-space-navigation';
 import { scaledPixels } from '../hooks/useScale';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import FocusablePressable from '../components/FocusablePressable';
 import { RootStackParamList } from '../navigation/types';
@@ -16,8 +16,16 @@ export default function DetailsScreen() {
   const navigation = useNavigation<DetailsScreenNavigationProp>();
   const { title, description, movie, headerImage } = route.params;
 
-  const styles = detailsStyles;
   const isFocused = useIsFocused();
+
+  // Memoize image source to prevent unnecessary re-renders
+  const imageSource = useMemo(() => ({ uri: headerImage }), [headerImage]);
+
+  // Memoize button style to prevent unnecessary re-renders
+  const buttonStyle = useMemo(
+    () => ({ paddingHorizontal: scaledPixels(30) }),
+    [],
+  );
 
   const navigate = useCallback(() => {
     navigation.navigate('Player', {
@@ -28,32 +36,32 @@ export default function DetailsScreen() {
 
   return (
     <SpatialNavigationRoot isActive={isFocused}>
-      <View style={styles.container}>
-        <Image source={{ uri: headerImage }} style={styles.backgroundImage} />
-        <View style={styles.contentContainer}>
-          <View style={styles.topContent}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.description}>{description}</Text>
+      <View style={detailsStyles.container}>
+        <Image source={imageSource} style={detailsStyles.backgroundImage} />
+        <View style={detailsStyles.contentContainer}>
+          <View style={detailsStyles.topContent}>
+            <Text style={detailsStyles.title}>{title}</Text>
+            <Text style={detailsStyles.description}>{description}</Text>
           </View>
-          <View style={styles.bottomContent}>
-            <View style={styles.crewContainer}>
-              <View style={styles.crewMember}>
-                <Text style={styles.crewRole}>Director</Text>
-                <Text style={styles.crewName}>Chris Traganos</Text>
+          <View style={detailsStyles.bottomContent}>
+            <View style={detailsStyles.crewContainer}>
+              <View style={detailsStyles.crewMember}>
+                <Text style={detailsStyles.crewRole}>Director</Text>
+                <Text style={detailsStyles.crewName}>Chris Traganos</Text>
               </View>
-              <View style={styles.crewMember}>
-                <Text style={styles.crewRole}>Executive Producer</Text>
-                <Text style={styles.crewName}>Gio Laquidara</Text>
+              <View style={detailsStyles.crewMember}>
+                <Text style={detailsStyles.crewRole}>Executive Producer</Text>
+                <Text style={detailsStyles.crewName}>Gio Laquidara</Text>
               </View>
-              <View style={styles.crewMember}>
-                <Text style={styles.crewRole}>Star</Text>
-                <Text style={styles.crewName}>Eric Fahsl</Text>
+              <View style={detailsStyles.crewMember}>
+                <Text style={detailsStyles.crewRole}>Star</Text>
+                <Text style={detailsStyles.crewName}>Eric Fahsl</Text>
               </View>
             </View>
             <FocusablePressable
               text={'Watch now'}
               onSelect={navigate}
-              style={{ paddingHorizontal: scaledPixels(30) }}
+              style={buttonStyle}
             />
           </View>
         </View>

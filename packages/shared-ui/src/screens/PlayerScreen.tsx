@@ -62,19 +62,7 @@ export default function PlayerScreen() {
     return () => {
       RemoteControlManager.removeKeydownListener(listener);
     };
-  }, []);
-
-  const seek = useCallback((time: number) => {
-    if (time < 0) {
-      time = 0;
-    } else if (time > durationRef.current) {
-      time = durationRef.current;
-    }
-    videoRef.current?.seek(time);
-    currentTimeRef.current = time;
-    setCurrentTime(time);
-    showControls();
-  }, []);
+  }, [seek, togglePausePlay, showControls, navigation]);
 
   const showControls = useCallback(() => {
     setControlsVisible(true);
@@ -96,18 +84,28 @@ export default function PlayerScreen() {
         setControlsVisible(false);
       });
     }, 3000);
-  }, []);
+  }, [controlsOpacity]);
+
+  const seek = useCallback((time: number) => {
+    if (time < 0) {
+      time = 0;
+    } else if (time > durationRef.current) {
+      time = durationRef.current;
+    }
+    videoRef.current?.seek(time);
+    currentTimeRef.current = time;
+    setCurrentTime(time);
+    showControls();
+  }, [showControls]);
 
   const togglePausePlay = useCallback(() => {
     setPaused((prev) => !prev);
     showControls();
   }, [showControls]);
 
-  const styles = playerStyles;
-
   return (
     <SpatialNavigationRoot isActive={isFocused && Platform.OS === 'android'}>
-      <View style={styles.container}>
+      <View style={playerStyles.container}>
         <VideoPlayer
           ref={videoRef}
           movie={movie}
@@ -121,7 +119,7 @@ export default function PlayerScreen() {
         />
 
         {!SHOW_NATIVE_CONTROLS && controlsVisible && !!durationRef.current && (
-          <Animated.View style={[styles.controlsContainer, { opacity: controlsOpacity }]}>
+          <Animated.View style={[playerStyles.controlsContainer, { opacity: controlsOpacity }]}>
             {isVideoBuffering && <LoadingIndicator />}
             <ExitButton onSelect={() => navigation.goBack()} />
             <Controls
