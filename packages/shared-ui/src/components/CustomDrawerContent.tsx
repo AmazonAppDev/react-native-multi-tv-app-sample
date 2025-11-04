@@ -226,7 +226,7 @@ const drawerStyles = StyleSheet.create({
     },
     settingsText: {
       color: colors.text,
-      fontSize: scaledPixels(36),
+      fontSize: scaledPixels(28),
       fontWeight: '500',
       flex: 1,
     },
