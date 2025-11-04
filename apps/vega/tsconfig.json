@@ -1,0 +1,6 @@
+{
+    "extends": "@tsconfig/react-native/tsconfig.json",
+    "compilerOptions": {
+        "types": ["jest", "@amazon-devices/react-native-kepler"], /* Override "jest", "react-native" from @tsconfig/react-native */
+    },
+}
