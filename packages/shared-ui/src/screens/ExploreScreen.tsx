@@ -6,6 +6,7 @@ import { useMenuContext } from '../components/MenuContext';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { Direction } from '@bam.tech/lrud';
 import { useCallback, useState } from 'react';
+import { safeZones } from '../theme';
 
 export default function ExploreScreen() {
   const styles = exploreStyles;
@@ -42,6 +43,8 @@ const exploreStyles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#000',
+      paddingHorizontal: scaledPixels(safeZones.titleSafe.horizontal),
+      paddingVertical: scaledPixels(safeZones.titleSafe.vertical),
     },
     title: {
       fontSize: scaledPixels(32),

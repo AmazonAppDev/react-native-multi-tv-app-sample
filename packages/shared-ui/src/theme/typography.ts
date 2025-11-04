@@ -3,13 +3,21 @@ export const typography = {
     regular: 'System',
     mono: 'SpaceMono',
   },
+  // Optimized for 10-foot viewing distance (TV best practices)
   fontSize: {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 20,
-    xl: 24,
-    xxl: 32,
+    xs: 16,    // Minimum readable size for TV
+    sm: 20,    // Small text, captions
+    md: 24,    // Body text
+    lg: 28,    // Subheadings
+    xl: 36,    // Headings
+    xxl: 48,   // Large headings
+    xxxl: 56,  // Hero titles
+  },
+  // Line heights for better readability
+  lineHeight: {
+    tight: 1.2,
+    normal: 1.5,
+    relaxed: 1.75,
   },
   fontWeight: {
     regular: '400' as const,

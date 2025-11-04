@@ -7,6 +7,7 @@ import { useCallback, useMemo } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import FocusablePressable from '../components/FocusablePressable';
 import { RootStackParamList } from '../navigation/types';
+import { safeZones, colors } from '../theme';
 
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 type DetailsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Details'>;
@@ -73,78 +74,89 @@ export default function DetailsScreen() {
 const detailsStyles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#000',
+      backgroundColor: colors.background,
     },
     backgroundImage: {
       position: 'absolute',
       width: '100%',
       height: '100%',
-      opacity: 0.3,
+      opacity: 0.25,
     },
     contentContainer: {
       flex: 1,
-      padding: scaledPixels(40),
+      paddingHorizontal: scaledPixels(safeZones.titleSafe.horizontal),
+      paddingVertical: scaledPixels(safeZones.titleSafe.vertical),
       justifyContent: 'space-between',
     },
     topContent: {
-      marginTop: scaledPixels(600),
+      marginTop: scaledPixels(580),
     },
     bottomContent: {
-      marginBottom: scaledPixels(40),
+      marginBottom: scaledPixels(safeZones.actionSafe.vertical),
     },
     title: {
-      fontSize: scaledPixels(48),
+      fontSize: scaledPixels(64),
       fontWeight: 'bold',
-      color: '#fff',
-      marginBottom: scaledPixels(20),
-      textShadowColor: 'rgba(0, 0, 0, 0.75)',
-      textShadowOffset: { width: -1, height: 1 },
-      textShadowRadius: 10,
+      color: colors.text,
+      marginBottom: scaledPixels(24),
+      textShadowColor: 'rgba(0, 0, 0, 0.9)',
+      textShadowOffset: { width: 0, height: 2 },
+      textShadowRadius: 12,
     },
     description: {
-      fontSize: scaledPixels(24),
-      color: '#fff',
-      marginBottom: scaledPixels(20),
-      width: '60%',
-      lineHeight: scaledPixels(32),
+      fontSize: scaledPixels(28),
+      color: colors.text,
+      marginBottom: scaledPixels(32),
+      width: '65%',
+      lineHeight: scaledPixels(40),
+      textShadowColor: 'rgba(0, 0, 0, 0.9)',
+      textShadowOffset: { width: 0, height: 2 },
+      textShadowRadius: 8,
     },
     crewContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      marginBottom: scaledPixels(30),
+      marginBottom: scaledPixels(40),
+      gap: scaledPixels(48),
     },
     crewMember: {
-      marginRight: scaledPixels(40),
-      marginBottom: scaledPixels(15),
+      marginBottom: scaledPixels(16),
     },
     crewRole: {
-      fontSize: scaledPixels(16),
-      color: '#aaa',
+      fontSize: scaledPixels(20),
+      color: colors.textSecondary,
       fontWeight: '600',
+      marginBottom: scaledPixels(4),
+      textShadowColor: 'rgba(0, 0, 0, 0.8)',
+      textShadowOffset: { width: 0, height: 1 },
+      textShadowRadius: 4,
     },
     crewName: {
-      fontSize: scaledPixels(24),
-      color: '#fff',
+      fontSize: scaledPixels(28),
+      color: colors.text,
       fontWeight: 'bold',
+      textShadowColor: 'rgba(0, 0, 0, 0.8)',
+      textShadowOffset: { width: 0, height: 1 },
+      textShadowRadius: 6,
     },
     watchButton: {
-      backgroundColor: 'rgba(255, 255, 255, 0.25)',
-      paddingVertical: scaledPixels(15),
-      paddingHorizontal: scaledPixels(30),
-      borderRadius: scaledPixels(5),
+      backgroundColor: colors.cardElevated,
+      paddingVertical: scaledPixels(20),
+      paddingHorizontal: scaledPixels(40),
+      borderRadius: scaledPixels(8),
       alignSelf: 'flex-start',
     },
     watchButtonFocused: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.focusBackground,
     },
     watchButtonText: {
-      color: '#fff',
-      fontSize: scaledPixels(18),
+      color: colors.text,
+      fontSize: scaledPixels(24),
       fontWeight: 'bold',
     },
     watchButtonTextFocused: {
-      color: '#000',
-      fontSize: scaledPixels(18),
+      color: colors.textOnPrimary,
+      fontSize: scaledPixels(24),
       fontWeight: 'bold',
     },
   });

@@ -4,6 +4,7 @@ import { DefaultFocus } from "react-tv-space-navigation";
 import FocusablePressable from "../FocusablePressable";
 import SeekBar from "./SeekBar";
 import { scaledPixels } from "../../hooks/useScale";
+import { safeZones } from "../../theme";
 
 interface ControlsProps {
   paused: boolean;
@@ -36,9 +37,9 @@ const Controls: React.FC<ControlsProps> = React.memo(({
 const controlsStyles = StyleSheet.create({
     bottomControls: {
       position: "absolute",
-      bottom: scaledPixels(20),
-      left: scaledPixels(20),
-      right: scaledPixels(20),
+      bottom: scaledPixels(safeZones.actionSafe.vertical),
+      left: scaledPixels(safeZones.actionSafe.horizontal),
+      right: scaledPixels(safeZones.actionSafe.horizontal),
       flexDirection: "row",
       alignItems: "center",
     },

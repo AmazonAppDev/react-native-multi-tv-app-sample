@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import FocusablePressable from "../FocusablePressable";
 import { scaledPixels } from "../../hooks/useScale";
+import { safeZones } from "../../theme";
 
 interface GoBackButtonProps {
   onSelect: () => void;
@@ -22,8 +23,8 @@ const ExitButton: React.FC<GoBackButtonProps> = React.memo(({ onSelect }) => {
 const exitButtonStyles = StyleSheet.create({
     exitBtn: {
       position: "absolute",
-      top: scaledPixels(20),
-      left: scaledPixels(20),
+      top: scaledPixels(safeZones.actionSafe.vertical),
+      left: scaledPixels(safeZones.actionSafe.horizontal),
       width: scaledPixels(100),
     },
   });

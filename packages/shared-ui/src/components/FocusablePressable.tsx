@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { scaledPixels } from "../hooks/useScale";
 import { SpatialNavigationFocusableView } from "react-tv-space-navigation";
+import { colors } from "../theme/colors";
 
 interface CustomPressableProps extends PressableProps {
   text: string;
@@ -35,9 +36,8 @@ const FocusablePressable = React.memo(({
         >
           <Text
             style={[
-              isFocused
-                ? styles.watchButtonTextFocused
-                : styles.watchButtonText,
+              styles.watchButtonText,
+              isFocused && styles.watchButtonTextFocused,
             ]}
           >
             {text}
@@ -50,23 +50,40 @@ const FocusablePressable = React.memo(({
 
 const styles = StyleSheet.create({
   watchButton: {
-    backgroundColor: "rgba(255, 255, 255, 0.25)",
-    paddingVertical: scaledPixels(15),
-    borderRadius: scaledPixels(5),
+    backgroundColor: colors.cardElevated,
+    paddingVertical: scaledPixels(20),
+    paddingHorizontal: scaledPixels(40),
+    borderRadius: scaledPixels(8),
+    borderWidth: scaledPixels(3),
+    borderColor: 'transparent',
     alignItems: "center",
     alignSelf: "flex-start",
+    minWidth: scaledPixels(200),
+    minHeight: scaledPixels(60),
   },
   watchButtonFocused: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.focusBackground,
+    borderColor: colors.focusBackground,
+    transform: [{ scale: 1.05 }],
+    // Shadow for depth
+    shadowColor: colors.focus,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: scaledPixels(12),
+    elevation: 8,
   },
   watchButtonText: {
-    color: "#fff",
-    fontSize: scaledPixels(18),
+    color: colors.text,
+    fontSize: scaledPixels(24),
     fontWeight: "bold",
+    textAlign: "center",
   },
   watchButtonTextFocused: {
-    color: "#000",
-    fontSize: scaledPixels(18),
+    color: colors.textOnPrimary,
+    fontSize: scaledPixels(24),
     fontWeight: "bold",
   },
 });

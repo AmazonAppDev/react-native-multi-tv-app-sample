@@ -9,6 +9,7 @@ import { useMenuContext } from '../components/MenuContext';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { Direction } from '@bam.tech/lrud';
+import { safeZones } from '../theme';
 
 export default function TVScreen() {
   const styles = tvStyles;
@@ -47,6 +48,8 @@ const tvStyles = StyleSheet.create({
       backgroundColor: '#000',
       justifyContent: 'center',
       alignItems: 'center',
+      paddingHorizontal: scaledPixels(safeZones.titleSafe.horizontal),
+      paddingVertical: scaledPixels(safeZones.titleSafe.vertical),
     },
     title: {
       fontSize: scaledPixels(32),

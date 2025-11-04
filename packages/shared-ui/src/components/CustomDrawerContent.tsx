@@ -6,13 +6,12 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { DrawerParamList } from '../navigation/types';
 import { useMenuContext } from '../components/MenuContext';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { safeZones, colors } from '../theme';
 
 export default function CustomDrawerContent(props: any) {
   const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const styles = drawerStyles;
-  const { top, right, bottom, left } = useSafeAreaInsets();
   const drawerItems = [
     { name: 'Home', label: 'Home' },
     { name: 'Explore', label: 'Explore' },
@@ -74,56 +73,80 @@ export default function CustomDrawerContent(props: any) {
 const drawerStyles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      paddingTop: scaledPixels(20),
+      backgroundColor: colors.scrimDark,
+      paddingTop: scaledPixels(safeZones.titleSafe.vertical),
     },
     header: {
-      padding: scaledPixels(16),
+      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      paddingVertical: scaledPixels(24),
+      marginBottom: scaledPixels(16),
     },
     profilePic: {
-      width: scaledPixels(180),
-      height: scaledPixels(180),
-      borderRadius: scaledPixels(20),
+      width: scaledPixels(200),
+      height: scaledPixels(200),
+      borderRadius: scaledPixels(24),
+      borderWidth: scaledPixels(4),
+      borderColor: colors.border,
     },
     userName: {
-      color: 'white',
-      fontSize: scaledPixels(32),
-      marginTop: scaledPixels(16),
+      color: colors.text,
+      fontSize: scaledPixels(36),
+      fontWeight: '600',
+      marginTop: scaledPixels(20),
     },
     switchAccount: {
-      color: 'gray',
-      fontSize: scaledPixels(20),
+      color: colors.textSecondary,
+      fontSize: scaledPixels(22),
+      marginTop: scaledPixels(8),
     },
     searchContainer: {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      padding: scaledPixels(12),
-      marginHorizontal: scaledPixels(16),
-      marginVertical: scaledPixels(8),
-      borderRadius: scaledPixels(4),
+      backgroundColor: colors.cardElevated,
+      padding: scaledPixels(16),
+      marginHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      marginVertical: scaledPixels(12),
+      borderRadius: scaledPixels(8),
     },
     searchText: {
-      color: 'gray',
+      color: colors.textSecondary,
+      fontSize: scaledPixels(20),
     },
     menuItem: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingTop: scaledPixels(16),
-      paddingBottom: scaledPixels(8),
-      paddingStart: scaledPixels(32),
+      paddingVertical: scaledPixels(20),
+      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      marginHorizontal: scaledPixels(16),
+      marginVertical: scaledPixels(6),
+      borderRadius: scaledPixels(8),
+      minHeight: scaledPixels(72),
+      borderWidth: scaledPixels(3),
+      borderColor: 'transparent',
     },
     menuItemFocused: {
-      backgroundColor: 'white',
+      backgroundColor: colors.focusBackground,
+      borderColor: colors.focusBorder,
+      transform: [{ scale: 1.05 }],
+      shadowColor: colors.focus,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 0.6,
+      shadowRadius: scaledPixels(12),
+      elevation: 8,
     },
     icon: {
-      width: scaledPixels(24),
-      height: scaledPixels(24),
-      marginRight: scaledPixels(16),
+      width: scaledPixels(32),
+      height: scaledPixels(32),
+      marginRight: scaledPixels(20),
     },
     menuText: {
-      color: 'white',
-      fontSize: scaledPixels(32),
+      color: colors.text,
+      fontSize: scaledPixels(36),
+      fontWeight: '500',
     },
     menuTextFocused: {
-      color: 'black',
+      color: colors.textOnPrimary,
+      fontWeight: '600',
     },
   });

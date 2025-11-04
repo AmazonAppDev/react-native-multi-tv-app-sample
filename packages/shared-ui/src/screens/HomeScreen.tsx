@@ -15,9 +15,9 @@ import {
 } from 'react-tv-space-navigation';
 import { Direction } from '@bam.tech/lrud';
 import { scaledPixels } from '../hooks/useScale';
-import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from '../navigation/types';
 import { moviesData, CardData } from '../data/moviesData';
+import { colors, safeZones } from '../theme';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DrawerNavigator'>;
 
@@ -36,9 +36,9 @@ const MovieItem = React.memo(
 
     return (
       <View style={[styles.highlightThumbnail, isFocused && styles.highlightThumbnailFocused]}>
-        <Image source={imageSource} style={styles.headerImage} />
+        <Image source={imageSource} style={styles.cardImage} />
         <View style={styles.thumbnailTextContainer}>
-          <Text style={styles.thumbnailText}>{item.title}</Text>
+          <Text style={styles.thumbnailText} numberOfLines={2}>{item.title}</Text>
         </View>
       </View>
     );
@@ -71,22 +71,14 @@ export default function HomeScreen() {
           source={headerImageSource}
           resizeMode="cover"
         />
-        <LinearGradient
-          colors={['rgba(0,0,0,0.9)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.3)', 'transparent']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={gridStyles.gradientLeft}
-        />
-        <LinearGradient
-          colors={['rgb(0,0,0)', 'rgba(0,0,0, 0.3)', 'transparent']}
-          locations={[0, 0.4, 1]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 0, y: 0 }}
-          style={gridStyles.gradientBottom}
-        />
+        {/* Solid scrim overlays instead of gradients for platform consistency */}
+        <View style={gridStyles.scrimLeft} />
+        <View style={gridStyles.scrimBottom} />
         <View style={gridStyles.headerTextContainer}>
           <Text style={gridStyles.headerTitle}>{focusedItem.title}</Text>
-          <Text style={gridStyles.headerDescription}>{focusedItem.description}</Text>
+          <Text style={gridStyles.headerDescription} numberOfLines={3}>
+            {focusedItem.description}
+          </Text>
         </View>
       </View>
     ),
@@ -133,7 +125,7 @@ export default function HomeScreen() {
                 data={moviesData}
                 orientation="horizontal"
                 renderItem={renderItem}
-                itemSize={scaledPixels(425)}
+                itemSize={scaledPixels(440)}
                 numberOfRenderedItems={6}
                 numberOfItemsVisibleOnScreen={4}
                 onEndReachedThresholdItemsNumber={3}
@@ -163,74 +155,91 @@ export default function HomeScreen() {
 const gridStyles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'black',
+      backgroundColor: colors.background,
     },
     scrollContent: {
       flex: 1,
-      marginBottom: scaledPixels(48),
+      marginBottom: scaledPixels(safeZones.actionSafe.vertical),
     },
     highlightsTitle: {
-      color: '#fff',
-      fontSize: scaledPixels(34),
+      color: colors.text,
+      fontSize: scaledPixels(40),
       fontWeight: 'bold',
-      marginBottom: scaledPixels(10),
-      marginTop: scaledPixels(15),
-      textShadowColor: 'rgba(0, 0, 0, 0.75)',
-      textShadowOffset: { width: -1, height: 1 },
-      textShadowRadius: 10,
+      marginBottom: scaledPixels(16),
+      marginTop: scaledPixels(20),
+      textShadowColor: 'rgba(0, 0, 0, 0.9)',
+      textShadowOffset: { width: 0, height: 2 },
+      textShadowRadius: 8,
     },
     headerTitle: {
-      color: '#fff',
-      fontSize: scaledPixels(48),
+      color: colors.text,
+      fontSize: scaledPixels(56),
       fontWeight: 'bold',
-      textShadowColor: 'rgba(0, 0, 0, 0.75)',
-      textShadowOffset: { width: -1, height: 1 },
-      textShadowRadius: 10,
+      marginBottom: scaledPixels(16),
+      textShadowColor: 'rgba(0, 0, 0, 0.9)',
+      textShadowOffset: { width: 0, height: 2 },
+      textShadowRadius: 12,
     },
     headerDescription: {
-      color: '#fff',
-      fontSize: scaledPixels(24),
+      color: colors.text,
+      fontSize: scaledPixels(28),
       fontWeight: '500',
-      paddingTop: scaledPixels(16),
-      textShadowColor: 'rgba(0, 0, 0, 0.75)',
-      textShadowOffset: { width: -1, height: 1 },
-      textShadowRadius: 10,
+      lineHeight: scaledPixels(40),
+      textShadowColor: 'rgba(0, 0, 0, 0.9)',
+      textShadowOffset: { width: 0, height: 2 },
+      textShadowRadius: 8,
     },
     thumbnailTextContainer: {
       position: 'absolute',
-      bottom: scaledPixels(10),
-      left: scaledPixels(10),
-      right: scaledPixels(10),
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      padding: scaledPixels(5),
-      borderRadius: scaledPixels(3),
+      bottom: 0,
+      left: 0,
+      right: 0,
+      backgroundColor: colors.scrimDark,
+      paddingHorizontal: scaledPixels(16),
+      paddingVertical: scaledPixels(12),
+      borderBottomLeftRadius: scaledPixels(8),
+      borderBottomRightRadius: scaledPixels(8),
     },
     thumbnailText: {
-      color: '#fff',
-      fontSize: scaledPixels(18),
-      fontWeight: 'bold',
+      color: colors.text,
+      fontSize: scaledPixels(24),
+      fontWeight: '600',
       textAlign: 'center',
+      lineHeight: scaledPixels(32),
     },
     highlightThumbnail: {
-      width: scaledPixels(400),
-      height: scaledPixels(240),
-      marginRight: scaledPixels(10),
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      borderRadius: scaledPixels(5),
+      width: scaledPixels(420),
+      height: scaledPixels(260),
+      marginRight: scaledPixels(20),
+      backgroundColor: colors.card,
+      borderRadius: scaledPixels(12),
+      borderWidth: scaledPixels(5),
+      borderColor: 'transparent',
+      overflow: 'hidden',
     },
     highlightThumbnailFocused: {
-      borderColor: '#fff',
-      borderWidth: scaledPixels(4),
+      borderColor: colors.focusBorder,
+      borderWidth: scaledPixels(6),
+      transform: [{ scale: 1.1 }],
+      shadowColor: colors.focus,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 0.9,
+      shadowRadius: scaledPixels(20),
+      elevation: 15,
     },
     highlightsContainer: {
-      padding: scaledPixels(10),
-      height: scaledPixels(360),
+      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      paddingVertical: scaledPixels(16),
+      height: scaledPixels(400),
     },
     thumbnailPlaceholder: {
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      backgroundColor: colors.cardElevated,
       width: '100%',
       height: '100%',
-      borderRadius: scaledPixels(5),
+      borderRadius: scaledPixels(8),
     },
     header: {
       width: '100%',
@@ -242,35 +251,36 @@ const gridStyles = StyleSheet.create({
       height: '100%',
       resizeMode: 'cover',
     },
-    gradientLeft: {
+    scrimLeft: {
       position: 'absolute',
       left: 0,
-      right: 0,
       top: 0,
-      height: '100%',
+      bottom: 0,
+      width: '65%',
+      backgroundColor: colors.scrimDark,
     },
-    gradientBottom: {
+    scrimBottom: {
       position: 'absolute',
       left: 0,
       right: 0,
       bottom: 0,
-      height: '15%',
+      height: '25%',
+      backgroundColor: colors.scrimMedium,
     },
     headerTextContainer: {
       position: 'absolute',
-      left: scaledPixels(40),
-      top: 0,
-      bottom: 0,
+      left: scaledPixels(safeZones.titleSafe.horizontal),
+      top: scaledPixels(safeZones.titleSafe.vertical),
+      bottom: scaledPixels(safeZones.titleSafe.vertical),
       justifyContent: 'center',
-      width: '50%',
+      width: '55%',
     },
     highlightsList: {
       paddingLeft: scaledPixels(20),
     },
     cardImage: {
       width: '100%',
-      height: '70%',
-      borderTopLeftRadius: scaledPixels(10),
-      borderTopRightRadius: scaledPixels(10),
+      height: '100%',
+      borderRadius: scaledPixels(8),
     },
   });
