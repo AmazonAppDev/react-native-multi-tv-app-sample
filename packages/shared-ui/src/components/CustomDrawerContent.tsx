@@ -20,23 +20,39 @@ export default function CustomDrawerContent(props: any) {
 
   return (
     <SpatialNavigationRoot isActive={isMenuOpen}>
-      <DrawerContentScrollView
-        {...props}
-        style={styles.container}
-        scrollEnabled={false}
-        contentContainerStyle={{
-          ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
-        }}
-      >
-        <View style={styles.header}>
-          <Image source={require('../assets/images/logo.png')} style={styles.profilePic} />
-          <Text style={styles.userName}>Pioneer Tom</Text>
-          <Text style={styles.switchAccount}>Switch account</Text>
-        </View>
-        {drawerItems.map((item, index) =>
-          index === 0 ? (
-            <DefaultFocus key={index}>
+      <View style={styles.drawerContainer}>
+        <DrawerContentScrollView
+          {...props}
+          style={styles.container}
+          scrollEnabled={false}
+          contentContainerStyle={{
+            ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
+          }}
+        >
+          <View style={styles.header}>
+            <Image source={require('../assets/images/logo.png')} style={styles.profilePic} />
+            <Text style={styles.userName}>Pioneer Tom</Text>
+            <Text style={styles.switchAccount}>Switch account</Text>
+          </View>
+          {drawerItems.map((item, index) =>
+            index === 0 ? (
+              <DefaultFocus key={index}>
+                <SpatialNavigationFocusableView
+                  onSelect={() => {
+                    toggleMenu(false);
+                    navigation.navigate(item.name as keyof DrawerParamList);
+                  }}
+                >
+                  {({ isFocused }) => (
+                    <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
+                      <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+                    </View>
+                  )}
+                </SpatialNavigationFocusableView>
+              </DefaultFocus>
+            ) : (
               <SpatialNavigationFocusableView
+                key={index}
                 onSelect={() => {
                   toggleMenu(false);
                   navigation.navigate(item.name as keyof DrawerParamList);
@@ -48,32 +64,40 @@ export default function CustomDrawerContent(props: any) {
                   </View>
                 )}
               </SpatialNavigationFocusableView>
-            </DefaultFocus>
-          ) : (
-            <SpatialNavigationFocusableView
-              key={index}
-              onSelect={() => {
-                toggleMenu(false);
-                navigation.navigate(item.name as keyof DrawerParamList);
-              }}
-            >
-              {({ isFocused }) => (
-                <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                  <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+            ),
+          )}
+        </DrawerContentScrollView>
+
+        {/* Settings button at bottom */}
+        <View style={styles.footer}>
+          <SpatialNavigationFocusableView
+            onSelect={() => {
+              toggleMenu(false);
+              navigation.navigate('Settings');
+            }}
+          >
+            {({ isFocused }) => (
+              <View style={[styles.settingsButton, isFocused && styles.settingsButtonFocused]}>
+                <View style={styles.cogIcon}>
+                  <Text style={[styles.cogIconText, isFocused && styles.cogIconTextFocused]}>⚙</Text>
                 </View>
-              )}
-            </SpatialNavigationFocusableView>
-          ),
-        )}
-      </DrawerContentScrollView>
+                <Text style={[styles.settingsText, isFocused && styles.settingsTextFocused]}>Settings</Text>
+              </View>
+            )}
+          </SpatialNavigationFocusableView>
+        </View>
+      </View>
     </SpatialNavigationRoot>
   );
 }
 
 const drawerStyles = StyleSheet.create({
-    container: {
+    drawerContainer: {
       flex: 1,
       backgroundColor: colors.scrimDark,
+    },
+    container: {
+      flex: 1,
       paddingTop: scaledPixels(safeZones.titleSafe.vertical),
     },
     header: {
@@ -146,6 +170,59 @@ const drawerStyles = StyleSheet.create({
       fontWeight: '500',
     },
     menuTextFocused: {
+      color: colors.textOnPrimary,
+      fontWeight: '600',
+    },
+    footer: {
+      paddingHorizontal: scaledPixels(16),
+      paddingBottom: scaledPixels(safeZones.actionSafe.vertical),
+      paddingTop: scaledPixels(16),
+      borderTopWidth: scaledPixels(2),
+      borderTopColor: colors.border,
+    },
+    settingsButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: scaledPixels(20),
+      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      borderRadius: scaledPixels(8),
+      minHeight: scaledPixels(72),
+      borderWidth: scaledPixels(3),
+      borderColor: 'transparent',
+    },
+    settingsButtonFocused: {
+      backgroundColor: colors.focusBackground,
+      borderColor: colors.focusBorder,
+      transform: [{ scale: 1.05 }],
+      shadowColor: colors.focus,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 0.6,
+      shadowRadius: scaledPixels(12),
+      elevation: 8,
+    },
+    cogIcon: {
+      width: scaledPixels(48),
+      height: scaledPixels(48),
+      marginRight: scaledPixels(20),
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    cogIconText: {
+      fontSize: scaledPixels(40),
+      color: colors.text,
+    },
+    cogIconTextFocused: {
+      color: colors.textOnPrimary,
+    },
+    settingsText: {
+      color: colors.text,
+      fontSize: scaledPixels(36),
+      fontWeight: '500',
+    },
+    settingsTextFocused: {
       color: colors.textOnPrimary,
       fontWeight: '600',
     },

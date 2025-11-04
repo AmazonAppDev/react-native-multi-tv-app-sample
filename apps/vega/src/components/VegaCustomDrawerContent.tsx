@@ -1,4 +1,4 @@
-import { scaledPixels } from '@multi-tv/shared-ui';
+import { scaledPixels, colors, safeZones } from '@multi-tv/shared-ui';
 import { DrawerContentScrollView } from '@amazon-devices/react-navigation__drawer';
 import { View, StyleSheet, Image, Platform, Text } from 'react-native';
 import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from 'react-tv-space-navigation';
@@ -20,23 +20,39 @@ export default function VegaCustomDrawerContent(props: any) {
 
   return (
     <SpatialNavigationRoot isActive={isMenuOpen}>
-      <DrawerContentScrollView
-        {...props}
-        style={styles.container}
-        scrollEnabled={false}
-        contentContainerStyle={{
-          ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
-        }}
-      >
-        <View style={styles.header}>
-          <Image source={require('../assets/kepler.png')} style={styles.profilePic} />
-          <Text style={styles.userName}>Pioneer Tom</Text>
-          <Text style={styles.switchAccount}>Switch account</Text>
-        </View>
-        {drawerItems.map((item, index) =>
-          index === 0 ? (
-            <DefaultFocus key={index}>
+      <View style={styles.drawerContainer}>
+        <DrawerContentScrollView
+          {...props}
+          style={styles.container}
+          scrollEnabled={false}
+          contentContainerStyle={{
+            ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
+          }}
+        >
+          <View style={styles.header}>
+            <Image source={require('../assets/kepler.png')} style={styles.profilePic} />
+            <Text style={styles.userName}>Pioneer Tom</Text>
+            <Text style={styles.switchAccount}>Switch account</Text>
+          </View>
+          {drawerItems.map((item, index) =>
+            index === 0 ? (
+              <DefaultFocus key={index}>
+                <SpatialNavigationFocusableView
+                  onSelect={() => {
+                    toggleMenu(false);
+                    navigation.navigate(item.name as keyof DrawerParamList);
+                  }}
+                >
+                  {({ isFocused }) => (
+                    <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
+                      <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+                    </View>
+                  )}
+                </SpatialNavigationFocusableView>
+              </DefaultFocus>
+            ) : (
               <SpatialNavigationFocusableView
+                key={index}
                 onSelect={() => {
                   toggleMenu(false);
                   navigation.navigate(item.name as keyof DrawerParamList);
@@ -48,82 +64,167 @@ export default function VegaCustomDrawerContent(props: any) {
                   </View>
                 )}
               </SpatialNavigationFocusableView>
-            </DefaultFocus>
-          ) : (
-            <SpatialNavigationFocusableView
-              key={index}
-              onSelect={() => {
-                toggleMenu(false);
-                navigation.navigate(item.name as keyof DrawerParamList);
-              }}
-            >
-              {({ isFocused }) => (
-                <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                  <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+            ),
+          )}
+        </DrawerContentScrollView>
+
+        {/* Settings button at bottom */}
+        <View style={styles.footer}>
+          <SpatialNavigationFocusableView
+            onSelect={() => {
+              toggleMenu(false);
+              navigation.navigate('Settings');
+            }}
+          >
+            {({ isFocused }) => (
+              <View style={[styles.settingsButton, isFocused && styles.settingsButtonFocused]}>
+                <View style={styles.cogIcon}>
+                  <Text style={[styles.cogIconText, isFocused && styles.cogIconTextFocused]}>⚙</Text>
                 </View>
-              )}
-            </SpatialNavigationFocusableView>
-          ),
-        )}
-      </DrawerContentScrollView>
+                <Text style={[styles.settingsText, isFocused && styles.settingsTextFocused]}>Settings</Text>
+              </View>
+            )}
+          </SpatialNavigationFocusableView>
+        </View>
+      </View>
     </SpatialNavigationRoot>
   );
 }
 
 const drawerStyles = StyleSheet.create({
+    drawerContainer: {
+      flex: 1,
+      backgroundColor: colors.scrimDark,
+    },
     container: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      paddingTop: scaledPixels(20),
+      paddingTop: scaledPixels(safeZones.titleSafe.vertical),
     },
     header: {
-      padding: scaledPixels(16),
+      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      paddingVertical: scaledPixels(24),
+      marginBottom: scaledPixels(16),
     },
     profilePic: {
-      width: scaledPixels(180),
-      height: scaledPixels(180),
-      borderRadius: scaledPixels(20),
+      width: scaledPixels(200),
+      height: scaledPixels(200),
+      borderRadius: scaledPixels(24),
+      borderWidth: scaledPixels(4),
+      borderColor: colors.border,
       resizeMode: 'contain',
     },
     userName: {
-      color: 'white',
-      fontSize: scaledPixels(32),
-      marginTop: scaledPixels(16),
+      color: colors.text,
+      fontSize: scaledPixels(36),
+      fontWeight: '600',
+      marginTop: scaledPixels(20),
     },
     switchAccount: {
-      color: 'gray',
-      fontSize: scaledPixels(20),
+      color: colors.textSecondary,
+      fontSize: scaledPixels(22),
+      marginTop: scaledPixels(8),
     },
     searchContainer: {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      padding: scaledPixels(12),
-      marginHorizontal: scaledPixels(16),
-      marginVertical: scaledPixels(8),
-      borderRadius: scaledPixels(4),
+      backgroundColor: colors.cardElevated,
+      padding: scaledPixels(16),
+      marginHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      marginVertical: scaledPixels(12),
+      borderRadius: scaledPixels(8),
     },
     searchText: {
-      color: 'gray',
+      color: colors.textSecondary,
+      fontSize: scaledPixels(20),
     },
     menuItem: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingTop: scaledPixels(16),
-      paddingBottom: scaledPixels(8),
-      paddingStart: scaledPixels(32),
+      paddingVertical: scaledPixels(20),
+      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      marginHorizontal: scaledPixels(16),
+      marginVertical: scaledPixels(6),
+      borderRadius: scaledPixels(8),
+      minHeight: scaledPixels(72),
+      borderWidth: scaledPixels(3),
+      borderColor: 'transparent',
     },
     menuItemFocused: {
-      backgroundColor: 'white',
+      backgroundColor: colors.focusBackground,
+      borderColor: colors.focusBorder,
+      transform: [{ scale: 1.05 }],
+      shadowColor: colors.focus,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 0.6,
+      shadowRadius: scaledPixels(12),
+      elevation: 8,
     },
     icon: {
-      width: scaledPixels(24),
-      height: scaledPixels(24),
-      marginRight: scaledPixels(16),
+      width: scaledPixels(32),
+      height: scaledPixels(32),
+      marginRight: scaledPixels(20),
     },
     menuText: {
-      color: 'white',
-      fontSize: scaledPixels(32),
+      color: colors.text,
+      fontSize: scaledPixels(36),
+      fontWeight: '500',
     },
     menuTextFocused: {
-      color: 'black',
+      color: colors.textOnPrimary,
+      fontWeight: '600',
+    },
+    footer: {
+      paddingHorizontal: scaledPixels(16),
+      paddingBottom: scaledPixels(safeZones.actionSafe.vertical),
+      paddingTop: scaledPixels(16),
+      borderTopWidth: scaledPixels(2),
+      borderTopColor: colors.border,
+    },
+    settingsButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: scaledPixels(20),
+      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      borderRadius: scaledPixels(8),
+      minHeight: scaledPixels(72),
+      borderWidth: scaledPixels(3),
+      borderColor: 'transparent',
+    },
+    settingsButtonFocused: {
+      backgroundColor: colors.focusBackground,
+      borderColor: colors.focusBorder,
+      transform: [{ scale: 1.05 }],
+      shadowColor: colors.focus,
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 0.6,
+      shadowRadius: scaledPixels(12),
+      elevation: 8,
+    },
+    cogIcon: {
+      width: scaledPixels(48),
+      height: scaledPixels(48),
+      marginRight: scaledPixels(20),
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    cogIconText: {
+      fontSize: scaledPixels(40),
+      color: colors.text,
+    },
+    cogIconTextFocused: {
+      color: colors.textOnPrimary,
+    },
+    settingsText: {
+      color: colors.text,
+      fontSize: scaledPixels(36),
+      fontWeight: '500',
+    },
+    settingsTextFocused: {
+      color: colors.textOnPrimary,
+      fontWeight: '600',
     },
   });

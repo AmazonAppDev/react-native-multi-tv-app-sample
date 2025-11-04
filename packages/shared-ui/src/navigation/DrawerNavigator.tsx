@@ -14,6 +14,7 @@ import { DrawerParamList } from './types';
 import HomeScreen from '../screens/HomeScreen';
 import ExploreScreen from '../screens/ExploreScreen';
 import TVScreen from '../screens/TVScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -89,6 +90,13 @@ export default function DrawerNavigator() {
           component={TVScreen}
           options={{
             drawerLabel: 'TV',
+          }}
+        />
+        <Drawer.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            drawerLabel: 'Settings',
           }}
         />
       </Drawer.Navigator>

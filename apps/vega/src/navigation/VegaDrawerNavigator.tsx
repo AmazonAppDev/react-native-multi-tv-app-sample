@@ -4,7 +4,7 @@ import { createDrawerNavigator } from '@amazon-devices/react-navigation__drawer'
 import { useNavigation, DrawerActions } from '@amazon-devices/react-navigation__native';
 import { SpatialNavigationRoot } from 'react-tv-space-navigation';
 import { Direction } from '@bam.tech/lrud';
-import { useMenuContext, scaledPixels, HomeScreen, ExploreScreen, TVScreen } from '@multi-tv/shared-ui';
+import { useMenuContext, scaledPixels, HomeScreen, ExploreScreen, TVScreen, SettingsScreen } from '@multi-tv/shared-ui';
 import VegaCustomDrawerContent from '../components/VegaCustomDrawerContent';
 import { DrawerParamList } from './types';
 
@@ -83,6 +83,13 @@ export default function VegaDrawerNavigator() {
             component={TVScreen}
             options={{
               drawerLabel: 'TV',
+            }}
+          />
+          <Drawer.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              drawerLabel: 'Settings',
             }}
           />
         </Drawer.Navigator>
