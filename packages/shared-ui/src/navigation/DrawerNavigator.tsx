@@ -21,8 +21,6 @@ function DrawerSyncWrapper() {
   const { isOpen: isMenuOpen } = useMenuContext();
   const navigation = useNavigation();
 
-  console.log('isMenuOpen:', isMenuOpen);
-
   // Open drawer on mount if menu context says it should be open
   useEffect(() => {
     if (isMenuOpen) {
@@ -34,13 +32,12 @@ function DrawerSyncWrapper() {
 }
 
 export default function DrawerNavigator() {
-  const styles = useDrawerStyles();
+  const styles = drawerStyles;
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const navigation = useNavigation();
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      console.log('Direction ' + movement);
       if (movement === 'right') {
         navigation.dispatch(DrawerActions.closeDrawer());
         toggleMenu(false);
@@ -112,8 +109,7 @@ export default function DrawerNavigator() {
   );
 }
 
-const useDrawerStyles = function () {
-  return StyleSheet.create({
+const drawerStyles = StyleSheet.create({
     drawerStyle: {
       width: scaledPixels(300),
       backgroundColor: '#2c3e50',
@@ -125,4 +121,3 @@ const useDrawerStyles = function () {
       marginLeft: scaledPixels(10),
     },
   });
-};

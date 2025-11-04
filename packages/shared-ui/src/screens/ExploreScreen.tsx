@@ -8,7 +8,7 @@ import { Direction } from '@bam.tech/lrud';
 import { useCallback, useState } from 'react';
 
 export default function ExploreScreen() {
-  const styles = useExploreStyles();
+  const styles = exploreStyles;
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const isFocused = useIsFocused();
   const isActive = isFocused && !isMenuOpen;
@@ -17,7 +17,6 @@ export default function ExploreScreen() {
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      console.log('Direction ' + movement);
       if (movement === 'left' && focusedIndex === 0) {
         navigation.dispatch(DrawerActions.openDrawer());
         toggleMenu(true);
@@ -39,8 +38,7 @@ export default function ExploreScreen() {
   );
 }
 
-const useExploreStyles = function () {
-  return StyleSheet.create({
+const exploreStyles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#000',
@@ -53,4 +51,3 @@ const useExploreStyles = function () {
       marginBottom: scaledPixels(20),
     },
   });
-};

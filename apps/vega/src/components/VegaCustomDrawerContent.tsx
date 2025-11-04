@@ -10,7 +10,7 @@ import { useMenuContext } from '@multi-tv/shared-ui';
 export default function VegaCustomDrawerContent(props: any) {
   const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
-  const styles = useDrawerStyles();
+  const styles = drawerStyles;
 
   const drawerItems = [
     { name: 'Home', label: 'Home' },
@@ -38,7 +38,6 @@ export default function VegaCustomDrawerContent(props: any) {
             <DefaultFocus key={index}>
               <SpatialNavigationFocusableView
                 onSelect={() => {
-                  console.log(item.name);
                   toggleMenu(false);
                   navigation.navigate(item.name as keyof DrawerParamList);
                 }}
@@ -54,7 +53,6 @@ export default function VegaCustomDrawerContent(props: any) {
             <SpatialNavigationFocusableView
               key={index}
               onSelect={() => {
-                console.log(item.name);
                 toggleMenu(false);
                 navigation.navigate(item.name as keyof DrawerParamList);
               }}
@@ -72,8 +70,7 @@ export default function VegaCustomDrawerContent(props: any) {
   );
 }
 
-const useDrawerStyles = function () {
-  return StyleSheet.create({
+const drawerStyles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -130,4 +127,3 @@ const useDrawerStyles = function () {
       color: 'black',
     },
   });
-};

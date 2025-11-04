@@ -7,8 +7,8 @@ interface GoBackButtonProps {
   onSelect: () => void;
 }
 
-const ExitButton: React.FC<GoBackButtonProps> = ({ onSelect }) => {
-  const styles = useExitButtonStyles();
+const ExitButton: React.FC<GoBackButtonProps> = React.memo(({ onSelect }) => {
+  const styles = exitButtonStyles;
 
   return (
     <FocusablePressable
@@ -17,10 +17,9 @@ const ExitButton: React.FC<GoBackButtonProps> = ({ onSelect }) => {
       style={styles.exitBtn}
     />
   );
-};
+});
 
-const useExitButtonStyles = () => {
-  return StyleSheet.create({
+const exitButtonStyles = StyleSheet.create({
     exitBtn: {
       position: "absolute",
       top: scaledPixels(20),
@@ -28,6 +27,5 @@ const useExitButtonStyles = () => {
       width: scaledPixels(100),
     },
   });
-};
 
 export default ExitButton;

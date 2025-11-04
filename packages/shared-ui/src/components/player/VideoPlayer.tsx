@@ -34,7 +34,7 @@ const VideoPlayer = React.forwardRef<VideoRef, VideoPlayerProps>(
     },
     ref,
   ) => {
-    const styles = useVideoPlayerStyles();
+    const styles = videoPlayerStyles;
     return (
       <TouchableWithoutFeedback>
         <Video
@@ -63,13 +63,11 @@ const VideoPlayer = React.forwardRef<VideoRef, VideoPlayerProps>(
   },
 );
 
-const useVideoPlayerStyles = () => {
-  return StyleSheet.create({
+const videoPlayerStyles = StyleSheet.create({
     video: {
       width: "100%",
       height: width * (9 / 16),
     },
   });
-};
 
 export default VideoPlayer;

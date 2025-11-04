@@ -30,7 +30,7 @@ type CardData = {
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DrawerNavigator'>;
 
 export default function HomeScreen() {
-  const styles = useGridStyles();
+  const styles = gridStyles;
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const trendingRef = useRef<SpatialNavigationVirtualizedListRef>(null);
@@ -83,7 +83,6 @@ export default function HomeScreen() {
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      console.log('Direction ' + movement);
       if (movement === 'left' && focusedIndex === 0) {
         navigation.dispatch(DrawerActions.openDrawer());
         toggleMenu(true);
@@ -156,8 +155,7 @@ export default function HomeScreen() {
   );
 }
 
-const useGridStyles = function () {
-  return StyleSheet.create({
+const gridStyles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: 'black',
@@ -271,7 +269,6 @@ const useGridStyles = function () {
       borderTopRightRadius: scaledPixels(10),
     },
   });
-};
 
 const moviesData = [
   {

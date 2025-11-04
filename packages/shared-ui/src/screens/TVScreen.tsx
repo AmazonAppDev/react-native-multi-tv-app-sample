@@ -11,7 +11,7 @@ import { useCallback, useState } from 'react';
 import { Direction } from '@bam.tech/lrud';
 
 export default function TVScreen() {
-  const styles = useTVStyles();
+  const styles = tvStyles;
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const isFocused = useIsFocused();
   const isActive = isFocused && !isMenuOpen;
@@ -20,7 +20,6 @@ export default function TVScreen() {
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      console.log('Direction ' + movement);
       if (movement === 'left' && focusedIndex === 0) {
         navigation.dispatch(DrawerActions.openDrawer());
         toggleMenu(true);
@@ -42,8 +41,7 @@ export default function TVScreen() {
   );
 }
 
-const useTVStyles = function () {
-  return StyleSheet.create({
+const tvStyles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#000',
@@ -58,4 +56,3 @@ const useTVStyles = function () {
       marginBottom: scaledPixels(20),
     },
   });
-};

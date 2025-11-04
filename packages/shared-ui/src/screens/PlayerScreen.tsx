@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { View, Platform, StyleSheet, Animated } from 'react-native';
 import { SpatialNavigationRoot } from 'react-tv-space-navigation';
 import { useIsFocused } from '@react-navigation/native';
@@ -64,7 +64,7 @@ export default function PlayerScreen() {
     };
   }, []);
 
-  const seek = (time: number) => {
+  const seek = useCallback((time: number) => {
     if (time < 0) {
       time = 0;
     } else if (time > durationRef.current) {
@@ -74,9 +74,9 @@ export default function PlayerScreen() {
     currentTimeRef.current = time;
     setCurrentTime(time);
     showControls();
-  };
+  }, []);
 
-  const showControls = () => {
+  const showControls = useCallback(() => {
     setControlsVisible(true);
     Animated.timing(controlsOpacity, {
       toValue: 1,
@@ -96,14 +96,14 @@ export default function PlayerScreen() {
         setControlsVisible(false);
       });
     }, 3000);
-  };
+  }, []);
 
-  const togglePausePlay = () => {
+  const togglePausePlay = useCallback(() => {
     setPaused((prev) => !prev);
     showControls();
-  };
+  }, [showControls]);
 
-  const styles = usePlayerStyles();
+  const styles = playerStyles;
 
   return (
     <SpatialNavigationRoot isActive={isFocused && Platform.OS === 'android'}>
@@ -137,8 +137,7 @@ export default function PlayerScreen() {
   );
 }
 
-const usePlayerStyles = () => {
-  return StyleSheet.create({
+const playerStyles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#000',
@@ -150,4 +149,3 @@ const usePlayerStyles = () => {
       zIndex: 1,
     },
   });
-};

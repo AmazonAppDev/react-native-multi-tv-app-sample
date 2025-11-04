@@ -16,7 +16,7 @@ export default function DetailsScreen() {
   const navigation = useNavigation<DetailsScreenNavigationProp>();
   const { title, description, movie, headerImage } = route.params;
 
-  const styles = useDetailsStyles();
+  const styles = detailsStyles;
   const isFocused = useIsFocused();
 
   const navigate = useCallback(() => {
@@ -62,8 +62,7 @@ export default function DetailsScreen() {
   );
 }
 
-const useDetailsStyles = function () {
-  return StyleSheet.create({
+const detailsStyles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#000',
@@ -141,4 +140,3 @@ const useDetailsStyles = function () {
       fontWeight: 'bold',
     },
   });
-};

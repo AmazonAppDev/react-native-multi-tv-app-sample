@@ -12,13 +12,13 @@ interface ControlsProps {
   duration: number;
 }
 
-const Controls: React.FC<ControlsProps> = ({
+const Controls: React.FC<ControlsProps> = React.memo(({
   paused,
   onPlayPause,
   currentTime,
   duration,
 }) => {
-  const styles = useControlsStyles();
+  const styles = controlsStyles;
   return (
     <View style={styles.bottomControls}>
       <DefaultFocus>
@@ -31,10 +31,9 @@ const Controls: React.FC<ControlsProps> = ({
       <SeekBar currentTime={currentTime} duration={duration} />
     </View>
   );
-};
+});
 
-const useControlsStyles = () => {
-  return StyleSheet.create({
+const controlsStyles = StyleSheet.create({
     bottomControls: {
       position: "absolute",
       bottom: scaledPixels(20),
@@ -48,6 +47,5 @@ const useControlsStyles = () => {
       width: scaledPixels(100),
     },
   });
-};
 
 export default Controls;

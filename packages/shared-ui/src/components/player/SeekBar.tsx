@@ -9,25 +9,24 @@ interface SeekBarProps {
   duration: number;
 }
 
-const SeekBar = ({ currentTime, duration }: SeekBarProps) => {
-  const styles = useSeekBarStyles();
+const SeekBar = React.memo(({ currentTime, duration }: SeekBarProps) => {
+  const styles = seekBarStyles;
 
-  const getThumbPosition = () => {
+  const thumbPosition = React.useMemo(() => {
     if (!duration) return 0;
     const percentage = (currentTime / duration) * 100;
     return (percentage * (width - scaledPixels(180))) / 100;
-  };
+  }, [currentTime, duration]);
 
   return (
     <View style={styles.seekbarContainer}>
       <View style={styles.seekbarTrack} />
-      <View style={[styles.seekbarThumb, { left: getThumbPosition() }]} />
+      <View style={[styles.seekbarThumb, { left: thumbPosition }]} />
     </View>
   );
-};
+});
 
-const useSeekBarStyles = () => {
-  return StyleSheet.create({
+const seekBarStyles = StyleSheet.create({
     seekbarContainer: {
       flex: 1,
       height: scaledPixels(40),
@@ -48,6 +47,5 @@ const useSeekBarStyles = () => {
       backgroundColor: "#fff",
     },
   });
-};
 
 export default SeekBar;

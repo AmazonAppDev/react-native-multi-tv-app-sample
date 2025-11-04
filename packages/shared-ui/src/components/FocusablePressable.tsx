@@ -15,7 +15,7 @@ interface CustomPressableProps extends PressableProps {
   style?: ViewStyle;
 }
 
-const FocusablePressable = ({
+const FocusablePressable = React.memo(({
   text,
   onSelect,
   style,
@@ -46,7 +46,7 @@ const FocusablePressable = ({
       )}
     </SpatialNavigationFocusableView>
   );
-};
+});
 
 const styles = StyleSheet.create({
   watchButton: {
