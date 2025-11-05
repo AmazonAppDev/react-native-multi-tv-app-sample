@@ -21,6 +21,8 @@ export default function CustomDrawerContent(props: any) {
   return (
     <SpatialNavigationRoot isActive={isMenuOpen}>
       <View style={styles.drawerContainer}>
+        {/* Gradient-like scrim overlay */}
+        <View style={styles.scrimOverlay} />
         <DrawerContentScrollView
           {...props}
           style={styles.container}
@@ -93,7 +95,16 @@ export default function CustomDrawerContent(props: any) {
 const drawerStyles = StyleSheet.create({
     drawerContainer: {
       flex: 1,
-      backgroundColor: colors.scrimDark,
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    },
+    scrimOverlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      opacity: 0.9,
     },
     container: {
       flex: 1,

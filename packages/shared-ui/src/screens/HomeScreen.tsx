@@ -18,6 +18,7 @@ import { scaledPixels } from '../hooks/useScale';
 import { RootStackParamList } from '../navigation/types';
 import { moviesData, CardData } from '../data/moviesData';
 import { colors, safeZones } from '../theme';
+import PlatformLinearGradient from '../components/PlatformLinearGradient';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DrawerNavigator'>;
 
@@ -71,9 +72,13 @@ export default function HomeScreen() {
           source={headerImageSource}
           resizeMode="cover"
         />
-        {/* Solid scrim overlays instead of gradients for platform consistency */}
-        <View style={gridStyles.scrimLeft} />
-        <View style={gridStyles.scrimBottom} />
+        {/* Linear gradient scrim for left overlay */}
+        <PlatformLinearGradient
+          colors={['rgba(0,0,0,0.9)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.3)', 'transparent']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={gridStyles.gradientLeft}
+        />
         <View style={gridStyles.headerTextContainer}>
           <Text style={gridStyles.headerTitle}>{focusedItem.title}</Text>
           <Text style={gridStyles.headerDescription} numberOfLines={3}>
@@ -251,21 +256,12 @@ const gridStyles = StyleSheet.create({
       height: '100%',
       resizeMode: 'cover',
     },
-    scrimLeft: {
+    gradientLeft: {
       position: 'absolute',
       left: 0,
       top: 0,
       bottom: 0,
       width: '65%',
-      backgroundColor: colors.scrimDark,
-    },
-    scrimBottom: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      height: '25%',
-      backgroundColor: colors.scrimMedium,
     },
     headerTextContainer: {
       position: 'absolute',

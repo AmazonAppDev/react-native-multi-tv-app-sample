@@ -3,7 +3,6 @@ import Video, { VideoRef } from "react-native-video";
 import {
   StyleSheet,
   Platform,
-  TouchableWithoutFeedback,
   useWindowDimensions,
 } from "react-native";
 
@@ -61,21 +60,19 @@ const VideoPlayer = React.memo(
       );
 
       return (
-        <TouchableWithoutFeedback>
-          <Video
-            ref={ref}
-            source={videoSource}
-            style={videoStyle}
-            controls={controls}
-            paused={paused}
-            onBuffer={({ isBuffering }) => onBuffer(isBuffering)}
-            onProgress={({ currentTime }) => onProgress(currentTime)}
-            onLoad={({ duration }) => onLoad(duration)}
-            onEnd={onEnd}
-            poster={posterConfig}
-            resizeMode="cover"
-          />
-        </TouchableWithoutFeedback>
+        <Video
+          ref={ref}
+          source={videoSource}
+          style={videoStyle}
+          controls={controls}
+          paused={paused}
+          onBuffer={({ isBuffering }) => onBuffer(isBuffering)}
+          onProgress={({ currentTime }) => onProgress(currentTime)}
+          onLoad={({ duration }) => onLoad(duration)}
+          onEnd={onEnd}
+          poster={posterConfig}
+          resizeMode="cover"
+        />
       );
     },
   ),

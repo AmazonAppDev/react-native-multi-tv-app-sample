@@ -34,7 +34,6 @@
     "@amazon-devices/react-navigation__routers": "~7.0.0",
     "@bam.tech/lrud": "*",
     "@multi-tv/shared-ui": "workspace:*",
-    "expo-linear-gradient": "*",
     "react": "18.2.0",
     "react-native": "0.72.0",
     "react-native-keyevent": "*",
