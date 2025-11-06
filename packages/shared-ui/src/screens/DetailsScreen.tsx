@@ -15,7 +15,19 @@ type DetailsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList,
 export default function DetailsScreen() {
   const route = useRoute<DetailsScreenRouteProp>();
   const navigation = useNavigation<DetailsScreenNavigationProp>();
-  const { title, description, movie, headerImage } = route.params;
+  const {
+    title,
+    description,
+    movie,
+    headerImage,
+    category,
+    genres,
+    releaseYear,
+    rating,
+    ratingCount,
+    contentRating,
+    duration
+  } = route.params;
 
   const isFocused = useIsFocused();
 
@@ -27,6 +39,20 @@ export default function DetailsScreen() {
     () => ({ paddingHorizontal: scaledPixels(30) }),
     [],
   );
+
+  // Format duration from seconds to human-readable format
+  const formattedDuration = useMemo(() => {
+    if (!duration) return '';
+    const minutes = Math.floor(duration / 60);
+    const seconds = duration % 60;
+    return `${minutes}m ${seconds}s`;
+  }, [duration]);
+
+  // Format rating display
+  const ratingDisplay = useMemo(() => {
+    if (!rating) return '';
+    return `${rating.toFixed(1)} ⭐ (${ratingCount || 0} ratings)`;
+  }, [rating, ratingCount]);
 
   const navigate = useCallback(() => {
     navigation.navigate('Player', {
@@ -42,6 +68,34 @@ export default function DetailsScreen() {
         <View style={detailsStyles.contentContainer}>
           <View style={detailsStyles.topContent}>
             <Text style={detailsStyles.title}>{title}</Text>
+
+            {/* Metadata row */}
+            <View style={detailsStyles.metadataRow}>
+              {releaseYear && (
+                <Text style={detailsStyles.metadataText}>{releaseYear}</Text>
+              )}
+              {contentRating && (
+                <Text style={detailsStyles.metadataText}>{contentRating}</Text>
+              )}
+              {formattedDuration && (
+                <Text style={detailsStyles.metadataText}>{formattedDuration}</Text>
+              )}
+              {ratingDisplay && (
+                <Text style={detailsStyles.metadataText}>{ratingDisplay}</Text>
+              )}
+            </View>
+
+            {/* Genres */}
+            {genres && genres.length > 0 && (
+              <View style={detailsStyles.genresContainer}>
+                {genres.map((genre, index) => (
+                  <View key={index} style={detailsStyles.genreTag}>
+                    <Text style={detailsStyles.genreText}>{genre}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+
             <Text style={detailsStyles.description}>{description}</Text>
           </View>
           <View style={detailsStyles.bottomContent}>
@@ -114,6 +168,39 @@ const detailsStyles = StyleSheet.create({
       textShadowColor: 'rgba(0, 0, 0, 0.9)',
       textShadowOffset: { width: 0, height: 2 },
       textShadowRadius: 8,
+    },
+    metadataRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginBottom: scaledPixels(16),
+      gap: scaledPixels(16),
+    },
+    metadataText: {
+      fontSize: scaledPixels(22),
+      color: colors.textSecondary,
+      fontWeight: '600',
+      textShadowColor: 'rgba(0, 0, 0, 0.8)',
+      textShadowOffset: { width: 0, height: 1 },
+      textShadowRadius: 4,
+    },
+    genresContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginBottom: scaledPixels(20),
+      gap: scaledPixels(12),
+    },
+    genreTag: {
+      backgroundColor: colors.cardElevated,
+      paddingHorizontal: scaledPixels(16),
+      paddingVertical: scaledPixels(8),
+      borderRadius: scaledPixels(20),
+      borderWidth: scaledPixels(1),
+      borderColor: colors.focusBorder,
+    },
+    genreText: {
+      fontSize: scaledPixels(18),
+      color: colors.text,
+      fontWeight: '600',
     },
     crewContainer: {
       flexDirection: 'row',

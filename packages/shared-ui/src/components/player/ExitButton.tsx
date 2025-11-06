@@ -25,7 +25,6 @@ const exitButtonStyles = StyleSheet.create({
       position: "absolute",
       top: scaledPixels(safeZones.actionSafe.vertical),
       left: scaledPixels(safeZones.actionSafe.horizontal),
-      width: scaledPixels(100),
     },
   });
 

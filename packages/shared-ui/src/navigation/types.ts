@@ -5,6 +5,13 @@ export type RootStackParamList = {
     description: string;
     headerImage: string;
     movie: string;
+    category?: string;
+    genres?: string[];
+    releaseYear?: number;
+    rating?: number;
+    ratingCount?: number;
+    contentRating?: string;
+    duration?: number;
   };
   Player: {
     movie: string;

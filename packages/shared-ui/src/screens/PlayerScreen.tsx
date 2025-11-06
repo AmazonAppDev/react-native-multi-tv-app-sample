@@ -1,14 +1,12 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { View, Platform, StyleSheet, Animated } from 'react-native';
+import { View, Platform, StyleSheet } from 'react-native';
 import { SpatialNavigationRoot } from 'react-tv-space-navigation';
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import RemoteControlManager from '../app/remote-control/RemoteControlManager';
 import { SupportedKeys } from '../app/remote-control/SupportedKeys';
-import Controls from '../components/player/Controls';
-import ExitButton from '../components/player/ExitButton';
-import LoadingIndicator from '../components/LoadingIndicator';
+import VideoOverlay from '../components/player/VideoOverlay';
 import { VideoRef } from 'react-native-video';
 import VideoPlayer from '../components/player/VideoPlayer';
 import { RootStackParamList } from '../navigation/types';
@@ -31,7 +29,6 @@ export default function PlayerScreen() {
   const hideControlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const currentTimeRef = useRef<number>(0);
   const durationRef = useRef<number>(0);
-  const controlsOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (SHOW_NATIVE_CONTROLS) return;
@@ -66,25 +63,14 @@ export default function PlayerScreen() {
 
   const showControls = useCallback(() => {
     setControlsVisible(true);
-    Animated.timing(controlsOpacity, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
 
     if (hideControlsTimeoutRef.current) {
       clearTimeout(hideControlsTimeoutRef.current);
     }
     hideControlsTimeoutRef.current = setTimeout(() => {
-      Animated.timing(controlsOpacity, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(() => {
-        setControlsVisible(false);
-      });
-    }, 3000);
-  }, [controlsOpacity]);
+      setControlsVisible(false);
+    }, 5000);
+  }, []);
 
   const seek = useCallback((time: number) => {
     if (time < 0) {
@@ -103,6 +89,13 @@ export default function PlayerScreen() {
     showControls();
   }, [showControls]);
 
+  // Show controls when video starts
+  useEffect(() => {
+    if (durationRef.current && !SHOW_NATIVE_CONTROLS) {
+      showControls();
+    }
+  }, [durationRef.current, showControls]);
+
   return (
     <SpatialNavigationRoot isActive={isFocused && Platform.OS === 'android'}>
       <View style={playerStyles.container}>
@@ -118,17 +111,16 @@ export default function PlayerScreen() {
           onEnd={() => setPaused(true)}
         />
 
-        {!SHOW_NATIVE_CONTROLS && controlsVisible && !!durationRef.current && (
-          <Animated.View style={[playerStyles.controlsContainer, { opacity: controlsOpacity }]}>
-            {isVideoBuffering && <LoadingIndicator />}
-            <ExitButton onSelect={() => navigation.goBack()} />
-            <Controls
-              paused={paused}
-              onPlayPause={togglePausePlay}
-              currentTime={currentTime}
-              duration={durationRef.current}
-            />
-          </Animated.View>
+        {!SHOW_NATIVE_CONTROLS && !!durationRef.current && (
+          <VideoOverlay
+            visible={controlsVisible}
+            paused={paused}
+            onPlayPause={togglePausePlay}
+            onExit={() => navigation.goBack()}
+            currentTime={currentTime}
+            duration={durationRef.current}
+            isBuffering={isVideoBuffering}
+          />
         )}
       </View>
     </SpatialNavigationRoot>

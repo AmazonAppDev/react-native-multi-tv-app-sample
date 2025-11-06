@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     borderWidth: scaledPixels(3),
     borderColor: 'transparent',
     alignItems: "center",
+    justifyContent: "center",
     alignSelf: "flex-start",
     minWidth: scaledPixels(200),
     minHeight: scaledPixels(60),

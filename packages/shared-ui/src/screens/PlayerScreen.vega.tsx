@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, Animated, BackHandler } from 'react-native';
+import { View, StyleSheet, BackHandler } from 'react-native';
+import { SpatialNavigationRoot } from 'react-tv-space-navigation';
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -10,9 +11,8 @@ import {
 import { VideoPlayer as W3CVideoPlayer } from '@amazon-devices/react-native-w3cmedia';
 import RemoteControlManager from '../app/remote-control/RemoteControlManager';
 import { SupportedKeys } from '../app/remote-control/SupportedKeys';
-import Controls from '../components/player/Controls';
+import VideoOverlay from '../components/player/VideoOverlay.vega';
 import ExitButton from '../components/player/ExitButton';
-import LoadingIndicator from '../components/LoadingIndicator';
 import VideoPlayer from '../components/player/VideoPlayer.vega';
 import { RootStackParamList } from '../navigation/types';
 import { VideoHandler } from '../utils/VideoHandler.kepler';
@@ -64,7 +64,6 @@ export default function PlayerScreen() {
   const hideControlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const currentTimeRef = useRef<number>(0);
   const durationRef = useRef<number>(0);
-  const controlsOpacity = useRef(new Animated.Value(0)).current;
   const videoHandlerRef = useRef<VideoHandler | null>(null);
 
   // Update refs when state changes
@@ -116,40 +115,101 @@ export default function PlayerScreen() {
   }, [movie, headerImage, isFocused]);
 
   /**
-   * Handle video end - auto-navigate back after delay
+   * Handle video end - pause and show controls
    */
   useEffect(() => {
     if (isVideoEnded) {
-      const timer = setTimeout(() => {
-        navigateBack();
-      }, 2000);
-      return () => clearTimeout(timer);
+      setPaused(true);
+      setControlsVisible(true);
     }
   }, [isVideoEnded]);
+
+  /**
+   * Show controls when video starts
+   */
+  useEffect(() => {
+    if (isVideoInitialized && duration > 0) {
+      showControls();
+    }
+  }, [isVideoInitialized, duration]);
 
   /**
    * Handle remote control key presses
    */
   useEffect(() => {
     const handleKeyDown = (key: SupportedKeys) => {
-      switch (key) {
-        case SupportedKeys.Right:
-        case SupportedKeys.FastForward:
-          seek(currentTimeRef.current + 10);
-          break;
-        case SupportedKeys.Left:
-        case SupportedKeys.Rewind:
-          seek(currentTimeRef.current - 10);
-          break;
-        case SupportedKeys.Back:
-          navigateBack();
-          break;
-        case SupportedKeys.PlayPause:
-          togglePausePlay();
-          break;
-        default:
-          showControls();
-          break;
+      try {
+        switch (key) {
+          case SupportedKeys.Right:
+          case SupportedKeys.FastForward:
+            // Seek forward 10 seconds
+            if (videoHandlerRef.current && durationRef.current) {
+              try {
+                const newTime = Math.min(currentTimeRef.current + 10, durationRef.current);
+                videoHandlerRef.current.seek(newTime);
+                setCurrentTime(newTime);
+                currentTimeRef.current = newTime;
+                setControlsVisible(true);
+              } catch (e) {
+                console.warn('[PlayerScreen.kepler] Seek error:', e);
+              }
+            }
+            break;
+          case SupportedKeys.Left:
+          case SupportedKeys.Rewind:
+            // Seek backward 10 seconds
+            if (videoHandlerRef.current) {
+              try {
+                const newTime = Math.max(currentTimeRef.current - 10, 0);
+                videoHandlerRef.current.seek(newTime);
+                setCurrentTime(newTime);
+                currentTimeRef.current = newTime;
+                setControlsVisible(true);
+              } catch (e) {
+                console.warn('[PlayerScreen.kepler] Seek error:', e);
+              }
+            }
+            break;
+          case SupportedKeys.Back:
+            // Navigate back with cleanup
+            try {
+              if (surfaceHandleRef.current && videoRef.current) {
+                videoRef.current.clearSurfaceHandle(surfaceHandleRef.current);
+              }
+              if (captionViewHandleRef.current && videoRef.current) {
+                videoRef.current.clearCaptionViewHandle(captionViewHandleRef.current);
+              }
+              videoHandlerRef.current?.destroyVideoElements();
+              videoRef.current = null;
+              navigation.goBack();
+            } catch (e) {
+              console.warn('[PlayerScreen.kepler] Navigation error:', e);
+              navigation.goBack();
+            }
+            break;
+          case SupportedKeys.PlayPause:
+            // Toggle pause/play
+            if (videoHandlerRef.current) {
+              try {
+                if (videoHandlerRef.current.isPaused()) {
+                  videoHandlerRef.current.play();
+                  setPaused(false);
+                } else {
+                  videoHandlerRef.current.pause();
+                  setPaused(true);
+                }
+                setControlsVisible(true);
+              } catch (e) {
+                console.warn('[PlayerScreen.kepler] Play/pause error:', e);
+              }
+            }
+            break;
+          default:
+            setControlsVisible(true);
+            break;
+        }
+      } catch (e) {
+        console.error('[PlayerScreen.kepler] Key handler error:', e);
       }
     };
 
@@ -159,7 +219,21 @@ export default function PlayerScreen() {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        navigateBack();
+        try {
+          // Navigate back with cleanup
+          if (surfaceHandleRef.current && videoRef.current) {
+            videoRef.current.clearSurfaceHandle(surfaceHandleRef.current);
+          }
+          if (captionViewHandleRef.current && videoRef.current) {
+            videoRef.current.clearCaptionViewHandle(captionViewHandleRef.current);
+          }
+          videoHandlerRef.current?.destroyVideoElements();
+          videoRef.current = null;
+          navigation.goBack();
+        } catch (e) {
+          console.warn('[PlayerScreen.kepler] Back button error:', e);
+          navigation.goBack();
+        }
         return true;
       },
     );
@@ -168,7 +242,7 @@ export default function PlayerScreen() {
       RemoteControlManager.removeKeydownListener(listener);
       backHandler.remove();
     };
-  }, []);
+  }, [navigation]);
 
   /**
    * Handle surface view creation
@@ -251,44 +325,17 @@ export default function PlayerScreen() {
   }, [navigation]);
 
   /**
-   * Seek to specific time
-   */
-  const seek = (time: number) => {
-    if (time < 0) {
-      time = 0;
-    } else if (time > durationRef.current) {
-      time = durationRef.current;
-    }
-
-    videoHandlerRef.current?.seek(time);
-    setCurrentTime(time);
-    currentTimeRef.current = time;
-    showControls();
-  };
-
-  /**
    * Show controls with auto-hide
    */
   const showControls = () => {
     setControlsVisible(true);
-    Animated.timing(controlsOpacity, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
 
     if (hideControlsTimeoutRef.current) {
       clearTimeout(hideControlsTimeoutRef.current);
     }
     hideControlsTimeoutRef.current = setTimeout(() => {
-      Animated.timing(controlsOpacity, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(() => {
-        setControlsVisible(false);
-      });
-    }, 3000);
+      setControlsVisible(false);
+    }, 5000);
   };
 
   /**
@@ -311,56 +358,45 @@ export default function PlayerScreen() {
 
   if (isVideoError) {
     return (
-      <View style={styles.container}>
-        <View style={styles.errorContainer}>
-          <ExitButton onSelect={navigateBack} />
+      <SpatialNavigationRoot isActive={isFocused}>
+        <View style={styles.container}>
+          <View style={styles.errorContainer}>
+            <ExitButton onSelect={navigateBack} />
+          </View>
         </View>
-      </View>
+      </SpatialNavigationRoot>
     );
   }
 
   return (
-    <View style={styles.container}>
-      {/* Kepler Video Player with native surface rendering */}
-      <VideoPlayer
-        movie={movie}
-        headerImage={headerImage}
-        showCaptions={false}
-        onSurfaceViewCreated={onSurfaceViewCreated}
-        onSurfaceViewDestroyed={onSurfaceViewDestroyed}
-        onCaptionViewCreated={onCaptionViewCreated}
-        onCaptionViewDestroyed={onCaptionViewDestroyed}
-        isVideoInitialized={isVideoInitialized}
-      />
+    <SpatialNavigationRoot isActive={isFocused}>
+      <View style={styles.container}>
+        {/* Kepler Video Player with native surface rendering */}
+        <VideoPlayer
+          movie={movie}
+          headerImage={headerImage}
+          showCaptions={false}
+          onSurfaceViewCreated={onSurfaceViewCreated}
+          onSurfaceViewDestroyed={onSurfaceViewDestroyed}
+          onCaptionViewCreated={onCaptionViewCreated}
+          onCaptionViewDestroyed={onCaptionViewDestroyed}
+          isVideoInitialized={isVideoInitialized}
+        />
 
-      {/* Buffering indicator */}
-      {isVideoBuffering && (
-        <View style={styles.bufferingContainer}>
-          <LoadingIndicator />
-        </View>
-      )}
-
-      {/* Custom controls overlay */}
-      {controlsVisible && !!durationRef.current && (
-        <Animated.View
-          style={[styles.controlsContainer, { opacity: controlsOpacity }]}>
-          <ExitButton onSelect={navigateBack} />
-          <Controls
+        {/* Custom controls overlay with buffering indicator */}
+        {!!durationRef.current && (
+          <VideoOverlay
+            visible={controlsVisible}
             paused={paused}
             onPlayPause={togglePausePlay}
+            onExit={navigateBack}
             currentTime={currentTime}
             duration={durationRef.current}
+            isBuffering={isVideoBuffering}
           />
-        </Animated.View>
-      )}
-
-      {/* Video ended overlay */}
-      {isVideoEnded && (
-        <View style={styles.endedContainer}>
-          <ExitButton onSelect={navigateBack} />
-        </View>
-      )}
-    </View>
+        )}
+      </View>
+    </SpatialNavigationRoot>
   );
 }
 
@@ -370,28 +406,9 @@ const usePlayerStyles = () => {
       flex: 1,
       backgroundColor: '#000',
     },
-    controlsContainer: {
-      ...StyleSheet.absoluteFillObject,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      justifyContent: 'space-between',
-      zIndex: 10,
-    },
-    bufferingContainer: {
-      ...StyleSheet.absoluteFillObject,
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 5,
-    },
     errorContainer: {
       ...StyleSheet.absoluteFillObject,
       backgroundColor: '#000',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 10,
-    },
-    endedContainer: {
-      ...StyleSheet.absoluteFillObject,
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 10,

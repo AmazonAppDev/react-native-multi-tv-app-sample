@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, useWindowDimensions } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { scaledPixels } from "../../hooks/useScale";
 
 interface SeekBarProps {
@@ -8,28 +8,15 @@ interface SeekBarProps {
 }
 
 const SeekBar = React.memo(({ currentTime, duration }: SeekBarProps) => {
-  const { width } = useWindowDimensions();
-
-  const thumbPosition = React.useMemo(() => {
+  const percentage = React.useMemo(() => {
     if (!duration) return 0;
-    const percentage = (currentTime / duration) * 100;
-    return (percentage * (width - scaledPixels(180))) / 100;
-  }, [currentTime, duration, width]);
-
-  const seekbarTrackStyle = React.useMemo(
-    () => [seekBarStyles.seekbarTrack, { width: width - scaledPixels(170) }],
-    [width],
-  );
-
-  const seekbarThumbStyle = React.useMemo(
-    () => [seekBarStyles.seekbarThumb, { left: thumbPosition }],
-    [thumbPosition],
-  );
+    return (currentTime / duration) * 100;
+  }, [currentTime, duration]);
 
   return (
     <View style={seekBarStyles.seekbarContainer}>
-      <View style={seekbarTrackStyle} />
-      <View style={seekbarThumbStyle} />
+      <View style={seekBarStyles.seekbarTrack} />
+      <View style={[seekBarStyles.seekbarThumb, { left: `${percentage}%` }]} />
     </View>
   );
 });
@@ -39,12 +26,13 @@ const seekBarStyles = StyleSheet.create({
     flex: 1,
     height: scaledPixels(40),
     justifyContent: "center",
+    marginRight: scaledPixels(80),
   },
   seekbarTrack: {
+    width: "100%",
     height: scaledPixels(5),
     backgroundColor: "#888",
     borderRadius: scaledPixels(2.5),
-    position: "absolute",
   },
   seekbarThumb: {
     position: "absolute",

@@ -45,7 +45,6 @@ const controlsStyles = StyleSheet.create({
     },
     controlButton: {
       marginRight: scaledPixels(20),
-      width: scaledPixels(100),
     },
   });
 
