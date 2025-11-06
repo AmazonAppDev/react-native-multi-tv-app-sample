@@ -5,7 +5,7 @@
 
 A production-ready TV application template built with React Native, supporting Android TV, Apple TV, Fire TV (with Fire OS), Fire TV (with Vega OS) and Web TV platforms. This monorepo showcases best practices for building cross-platform TV applications with shared UI components, efficient focus management, and platform-specific optimizations.
 
-![Demo GIF](https://github.com/AmazonAppDev/react-native-multi-tv-app-sample/blob/main/tvdemo.gif)
+![Demo GIF](./tvdemo.gif)
 
 ## Table of Contents
 
