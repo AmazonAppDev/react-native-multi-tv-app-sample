@@ -18,6 +18,7 @@ A production-ready TV application template built with React Native, supporting A
 - [Project Structure](#project-structure)
 - [Technologies](#technologies)
 - [Contributing](#contributing)
+- [Troubleshooting](#troubleshooting)
 - [License](#license)
 
 ## Features
@@ -35,6 +36,32 @@ A production-ready TV application template built with React Native, supporting A
 - **Grid Layouts**: Responsive content grids optimized for TV screens
 - **Dynamic Hero Banner**: Header image that updates based on focused content
 - **Detail Screens**: Rich content detail pages with metadata and actions
+
+### Video Player Features
+
+- **Overlay Controls**: Custom video controls with spatial navigation support
+  - Play/pause button with visual state
+  - Seek bar with current time and duration display
+  - Exit button to return to previous screen
+  - Auto-hide after 5 seconds of inactivity
+- **Buffering Indicators**: Visual feedback during video loading and seeking
+- **Remote Control Integration**: Full support for play/pause, seek forward/backward (10s intervals), and exit
+- **Platform Optimizations**:
+  - Native controls on iOS/tvOS
+  - Custom overlay on Android TV, Fire TV, and Web
+  - Hardware-accelerated rendering on Fire TV Vega with W3C Media APIs
+
+### Dynamic Content Loading
+
+- **External Catalog API**: Fetch movie content dynamically from remote JSON endpoint
+- **Rich Metadata Support**:
+  - Genres, ratings, and content ratings
+  - Release year and duration
+  - Trending flags
+  - Multiple video source formats
+- **Type-Safe Transforms**: Automatic conversion from catalog API format to UI-ready data structures
+- **Error Handling**: Graceful fallback and error states for failed API requests
+- **Extensible**: Easy to swap catalog endpoint or add new metadata fields
 
 ### Architecture
 
@@ -340,6 +367,27 @@ The project includes platform-specific remote control managers:
 
 All managers implement `RemoteControlManagerInterface` and integrate with `react-tv-space-navigation`.
 
+#### Remote Control Key Mappings
+
+The following keys are supported across all platforms in the video player:
+
+| Key/Button    | Action                          | Platforms              |
+| ------------- | ------------------------------- | ---------------------- |
+| PlayPause     | Toggle play/pause               | All                    |
+| Select/Enter  | Activate focused item           | All                    |
+| Back          | Exit player or go back          | All                    |
+| Left          | Seek backward 10 seconds        | All (in player)        |
+| Right         | Seek forward 10 seconds         | All (in player)        |
+| FastForward   | Seek forward 10 seconds         | All (in player)        |
+| Rewind        | Seek backward 10 seconds        | All (in player)        |
+| Up/Down       | Navigate menu items             | All (in navigation)    |
+
+**Platform-Specific Notes:**
+- **iOS/tvOS**: Uses native video controls by default; custom overlay disabled
+- **Android TV/Fire TV**: Custom overlay with spatial navigation for all controls
+- **Web**: Keyboard support with arrow keys and spacebar for play/pause
+- **Fire TV Vega**: Hardware-accelerated video with W3C Media APIs
+
 ### Testing
 
 ```bash
@@ -401,6 +449,84 @@ Contributions are welcome! This project is an open-source sample designed to hel
 - Update documentation as needed
 - Ensure all tests pass before submitting PR
 - Use conventional commit messages
+
+## Troubleshooting
+
+### iOS Build Issues
+
+**Error: "can't access lexical declaration 'X' before initialization"**
+- This typically occurs when functions are referenced before they're defined
+- Solution: Functions should be defined before useEffect hooks that reference them
+
+**Error: "No such file or directory: node"**
+- The Xcode build can't find the Node.js binary
+- Solution: Update `apps/expo-multi-tv/ios/.xcode.env.local` with correct Node path:
+  ```bash
+  export NODE_BINARY=/opt/homebrew/bin/node  # or your node path
+  ```
+- Find your node path with: `which node`
+- Note: `.xcode.env.local` is gitignored (machine-specific configuration)
+
+**Pods Installation Issues**
+- Clean and reinstall:
+  ```bash
+  cd apps/expo-multi-tv/ios
+  rm -rf Pods Podfile.lock
+  pod install
+  ```
+
+### Android TV Build Issues
+
+**Metro Bundler Port Conflicts**
+- If port 8081 is in use:
+  ```bash
+  yarn start --port 8082
+  ```
+
+**ADB Device Not Found**
+- Ensure Android TV/Fire TV is connected:
+  ```bash
+  adb devices
+  adb connect <device-ip>:5555
+  ```
+
+### Fire TV Vega Issues
+
+**Vega SDK Not Found**
+- Ensure Vega SDK is installed and in PATH
+- Check SDK path: `echo $KEPLER_SDK_HOME`
+- Download from: [Amazon Vega Developer Portal](https://developer.amazon.com/vega)
+
+### Web Platform Issues
+
+**Video Player White Screen**
+- Check browser console for JavaScript errors
+- Ensure catalog API is accessible
+- Verify video URLs are CORS-enabled
+
+**Spatial Navigation Not Working**
+- Use keyboard arrows for navigation on web
+- Focus management requires keyboard or gamepad input
+
+### Common Issues
+
+**"Module not found" Errors**
+- Clear cache and reinstall:
+  ```bash
+  yarn clean:all
+  yarn install
+  ```
+
+**TypeScript Errors**
+- Run type checking:
+  ```bash
+  yarn typecheck
+  ```
+
+**Video Playback Issues**
+- Verify video URLs are accessible
+- Check network connectivity
+- Ensure video format is supported (MP4 recommended)
 
 ## License
 
