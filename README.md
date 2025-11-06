@@ -145,8 +145,6 @@ yarn dev:ios
 # Web
 yarn dev:web
 
-# Fire TV (Vega OS)
-yarn dev:vega
 ```
 
 ### Platform-Specific Instructions
