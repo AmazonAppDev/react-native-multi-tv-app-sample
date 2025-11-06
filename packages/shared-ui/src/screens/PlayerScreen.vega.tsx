@@ -76,6 +76,81 @@ export default function PlayerScreen() {
   }, [duration]);
 
   /**
+   * Show controls with auto-hide
+   */
+  const showControls = useCallback(() => {
+    setControlsVisible(true);
+
+    if (hideControlsTimeoutRef.current) {
+      clearTimeout(hideControlsTimeoutRef.current);
+    }
+    hideControlsTimeoutRef.current = setTimeout(() => {
+      setControlsVisible(false);
+    }, 5000);
+  }, []);
+
+  /**
+   * Seek to a specific time
+   */
+  const seek = useCallback((time: number) => {
+    if (videoHandlerRef.current && durationRef.current) {
+      try {
+        const clampedTime = Math.max(0, Math.min(time, durationRef.current));
+        videoHandlerRef.current.seek(clampedTime);
+        setCurrentTime(clampedTime);
+        currentTimeRef.current = clampedTime;
+        showControls();
+      } catch (e) {
+        console.warn('[PlayerScreen.kepler] Seek error:', e);
+      }
+    }
+  }, [showControls]);
+
+  /**
+   * Toggle play/pause
+   */
+  const togglePausePlay = useCallback(() => {
+    if (videoHandlerRef.current) {
+      try {
+        if (videoHandlerRef.current.isPaused()) {
+          videoHandlerRef.current.play();
+          setPaused(false);
+        } else {
+          videoHandlerRef.current.pause();
+          setPaused(true);
+        }
+        showControls();
+      } catch (e) {
+        console.warn('[PlayerScreen.kepler] Play/pause error:', e);
+      }
+    }
+  }, [showControls]);
+
+  /**
+   * Navigate back with cleanup
+   */
+  const navigateBack = useCallback(() => {
+    console.log('[PlayerScreen.kepler] - Navigating back');
+
+    // Clear surface and caption handles
+    if (surfaceHandleRef.current && videoRef.current) {
+      videoRef.current.clearSurfaceHandle(surfaceHandleRef.current);
+    }
+    if (captionViewHandleRef.current && videoRef.current) {
+      videoRef.current.clearCaptionViewHandle(captionViewHandleRef.current);
+    }
+
+    // Destroy video elements
+    videoHandlerRef.current?.destroyVideoElements();
+    videoRef.current = null;
+
+    // Navigate back after short delay
+    setTimeout(() => {
+      navigation.goBack();
+    }, 300);
+  }, [navigation]);
+
+  /**
    * Initialize video handler and start playback
    */
   useEffect(() => {
@@ -131,7 +206,7 @@ export default function PlayerScreen() {
     if (isVideoInitialized && duration > 0) {
       showControls();
     }
-  }, [isVideoInitialized, duration]);
+  }, [isVideoInitialized, duration, showControls]);
 
   /**
    * Handle remote control key presses
@@ -142,70 +217,20 @@ export default function PlayerScreen() {
         switch (key) {
           case SupportedKeys.Right:
           case SupportedKeys.FastForward:
-            // Seek forward 10 seconds
-            if (videoHandlerRef.current && durationRef.current) {
-              try {
-                const newTime = Math.min(currentTimeRef.current + 10, durationRef.current);
-                videoHandlerRef.current.seek(newTime);
-                setCurrentTime(newTime);
-                currentTimeRef.current = newTime;
-                setControlsVisible(true);
-              } catch (e) {
-                console.warn('[PlayerScreen.kepler] Seek error:', e);
-              }
-            }
+            seek(currentTimeRef.current + 10);
             break;
           case SupportedKeys.Left:
           case SupportedKeys.Rewind:
-            // Seek backward 10 seconds
-            if (videoHandlerRef.current) {
-              try {
-                const newTime = Math.max(currentTimeRef.current - 10, 0);
-                videoHandlerRef.current.seek(newTime);
-                setCurrentTime(newTime);
-                currentTimeRef.current = newTime;
-                setControlsVisible(true);
-              } catch (e) {
-                console.warn('[PlayerScreen.kepler] Seek error:', e);
-              }
-            }
+            seek(currentTimeRef.current - 10);
             break;
           case SupportedKeys.Back:
-            // Navigate back with cleanup
-            try {
-              if (surfaceHandleRef.current && videoRef.current) {
-                videoRef.current.clearSurfaceHandle(surfaceHandleRef.current);
-              }
-              if (captionViewHandleRef.current && videoRef.current) {
-                videoRef.current.clearCaptionViewHandle(captionViewHandleRef.current);
-              }
-              videoHandlerRef.current?.destroyVideoElements();
-              videoRef.current = null;
-              navigation.goBack();
-            } catch (e) {
-              console.warn('[PlayerScreen.kepler] Navigation error:', e);
-              navigation.goBack();
-            }
+            navigateBack();
             break;
           case SupportedKeys.PlayPause:
-            // Toggle pause/play
-            if (videoHandlerRef.current) {
-              try {
-                if (videoHandlerRef.current.isPaused()) {
-                  videoHandlerRef.current.play();
-                  setPaused(false);
-                } else {
-                  videoHandlerRef.current.pause();
-                  setPaused(true);
-                }
-                setControlsVisible(true);
-              } catch (e) {
-                console.warn('[PlayerScreen.kepler] Play/pause error:', e);
-              }
-            }
+            togglePausePlay();
             break;
           default:
-            setControlsVisible(true);
+            showControls();
             break;
         }
       } catch (e) {
@@ -219,21 +244,7 @@ export default function PlayerScreen() {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        try {
-          // Navigate back with cleanup
-          if (surfaceHandleRef.current && videoRef.current) {
-            videoRef.current.clearSurfaceHandle(surfaceHandleRef.current);
-          }
-          if (captionViewHandleRef.current && videoRef.current) {
-            videoRef.current.clearCaptionViewHandle(captionViewHandleRef.current);
-          }
-          videoHandlerRef.current?.destroyVideoElements();
-          videoRef.current = null;
-          navigation.goBack();
-        } catch (e) {
-          console.warn('[PlayerScreen.kepler] Back button error:', e);
-          navigation.goBack();
-        }
+        navigateBack();
         return true;
       },
     );
@@ -242,7 +253,7 @@ export default function PlayerScreen() {
       RemoteControlManager.removeKeydownListener(listener);
       backHandler.remove();
     };
-  }, [navigation]);
+  }, [seek, togglePausePlay, showControls, navigateBack]);
 
   /**
    * Handle surface view creation
@@ -299,60 +310,6 @@ export default function PlayerScreen() {
     }
     captionViewHandleRef.current = null;
   }, []);
-
-  /**
-   * Navigate back with cleanup
-   */
-  const navigateBack = useCallback(() => {
-    console.log('[PlayerScreen.kepler] - Navigating back');
-
-    // Clear surface and caption handles
-    if (surfaceHandleRef.current && videoRef.current) {
-      videoRef.current.clearSurfaceHandle(surfaceHandleRef.current);
-    }
-    if (captionViewHandleRef.current && videoRef.current) {
-      videoRef.current.clearCaptionViewHandle(captionViewHandleRef.current);
-    }
-
-    // Destroy video elements
-    videoHandlerRef.current?.destroyVideoElements();
-    videoRef.current = null;
-
-    // Navigate back after short delay
-    setTimeout(() => {
-      navigation.goBack();
-    }, 300);
-  }, [navigation]);
-
-  /**
-   * Show controls with auto-hide
-   */
-  const showControls = () => {
-    setControlsVisible(true);
-
-    if (hideControlsTimeoutRef.current) {
-      clearTimeout(hideControlsTimeoutRef.current);
-    }
-    hideControlsTimeoutRef.current = setTimeout(() => {
-      setControlsVisible(false);
-    }, 5000);
-  };
-
-  /**
-   * Toggle play/pause
-   */
-  const togglePausePlay = () => {
-    if (videoHandlerRef.current) {
-      if (videoHandlerRef.current.isPaused()) {
-        videoHandlerRef.current.play();
-        setPaused(false);
-      } else {
-        videoHandlerRef.current.pause();
-        setPaused(true);
-      }
-      showControls();
-    }
-  };
 
   const styles = usePlayerStyles();
 
