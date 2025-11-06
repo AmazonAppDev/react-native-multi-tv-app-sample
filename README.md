@@ -263,7 +263,6 @@ yarn build
 | `yarn dev:web`     | Run on Web                        |
 | `yarn dev:vega`    | Start vega Metro bundler          |
 | `yarn build:vega`  | Build vega for Fire TV            |
-| `yarn lint:all`    | Lint all packages                 |
 | `yarn format`      | Format code with Prettier         |
 | `yarn clean:all`   | Clean all node_modules            |
 
@@ -371,47 +370,23 @@ All managers implement `RemoteControlManagerInterface` and integrate with `react
 
 The following keys are supported across all platforms in the video player:
 
-| Key/Button    | Action                          | Platforms              |
-| ------------- | ------------------------------- | ---------------------- |
-| PlayPause     | Toggle play/pause               | All                    |
-| Select/Enter  | Activate focused item           | All                    |
-| Back          | Exit player or go back          | All                    |
-| Left          | Seek backward 10 seconds        | All (in player)        |
-| Right         | Seek forward 10 seconds         | All (in player)        |
-| FastForward   | Seek forward 10 seconds         | All (in player)        |
-| Rewind        | Seek backward 10 seconds        | All (in player)        |
-| Up/Down       | Navigate menu items             | All (in navigation)    |
+| Key/Button   | Action                   | Platforms           |
+| ------------ | ------------------------ | ------------------- |
+| PlayPause    | Toggle play/pause        | All                 |
+| Select/Enter | Activate focused item    | All                 |
+| Back         | Exit player or go back   | All                 |
+| Left         | Seek backward 10 seconds | All (in player)     |
+| Right        | Seek forward 10 seconds  | All (in player)     |
+| FastForward  | Seek forward 10 seconds  | All (in player)     |
+| Rewind       | Seek backward 10 seconds | All (in player)     |
+| Up/Down      | Navigate menu items      | All (in navigation) |
 
 **Platform-Specific Notes:**
+
 - **iOS/tvOS**: Uses native video controls by default; custom overlay disabled
 - **Android TV/Fire TV**: Custom overlay with spatial navigation for all controls
 - **Web**: Keyboard support with arrow keys and spacebar for play/pause
 - **Fire TV Vega**: Hardware-accelerated video with W3C Media APIs
-
-### Testing
-
-```bash
-# Run all tests
-yarn test:all
-
-# Test specific package
-yarn workspace @multi-tv/shared-ui test
-yarn workspace @multi-tv/expo-multi-tv test
-yarn workspace @multi-tv/vega test
-```
-
-### Code Quality
-
-```bash
-# Lint all code
-yarn lint:all
-
-# Type check
-yarn typecheck
-
-# Format code
-yarn format
-```
 
 ## Technologies
 
@@ -455,10 +430,12 @@ Contributions are welcome! This project is an open-source sample designed to hel
 ### iOS Build Issues
 
 **Error: "can't access lexical declaration 'X' before initialization"**
+
 - This typically occurs when functions are referenced before they're defined
 - Solution: Functions should be defined before useEffect hooks that reference them
 
 **Error: "No such file or directory: node"**
+
 - The Xcode build can't find the Node.js binary
 - Solution: Update `apps/expo-multi-tv/ios/.xcode.env.local` with correct Node path:
   ```bash
@@ -468,6 +445,7 @@ Contributions are welcome! This project is an open-source sample designed to hel
 - Note: `.xcode.env.local` is gitignored (machine-specific configuration)
 
 **Pods Installation Issues**
+
 - Clean and reinstall:
   ```bash
   cd apps/expo-multi-tv/ios
@@ -478,12 +456,14 @@ Contributions are welcome! This project is an open-source sample designed to hel
 ### Android TV Build Issues
 
 **Metro Bundler Port Conflicts**
+
 - If port 8081 is in use:
   ```bash
   yarn start --port 8082
   ```
 
 **ADB Device Not Found**
+
 - Ensure Android TV/Fire TV is connected:
   ```bash
   adb devices
@@ -493,6 +473,7 @@ Contributions are welcome! This project is an open-source sample designed to hel
 ### Fire TV Vega Issues
 
 **Vega SDK Not Found**
+
 - Ensure Vega SDK is installed and in PATH
 - Check SDK path: `echo $KEPLER_SDK_HOME`
 - Download from: [Amazon Vega Developer Portal](https://developer.amazon.com/vega)
@@ -500,17 +481,20 @@ Contributions are welcome! This project is an open-source sample designed to hel
 ### Web Platform Issues
 
 **Video Player White Screen**
+
 - Check browser console for JavaScript errors
 - Ensure catalog API is accessible
 - Verify video URLs are CORS-enabled
 
 **Spatial Navigation Not Working**
+
 - Use keyboard arrows for navigation on web
 - Focus management requires keyboard or gamepad input
 
 ### Common Issues
 
 **"Module not found" Errors**
+
 - Clear cache and reinstall:
   ```bash
   yarn clean:all
@@ -518,12 +502,14 @@ Contributions are welcome! This project is an open-source sample designed to hel
   ```
 
 **TypeScript Errors**
+
 - Run type checking:
   ```bash
   yarn typecheck
   ```
 
 **Video Playback Issues**
+
 - Verify video URLs are accessible
 - Check network connectivity
 - Ensure video format is supported (MP4 recommended)
