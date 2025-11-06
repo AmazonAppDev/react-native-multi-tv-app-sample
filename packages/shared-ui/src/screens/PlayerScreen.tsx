@@ -30,6 +30,34 @@ export default function PlayerScreen() {
   const currentTimeRef = useRef<number>(0);
   const durationRef = useRef<number>(0);
 
+  const showControls = useCallback(() => {
+    setControlsVisible(true);
+
+    if (hideControlsTimeoutRef.current) {
+      clearTimeout(hideControlsTimeoutRef.current);
+    }
+    hideControlsTimeoutRef.current = setTimeout(() => {
+      setControlsVisible(false);
+    }, 5000);
+  }, []);
+
+  const seek = useCallback((time: number) => {
+    if (time < 0) {
+      time = 0;
+    } else if (time > durationRef.current) {
+      time = durationRef.current;
+    }
+    videoRef.current?.seek(time);
+    currentTimeRef.current = time;
+    setCurrentTime(time);
+    showControls();
+  }, [showControls]);
+
+  const togglePausePlay = useCallback(() => {
+    setPaused((prev) => !prev);
+    showControls();
+  }, [showControls]);
+
   useEffect(() => {
     if (SHOW_NATIVE_CONTROLS) return;
 
@@ -60,34 +88,6 @@ export default function PlayerScreen() {
       RemoteControlManager.removeKeydownListener(listener);
     };
   }, [seek, togglePausePlay, showControls, navigation]);
-
-  const showControls = useCallback(() => {
-    setControlsVisible(true);
-
-    if (hideControlsTimeoutRef.current) {
-      clearTimeout(hideControlsTimeoutRef.current);
-    }
-    hideControlsTimeoutRef.current = setTimeout(() => {
-      setControlsVisible(false);
-    }, 5000);
-  }, []);
-
-  const seek = useCallback((time: number) => {
-    if (time < 0) {
-      time = 0;
-    } else if (time > durationRef.current) {
-      time = durationRef.current;
-    }
-    videoRef.current?.seek(time);
-    currentTimeRef.current = time;
-    setCurrentTime(time);
-    showControls();
-  }, [showControls]);
-
-  const togglePausePlay = useCallback(() => {
-    setPaused((prev) => !prev);
-    showControls();
-  }, [showControls]);
 
   // Show controls when video starts
   useEffect(() => {
