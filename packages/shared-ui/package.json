@@ -1,0 +1,22 @@
+{
+  "name": "@multi-tv/shared-ui",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "clean": "rm -rf node_modules"
+  },
+  "peerDependencies": {
+    "@react-navigation/native": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@types/react": "~18.2.45",
+    "typescript": "~5.3.3"
+  }
+}

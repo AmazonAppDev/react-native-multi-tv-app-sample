@@ -1,0 +1,77 @@
+{
+  "name": "@multi-tv/vega",
+  "version": "0.0.1",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules buildinfo.json dist build",
+    "start": "react-native start",
+    "test": "jest --colors ",
+    "test:snapshot": "jest --colors --updateSnapshot",
+    "lint": "eslint src test --ext .ts,.tsx",
+    "lint:fix": "eslint src test --ext .ts,.tsx --fix",
+    "build:release": "react-native build-kepler --build-type Release",
+    "build:debug": "react-native build-kepler --build-type Debug",
+    "build:app": "npm-run-all build:release",
+    "build": "npm-run-all build:release",
+    "release": "npm-run-all lint test build:app"
+  },
+  "dependencies": {
+    "@amazon-devices/kepler-media-controls": "^1.0.0",
+    "@amazon-devices/kepler-media-types": "^1.0.0",
+    "@amazon-devices/react-native-gesture-handler": "~2.0.0",
+    "@amazon-devices/react-native-kepler": "^2.0.0",
+    "@amazon-devices/react-native-reanimated": "~2.0.0",
+    "@amazon-devices/react-native-safe-area-context": "*",
+    "@amazon-devices/react-native-screens": "*",
+    "@amazon-devices/react-native-w3cmedia": "~2.1.0",
+    "@amazon-devices/react-navigation__core": "~7.0.0",
+    "@amazon-devices/react-navigation__drawer": "~7.0.0",
+    "@amazon-devices/react-navigation__native": "~7.0.0",
+    "@amazon-devices/react-navigation__native-stack": "~7.0.0",
+    "@amazon-devices/react-navigation__routers": "~7.0.0",
+    "@bam.tech/lrud": "*",
+    "@multi-tv/shared-ui": "workspace:*",
+    "react": "18.2.0",
+    "react-native": "0.72.0",
+    "react-native-keyevent": "*",
+    "react-native-pixel-perfect": "*",
+    "react-native-video": "*",
+    "react-tv-space-navigation": "*"
+  },
+  "devDependencies": {
+    "@amazon-devices/kepler-cli-platform": "^0",
+    "@babel/core": "^7.20.0",
+    "@babel/traverse": "^7.20.0",
+    "@react-native-community/cli": "11.3.2",
+    "@react-native-community/cli-tools": "^11.0.0",
+    "@react-native/eslint-config": "0.72.2",
+    "@react-native/metro-config": "^0.72.6",
+    "@testing-library/react-native": "^7.2.0",
+    "@tsconfig/react-native": "^3.0.2",
+    "@types/jest": "^28.0.0",
+    "@types/react": "^18.0.24",
+    "@types/react-test-renderer": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "babel-jest": "^28.0.0",
+    "eslint": "^8.12.0",
+    "jest": "^28.0.0",
+    "metro-react-native-babel-preset": "^0.76.5",
+    "mustache": "^4.2.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.6.2",
+    "react-test-renderer": "18.2.0",
+    "ts-jest": "^28.0.0",
+    "typescript": "4.8.4"
+  },
+  "kepler": {
+    "projectType": "application",
+    "appName": "MultiTVVega",
+    "targets": [
+      "tv"
+    ]
+  }
+}
