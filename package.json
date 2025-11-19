@@ -7,6 +7,13 @@
     "packages/*"
   ],
   "packageManager": "yarn@4.5.0",
+  "resolutions": {
+    "js-yaml": "^3.14.2",
+    "min-document": "^2.19.1",
+    "logkitty": "^0.7.1",
+    "node-fetch": "^2.6.7",
+    "ws": "^8.17.1"
+  },
   "scripts": {
     "dev": "yarn workspace @multi-tv/expo-multi-tv start",
     "dev:android": "yarn workspace @multi-tv/expo-multi-tv android",
