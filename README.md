@@ -216,7 +216,9 @@ cd apps/expo-multi-tv
 yarn ios
 ```
 
-#### Web
+#### Web - Useful for LG WebOS and Tizen
+
+Development server:
 
 ```bash
 yarn dev:web
@@ -227,6 +229,14 @@ Or directly from the app directory:
 ```bash
 cd apps/expo-multi-tv
 yarn web
+```
+
+Production build:
+
+```bash
+cd apps/expo-multi-tv
+npx expo export --platform web
+npx serve dist
 ```
 
 #### Fire TV (Vega)
