@@ -190,14 +190,15 @@ export default function PlayerScreen() {
   }, [movie, headerImage, isFocused]);
 
   /**
-   * Handle video end - pause and show controls
+   * Handle video end - pause, show controls, and navigate back
    */
   useEffect(() => {
     if (isVideoEnded) {
       setPaused(true);
       setControlsVisible(true);
+      navigateBack();
     }
-  }, [isVideoEnded]);
+  }, [isVideoEnded, navigateBack]);
 
   /**
    * Show controls when video starts
