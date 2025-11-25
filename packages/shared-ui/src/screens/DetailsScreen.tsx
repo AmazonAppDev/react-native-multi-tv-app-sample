@@ -1,7 +1,7 @@
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StyleSheet, View, Image, Text } from 'react-native';
-import { SpatialNavigationRoot } from 'react-tv-space-navigation';
+import { SpatialNavigationRoot, DefaultFocus } from 'react-tv-space-navigation';
 import { scaledPixels } from '../hooks/useScale';
 import { useCallback, useMemo } from 'react';
 import { useIsFocused } from '@react-navigation/native';
@@ -113,11 +113,13 @@ export default function DetailsScreen() {
                 <Text style={detailsStyles.crewName}>Eric Fahsl</Text>
               </View>
             </View>
-            <FocusablePressable
-              text={'Watch now'}
-              onSelect={navigate}
-              style={buttonStyle}
-            />
+            <DefaultFocus>
+              <FocusablePressable
+                text={'Watch now'}
+                onSelect={navigate}
+                style={buttonStyle}
+              />
+            </DefaultFocus>
           </View>
         </View>
       </View>
