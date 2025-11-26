@@ -108,7 +108,10 @@ export default function PlayerScreen() {
           onBuffer={setIsVideoBuffering}
           onProgress={setCurrentTime}
           onLoad={(duration) => (durationRef.current = duration)}
-          onEnd={() => setPaused(true)}
+          onEnd={() => {
+            setPaused(true);
+            navigation.goBack();
+          }}
         />
 
         {!SHOW_NATIVE_CONTROLS && !!durationRef.current && (
