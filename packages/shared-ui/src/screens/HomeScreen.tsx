@@ -44,9 +44,6 @@ const MovieItem = React.memo(
           onError={(error) => console.log('Image load error:', item.title, error.nativeEvent.error)}
           onLoad={() => console.log('Image loaded:', item.title)}
         />
-        <View style={styles.thumbnailTextContainer}>
-          <Text style={styles.thumbnailText} numberOfLines={2}>{item.title}</Text>
-        </View>
       </View>
     );
   },
@@ -102,19 +99,6 @@ export default function HomeScreen() {
             source={headerImageSource}
             resizeMode="cover"
           />
-          {/* Linear gradient scrim for left overlay */}
-          <PlatformLinearGradient
-            colors={['rgba(0,0,0,0.9)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.3)', 'transparent']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={gridStyles.gradientLeft}
-          />
-          <View style={gridStyles.headerTextContainer}>
-            <Text style={gridStyles.headerTitle}>{focusedItem.title}</Text>
-            <Text style={gridStyles.headerDescription} numberOfLines={3}>
-              {focusedItem.description}
-            </Text>
-          </View>
         </View>
       );
     },
