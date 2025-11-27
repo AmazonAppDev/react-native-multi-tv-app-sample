@@ -99,6 +99,19 @@ export default function HomeScreen() {
             source={headerImageSource}
             resizeMode="cover"
           />
+          {/* Linear gradient scrim for left overlay */}
+          <PlatformLinearGradient
+            colors={['rgba(0,0,0,0.9)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.3)', 'transparent']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={gridStyles.gradientLeft}
+          />
+          <View style={gridStyles.headerTextContainer}>
+            <Text style={gridStyles.headerTitle}>{focusedItem.title}</Text>
+            <Text style={gridStyles.headerDescription} numberOfLines={3}>
+              {focusedItem.description}
+            </Text>
+          </View>
         </View>
       );
     },
@@ -191,125 +204,125 @@ export default function HomeScreen() {
 }
 
 const gridStyles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  scrollContent: {
+    flex: 1,
+    marginBottom: scaledPixels(safeZones.actionSafe.vertical),
+  },
+  highlightsTitle: {
+    color: colors.text,
+    fontSize: scaledPixels(40),
+    fontWeight: 'bold',
+    marginBottom: scaledPixels(16),
+    marginTop: scaledPixels(20),
+    textShadowColor: 'rgba(0, 0, 0, 0.9)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
+  },
+  headerTitle: {
+    color: colors.text,
+    fontSize: scaledPixels(56),
+    fontWeight: 'bold',
+    marginBottom: scaledPixels(16),
+    textShadowColor: 'rgba(0, 0, 0, 0.9)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 12,
+  },
+  headerDescription: {
+    color: colors.text,
+    fontSize: scaledPixels(28),
+    fontWeight: '500',
+    lineHeight: scaledPixels(40),
+    textShadowColor: 'rgba(0, 0, 0, 0.9)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
+  },
+  thumbnailTextContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: colors.scrimDark,
+    paddingHorizontal: scaledPixels(16),
+    paddingVertical: scaledPixels(12),
+    borderBottomLeftRadius: scaledPixels(8),
+    borderBottomRightRadius: scaledPixels(8),
+  },
+  thumbnailText: {
+    color: colors.text,
+    fontSize: scaledPixels(24),
+    fontWeight: '600',
+    textAlign: 'center',
+    lineHeight: scaledPixels(32),
+  },
+  highlightThumbnail: {
+    width: scaledPixels(420),
+    height: scaledPixels(260),
+    marginRight: scaledPixels(20),
+    backgroundColor: colors.card,
+    borderRadius: scaledPixels(12),
+    borderWidth: scaledPixels(5),
+    borderColor: 'transparent',
+    overflow: 'hidden',
+  },
+  highlightThumbnailFocused: {
+    borderColor: colors.focusBorder,
+    borderWidth: scaledPixels(6),
+    transform: [{ scale: 1.1 }],
+    shadowColor: colors.focus,
+    shadowOffset: {
+      width: 0,
+      height: 0,
     },
-    scrollContent: {
-      flex: 1,
-      marginBottom: scaledPixels(safeZones.actionSafe.vertical),
-    },
-    highlightsTitle: {
-      color: colors.text,
-      fontSize: scaledPixels(40),
-      fontWeight: 'bold',
-      marginBottom: scaledPixels(16),
-      marginTop: scaledPixels(20),
-      textShadowColor: 'rgba(0, 0, 0, 0.9)',
-      textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 8,
-    },
-    headerTitle: {
-      color: colors.text,
-      fontSize: scaledPixels(56),
-      fontWeight: 'bold',
-      marginBottom: scaledPixels(16),
-      textShadowColor: 'rgba(0, 0, 0, 0.9)',
-      textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 12,
-    },
-    headerDescription: {
-      color: colors.text,
-      fontSize: scaledPixels(28),
-      fontWeight: '500',
-      lineHeight: scaledPixels(40),
-      textShadowColor: 'rgba(0, 0, 0, 0.9)',
-      textShadowOffset: { width: 0, height: 2 },
-      textShadowRadius: 8,
-    },
-    thumbnailTextContainer: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: colors.scrimDark,
-      paddingHorizontal: scaledPixels(16),
-      paddingVertical: scaledPixels(12),
-      borderBottomLeftRadius: scaledPixels(8),
-      borderBottomRightRadius: scaledPixels(8),
-    },
-    thumbnailText: {
-      color: colors.text,
-      fontSize: scaledPixels(24),
-      fontWeight: '600',
-      textAlign: 'center',
-      lineHeight: scaledPixels(32),
-    },
-    highlightThumbnail: {
-      width: scaledPixels(420),
-      height: scaledPixels(260),
-      marginRight: scaledPixels(20),
-      backgroundColor: colors.card,
-      borderRadius: scaledPixels(12),
-      borderWidth: scaledPixels(5),
-      borderColor: 'transparent',
-      overflow: 'hidden',
-    },
-    highlightThumbnailFocused: {
-      borderColor: colors.focusBorder,
-      borderWidth: scaledPixels(6),
-      transform: [{ scale: 1.1 }],
-      shadowColor: colors.focus,
-      shadowOffset: {
-        width: 0,
-        height: 0,
-      },
-      shadowOpacity: 0.9,
-      shadowRadius: scaledPixels(20),
-      elevation: 15,
-    },
-    highlightsContainer: {
-      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
-      paddingVertical: scaledPixels(16),
-      height: scaledPixels(400),
-    },
-    thumbnailPlaceholder: {
-      backgroundColor: colors.cardElevated,
-      width: '100%',
-      height: '100%',
-      borderRadius: scaledPixels(8),
-    },
-    header: {
-      width: '100%',
-      height: scaledPixels(700),
-      position: 'relative',
-    },
-    headerImage: {
-      width: '100%',
-      height: '100%',
-      resizeMode: 'cover',
-    },
-    gradientLeft: {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      bottom: 0,
-      width: '65%',
-    },
-    headerTextContainer: {
-      position: 'absolute',
-      left: scaledPixels(safeZones.titleSafe.horizontal),
-      top: scaledPixels(safeZones.titleSafe.vertical),
-      bottom: scaledPixels(safeZones.titleSafe.vertical),
-      justifyContent: 'center',
-      width: '55%',
-    },
-    highlightsList: {
-      paddingLeft: scaledPixels(20),
-    },
-    cardImage: {
-      width: '100%',
-      height: '100%',
-      borderRadius: scaledPixels(8),
-    },
-  });
+    shadowOpacity: 0.9,
+    shadowRadius: scaledPixels(20),
+    elevation: 15,
+  },
+  highlightsContainer: {
+    paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+    paddingVertical: scaledPixels(16),
+    height: scaledPixels(400),
+  },
+  thumbnailPlaceholder: {
+    backgroundColor: colors.cardElevated,
+    width: '100%',
+    height: '100%',
+    borderRadius: scaledPixels(8),
+  },
+  header: {
+    width: '100%',
+    height: scaledPixels(700),
+    position: 'relative',
+  },
+  headerImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  gradientLeft: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: '65%',
+  },
+  headerTextContainer: {
+    position: 'absolute',
+    left: scaledPixels(safeZones.titleSafe.horizontal),
+    top: scaledPixels(safeZones.titleSafe.vertical),
+    bottom: scaledPixels(safeZones.titleSafe.vertical),
+    justifyContent: 'center',
+    width: '55%',
+  },
+  highlightsList: {
+    paddingLeft: scaledPixels(20),
+  },
+  cardImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: scaledPixels(8),
+  },
+});
