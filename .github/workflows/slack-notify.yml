@@ -1,0 +1,32 @@
+name: Slack Notifications
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+  issue_comment:
+    types: [created]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send to Slack
+        run: |
+          if [ "${{ github.event_name }}" = "issues" ]; then
+            TITLE="${{ github.event.issue.title }}"
+            URL="${{ github.event.issue.html_url }}"
+            EVENT="🟢 New Issue"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            TITLE="${{ github.event.pull_request.title }}"
+            URL="${{ github.event.pull_request.html_url }}"
+            EVENT="🔵 New PR"
+          elif [ "${{ github.event_name }}" = "issue_comment" ]; then
+            TITLE="${{ github.event.issue.title }}"
+            URL="${{ github.event.comment.html_url }}"
+            EVENT="💬 New Comment"
+          fi
+
+          curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"repo\":\"${{ github.repository }}\",\"event\":\"$EVENT\",\"title\":\"$TITLE\",\"url\":\"$URL\",\"user\":\"${{ github.actor }}\"}"
