@@ -67,8 +67,6 @@ export default function DrawerNavigator() {
           // Disable swipe gestures since we use remote control navigation
           drawerType: 'front',
           swipeEnabled: false,
-          // Disable animations to avoid Reanimated worklet issues on TV
-          animationEnabled: false,
         }}
       >
         <Drawer.Screen
