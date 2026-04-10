@@ -50,7 +50,7 @@
     "react-native-screens": "~4.9.0",
     "react-native-video": "^6.8.0",
     "react-native-web": "~0.19.10",
-    "react-tv-space-navigation": "^3.6.1"
+    "react-tv-space-navigation": "6.0.0-beta1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

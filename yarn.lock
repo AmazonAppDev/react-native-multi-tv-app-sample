@@ -2085,7 +2085,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bam.tech/lrud@npm:*, @bam.tech/lrud@npm:^8.0.1, @bam.tech/lrud@npm:^8.0.2":
+"@bam.tech/lrud@npm:*, @bam.tech/lrud@npm:^8.0.2":
   version: 8.0.2
   resolution: "@bam.tech/lrud@npm:8.0.2"
   dependencies:
@@ -3875,7 +3875,7 @@ __metadata:
     react-native-screens: "npm:~4.9.0"
     react-native-video: "npm:^6.8.0"
     react-native-web: "npm:~0.19.10"
-    react-tv-space-navigation: "npm:^3.6.1"
+    react-tv-space-navigation: "npm:6.0.0-beta1"
     typescript: "npm:~5.7.0"
   languageName: unknown
   linkType: soft
@@ -17369,13 +17369,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tv-space-navigation@npm:^3.6.1":
-  version: 3.6.1
-  resolution: "react-tv-space-navigation@npm:3.6.1"
+"react-tv-space-navigation@npm:6.0.0-beta1":
+  version: 6.0.0-beta1
+  resolution: "react-tv-space-navigation@npm:6.0.0-beta1"
   dependencies:
-    "@bam.tech/lrud": "npm:^8.0.1"
+    "@bam.tech/lrud": "npm:^8.0.2"
     lodash.uniqueid: "npm:^4.0.1"
-  checksum: 10c0/9e380e680948f7fdf420d122810901be6da77aa788622ac456d5a5b2401dd88d7cc1b1b5f6bd4c37d0e73b55c03f3f8f5462937b6de9889b22dd9ec873a903b9
+  checksum: 10c0/857cf20d54b2dfcec671974ee882f677821997b64562f156266748abe70bd0837dcabfaa08a0236cde6b19209bd65e465063b0c5bbc3cb82e744fbcaded58ecd
   languageName: node
   linkType: hard
 
