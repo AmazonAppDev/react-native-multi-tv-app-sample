@@ -3850,7 +3850,6 @@ __metadata:
     expo: "npm:~54.0.0"
     expo-build-properties: "npm:~0.13.0"
     expo-constants: "npm:~17.0.0"
-    expo-dev-client: "npm:~6.0.21"
     expo-font: "npm:~13.0.0"
     expo-linear-gradient: "npm:~14.0.0"
     expo-linking: "npm:~7.0.0"
@@ -3867,7 +3866,7 @@ __metadata:
     react: "npm:19.1.0"
     react-dom: "npm:19.1.0"
     react-native: "npm:react-native-tvos@~0.81.0-0"
-    react-native-gesture-handler: "npm:~2.24.0"
+    react-native-gesture-handler: "npm:^2.31.2"
     react-native-keyevent: "npm:^0.3.2"
     react-native-pixel-perfect: "npm:^1.0.2"
     react-native-reanimated: "npm:3.19.5"
@@ -5414,6 +5413,24 @@ __metadata:
   dependencies:
     "@types/react": "npm:^18"
   checksum: 10c0/9fc8467ff1a3f14be6cc3498a75fc788d2c92c0fffa7bf21269ed5d9d82db9195bf2178ddc42ea16a0836995c1b77601c6be8abb27bd1864668c418c6d0e5a3b
+  languageName: node
+  linkType: hard
+
+"@types/react-test-renderer@npm:^19.1.0":
+  version: 19.1.0
+  resolution: "@types/react-test-renderer@npm:19.1.0"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/799654e430df10aeaf267d71507fb64ec151359ead7e3774111bfd4abce7e0911dba461811195c06c22a6d17496ea92537d3185320ff4112fe29954cad1b9152
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:*":
+  version: 19.2.14
+  resolution: "@types/react@npm:19.2.14"
+  dependencies:
+    csstype: "npm:^3.2.2"
+  checksum: 10c0/7d25bf41b57719452d86d2ac0570b659210402707313a36ee612666bf11275a1c69824f8c3ee1fdca077ccfe15452f6da8f1224529b917050eb2d861e52b59b7
   languageName: node
   linkType: hard
 
@@ -9176,54 +9193,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-dev-client@npm:~6.0.21":
-  version: 6.0.21
-  resolution: "expo-dev-client@npm:6.0.21"
-  dependencies:
-    expo-dev-launcher: "npm:6.0.21"
-    expo-dev-menu: "npm:7.0.19"
-    expo-dev-menu-interface: "npm:2.0.0"
-    expo-manifests: "npm:~1.0.11"
-    expo-updates-interface: "npm:~2.0.0"
-  peerDependencies:
-    expo: "*"
-  checksum: 10c0/cf9ec5a8ed7a3a852ec7ac98a2fd4f68bf2a23456f85b30f837aa00e8c473197ad06e6ec35eed8024308a284092fa7605271a092adeb57c921ccbdc0a7aa87a6
-  languageName: node
-  linkType: hard
-
-"expo-dev-launcher@npm:6.0.21":
-  version: 6.0.21
-  resolution: "expo-dev-launcher@npm:6.0.21"
-  dependencies:
-    ajv: "npm:^8.11.0"
-    expo-dev-menu: "npm:7.0.19"
-    expo-manifests: "npm:~1.0.11"
-  peerDependencies:
-    expo: "*"
-  checksum: 10c0/cf7e5c143ee51d9f1204ca3025498c39b07c6353ba3c8941e50f84c5aed8d6206790557b5742e53bf4d2b362a98892bc5defa02701598fee0af2f52a78bc837b
-  languageName: node
-  linkType: hard
-
-"expo-dev-menu-interface@npm:2.0.0":
-  version: 2.0.0
-  resolution: "expo-dev-menu-interface@npm:2.0.0"
-  peerDependencies:
-    expo: "*"
-  checksum: 10c0/ef85287262acce5822cd274f91b908bccbc590d3eba2fb34f037271f6f7d6d9e312655c72fca82f890035ed5954e47c58e4509ad5b925737da61d656c48170a4
-  languageName: node
-  linkType: hard
-
-"expo-dev-menu@npm:7.0.19":
-  version: 7.0.19
-  resolution: "expo-dev-menu@npm:7.0.19"
-  dependencies:
-    expo-dev-menu-interface: "npm:2.0.0"
-  peerDependencies:
-    expo: "*"
-  checksum: 10c0/9b6c00c3c46fa5971baca3bf5eba11bd3f46026eeae7194ea9cff898cf300079fdd9b485c1d87da186aecfbbc9f5f9b7deb204aa914b2d1bb861136261db34df
-  languageName: node
-  linkType: hard
-
 "expo-file-system@npm:~19.0.21":
   version: 19.0.21
   resolution: "expo-file-system@npm:19.0.21"
@@ -9259,13 +9228,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-json-utils@npm:~0.15.0":
-  version: 0.15.0
-  resolution: "expo-json-utils@npm:0.15.0"
-  checksum: 10c0/c4cd95ad27fb7379f072a979399ea84781ec99db8a8f675dfaab8261eb16361d07133624fa50c70940bb57c280785a429a7a20a1f83b839ee03c96746370f59d
-  languageName: node
-  linkType: hard
-
 "expo-keep-awake@npm:~15.0.8":
   version: 15.0.8
   resolution: "expo-keep-awake@npm:15.0.8"
@@ -9297,18 +9259,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/403a34d7464d398a2d141237172bb6b4e2bdb302940e55cee0fa52f49e9b70056005cd04cce44483daa3d9573b963714fb55af03ab01999853d89bee9faa6755
-  languageName: node
-  linkType: hard
-
-"expo-manifests@npm:~1.0.11":
-  version: 1.0.11
-  resolution: "expo-manifests@npm:1.0.11"
-  dependencies:
-    "@expo/config": "npm:~12.0.13"
-    expo-json-utils: "npm:~0.15.0"
-  peerDependencies:
-    expo: "*"
-  checksum: 10c0/184f3ce01f9f0099ef08433c33a42ca1f865045bfcde00a6bb7f8c51825288b5b4d9f2150fc4e57aea9f6aff34093f49157f4d78fdd0d79157a199a03cdb4243
   languageName: node
   linkType: hard
 
@@ -9381,15 +9331,6 @@ __metadata:
     react-native-web:
       optional: true
   checksum: 10c0/189c8e07aa132b49080a6df324045f34e5492c34666b29ae65eab45059f4ca9c5cee1e561070619d2786df1d1cc1ff39d04e95329d090a6e1b30266abdb48a92
-  languageName: node
-  linkType: hard
-
-"expo-updates-interface@npm:~2.0.0":
-  version: 2.0.0
-  resolution: "expo-updates-interface@npm:2.0.0"
-  peerDependencies:
-    expo: "*"
-  checksum: 10c0/d2ccf8325c1c8092fac6cfa521291943dce92f56a633bcc60abe1db54c88da601d6b0174aa1e824db6d3508486ccccafa16e39f05b7014dd70442ba91340b02e
   languageName: node
   linkType: hard
 
@@ -16988,17 +16929,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:~2.24.0":
-  version: 2.24.0
-  resolution: "react-native-gesture-handler@npm:2.24.0"
+"react-native-gesture-handler@npm:^2.31.2":
+  version: 2.31.2
+  resolution: "react-native-gesture-handler@npm:2.31.2"
   dependencies:
     "@egjs/hammerjs": "npm:^2.0.17"
+    "@types/react-test-renderer": "npm:^19.1.0"
     hoist-non-react-statics: "npm:^3.3.0"
     invariant: "npm:^2.2.4"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/eb2c5cb53690ae5de1482370a156cbd775f6b3054540cd47310ec4712df83a280fe7b6259f372eec4c14a6d7f70ab18f1919a9fe63beaca9ceae126edbe32298
+  checksum: 10c0/a312bb684b5de5376078e407a08a17fddef51a11ea09dd12236b3a971b18a68496f3d8c13391cdfefcc5af776fd90936066aaf20a7cfe2849d8c47c223643dd2
   languageName: node
   linkType: hard
 
