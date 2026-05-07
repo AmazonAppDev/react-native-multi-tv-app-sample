@@ -110,7 +110,7 @@ react-native-multi-tv-app-sample/
 │ Apps                     │ Packages                     │
 ├──────────────────────────┼──────────────────────────────┤
 │ expo-multi-tv            │ shared-ui                    │
-│   ├─ Expo SDK 51         │   ├─ Components              │
+│   ├─ Expo SDK 54         │   ├─ Components              │
 │   ├─ React Navigation    │   ├─ Screens                 │
 │   ├─ react-native-tvos   │   ├─ Navigation              │
 │   └─ Platforms:          │   ├─ Hooks                   │
