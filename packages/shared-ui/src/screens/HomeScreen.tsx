@@ -166,8 +166,6 @@ export default function HomeScreen() {
                 orientation="horizontal"
                 renderItem={renderItem}
                 itemSize={scaledPixels(440)}
-                numberOfRenderedItems={6}
-                numberOfItemsVisibleOnScreen={4}
                 onEndReachedThresholdItemsNumber={3}
               />
             </DefaultFocus>

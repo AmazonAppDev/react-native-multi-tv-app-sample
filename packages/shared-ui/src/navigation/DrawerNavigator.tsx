@@ -1,10 +1,8 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { StyleSheet, View, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { useNavigation, DrawerActions } from '@react-navigation/native';
-import { SpatialNavigationRoot } from 'react-tv-space-navigation';
-import { Direction } from '@bam.tech/lrud';
+import { useNavigation, DrawerActions, NavigationProp } from '@react-navigation/native';
 import { useMenuContext } from '../components/MenuContext';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import { scaledPixels } from '../hooks/useScale';
@@ -18,9 +16,14 @@ import SettingsScreen from '../screens/SettingsScreen';
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
-function DrawerSyncWrapper() {
+function DrawerSyncWrapper({ drawerNavRef }: { drawerNavRef: React.MutableRefObject<any> }) {
   const { isOpen: isMenuOpen } = useMenuContext();
   const navigation = useNavigation();
+
+  // Capture the drawer navigation object (useNavigation inside a Drawer.Screen gets the Drawer navigator)
+  useEffect(() => {
+    drawerNavRef.current = navigation;
+  }, [navigation, drawerNavRef]);
 
   // Open drawer on mount if menu context says it should be open
   useEffect(() => {
@@ -34,24 +37,10 @@ function DrawerSyncWrapper() {
 
 export default function DrawerNavigator() {
   const styles = drawerStyles;
-  const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
-  const navigation = useNavigation();
-
-  const onDirectionHandledWithoutMovement = useCallback(
-    (movement: Direction) => {
-      if (movement === 'right') {
-        navigation.dispatch(DrawerActions.closeDrawer());
-        toggleMenu(false);
-      }
-    },
-    [toggleMenu, navigation],
-  );
+  const { isOpen: isMenuOpen } = useMenuContext();
+  const drawerNavRef = useRef<NavigationProp<DrawerParamList> | null>(null);
 
   const navigationContent = (
-    <SpatialNavigationRoot
-      isActive={isMenuOpen}
-      onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}
-    >
       <Drawer.Navigator
         drawerContent={CustomDrawerContent}
         initialRouteName="Home"
@@ -67,17 +56,19 @@ export default function DrawerNavigator() {
           // Disable swipe gestures since we use remote control navigation
           drawerType: 'front',
           swipeEnabled: false,
-          // Disable animations to avoid Reanimated worklet issues on TV
-          animationEnabled: false,
         }}
       >
         <Drawer.Screen
           name="Home"
-          component={HomeScreen}
-          options={{
-            drawerLabel: 'Home',
-          }}
-        />
+          options={{ drawerLabel: 'Home' }}
+        >
+          {() => (
+            <>
+              <DrawerSyncWrapper drawerNavRef={drawerNavRef} />
+              <HomeScreen />
+            </>
+          )}
+        </Drawer.Screen>
         <Drawer.Screen
           name="Explore"
           component={ExploreScreen}
@@ -100,8 +91,6 @@ export default function DrawerNavigator() {
           }}
         />
       </Drawer.Navigator>
-      <DrawerSyncWrapper />
-    </SpatialNavigationRoot>
   );
 
   // On TV platforms, don't use GestureHandlerRootView as we use remote control navigation
