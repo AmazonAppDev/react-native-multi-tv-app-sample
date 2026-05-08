@@ -98,18 +98,18 @@ const overlayStyles = StyleSheet.create({
   exitButton: {
     position: "absolute",
     top: scaledPixels(safeZones.actionSafe.vertical),
-    left: scaledPixels(safeZones.actionSafe.horizontal),
+    start: scaledPixels(safeZones.actionSafe.horizontal),
   },
   bottomControls: {
     position: "absolute",
     bottom: scaledPixels(safeZones.actionSafe.vertical),
-    left: scaledPixels(safeZones.actionSafe.horizontal),
-    right: scaledPixels(safeZones.actionSafe.horizontal),
+    start: scaledPixels(safeZones.actionSafe.horizontal),
+    end: scaledPixels(safeZones.actionSafe.horizontal),
     flexDirection: "row",
     alignItems: "center",
   },
   controlButton: {
-    marginRight: scaledPixels(20),
+    marginEnd: scaledPixels(20),
   },
 });
 

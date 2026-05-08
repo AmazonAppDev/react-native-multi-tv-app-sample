@@ -19,6 +19,7 @@ import { RootStackParamList } from '../navigation/types';
 import { fetchMoviesData, CardData } from '../data/moviesData';
 import { colors, safeZones } from '../theme';
 import PlatformLinearGradient from '../components/PlatformLinearGradient';
+import { getOpenDrawerDirection } from '../utils/rtl';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DrawerNavigator'>;
 
@@ -120,7 +121,7 @@ export default function HomeScreen() {
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      if (movement === 'left' && focusedIndex === 0) {
+      if (movement === getOpenDrawerDirection() && focusedIndex === 0) {
         navigation.dispatch(DrawerActions.openDrawer());
         toggleMenu(true);
       }
@@ -241,13 +242,13 @@ const gridStyles = StyleSheet.create({
   thumbnailTextContainer: {
     position: 'absolute',
     bottom: 0,
-    left: 0,
-    right: 0,
+    start: 0,
+    end: 0,
     backgroundColor: colors.scrimDark,
     paddingHorizontal: scaledPixels(16),
     paddingVertical: scaledPixels(12),
-    borderBottomLeftRadius: scaledPixels(8),
-    borderBottomRightRadius: scaledPixels(8),
+    borderBottomStartRadius: scaledPixels(8),
+    borderBottomEndRadius: scaledPixels(8),
   },
   thumbnailText: {
     color: colors.text,
@@ -259,7 +260,7 @@ const gridStyles = StyleSheet.create({
   highlightThumbnail: {
     width: scaledPixels(420),
     height: scaledPixels(260),
-    marginRight: scaledPixels(20),
+    marginEnd: scaledPixels(20),
     backgroundColor: colors.card,
     borderRadius: scaledPixels(12),
     borderWidth: scaledPixels(5),
@@ -302,21 +303,21 @@ const gridStyles = StyleSheet.create({
   },
   gradientLeft: {
     position: 'absolute',
-    left: 0,
+    start: 0,
     top: 0,
     bottom: 0,
     width: '65%',
   },
   headerTextContainer: {
     position: 'absolute',
-    left: scaledPixels(safeZones.titleSafe.horizontal),
+    start: scaledPixels(safeZones.titleSafe.horizontal),
     top: scaledPixels(safeZones.titleSafe.vertical),
     bottom: scaledPixels(safeZones.titleSafe.vertical),
     justifyContent: 'center',
     width: '55%',
   },
   highlightsList: {
-    paddingLeft: scaledPixels(20),
+    paddingStart: scaledPixels(20),
   },
   cardImage: {
     width: '100%',

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, I18nManager } from "react-native";
 import { scaledPixels } from "../../hooks/useScale";
 
 interface SeekBarProps {
@@ -13,10 +13,14 @@ const SeekBar = React.memo(({ currentTime, duration }: SeekBarProps) => {
     return (currentTime / duration) * 100;
   }, [currentTime, duration]);
 
+  const thumbPosition = I18nManager.isRTL
+    ? { right: `${percentage}%` }
+    : { left: `${percentage}%` };
+
   return (
     <View style={seekBarStyles.seekbarContainer}>
       <View style={seekBarStyles.seekbarTrack} />
-      <View style={[seekBarStyles.seekbarThumb, { left: `${percentage}%` }]} />
+      <View style={[seekBarStyles.seekbarThumb, thumbPosition]} />
     </View>
   );
 });
@@ -26,7 +30,7 @@ const seekBarStyles = StyleSheet.create({
     flex: 1,
     height: scaledPixels(40),
     justifyContent: "center",
-    marginRight: scaledPixels(80),
+    marginEnd: scaledPixels(80),
   },
   seekbarTrack: {
     width: "100%",
