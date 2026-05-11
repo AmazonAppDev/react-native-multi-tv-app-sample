@@ -12,6 +12,7 @@ import { colors, safeZones } from '../theme';
 import FocusablePressable from '../components/FocusablePressable';
 import { useCallback, useState } from 'react';
 import { useMenuContext } from '../components/MenuContext';
+import { getOpenDrawerDirection } from '../utils/rtl';
 
 export default function SettingsScreen() {
   const isFocused = useIsFocused();
@@ -25,7 +26,7 @@ export default function SettingsScreen() {
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      if (movement === 'left') {
+      if (movement === getOpenDrawerDirection()) {
         navigation.dispatch(DrawerActions.openDrawer());
         toggleMenu(true);
       }
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     gap: scaledPixels(16),
   },
   optionButton: {
-    marginRight: scaledPixels(12),
+    marginEnd: scaledPixels(12),
     marginBottom: scaledPixels(12),
   },
   selectedOption: {

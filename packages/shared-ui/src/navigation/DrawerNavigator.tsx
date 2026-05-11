@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { StyleSheet, View, Platform } from 'react-native';
+import { StyleSheet, View, Platform, I18nManager } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useNavigation, DrawerActions, NavigationProp } from '@react-navigation/native';
@@ -52,10 +52,9 @@ export default function DrawerNavigator() {
           drawerInactiveTintColor: '#bdc3c7',
           drawerStyle: styles.drawerStyle,
           drawerLabelStyle: styles.drawerLabelStyle,
-          // Use 'front' type to allow drawer to open/close (collapse/expand)
-          // Disable swipe gestures since we use remote control navigation
           drawerType: 'front',
           swipeEnabled: false,
+          drawerPosition: I18nManager.isRTL ? 'right' : 'left',
         }}
       >
         <Drawer.Screen
@@ -115,6 +114,6 @@ const drawerStyles = StyleSheet.create({
     drawerLabelStyle: {
       fontSize: scaledPixels(18),
       fontWeight: 'bold',
-      marginLeft: scaledPixels(10),
+      marginStart: scaledPixels(10),
     },
   });

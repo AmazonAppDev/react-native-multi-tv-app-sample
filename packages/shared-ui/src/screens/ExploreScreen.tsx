@@ -7,6 +7,7 @@ import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { Direction } from '@bam.tech/lrud';
 import { useCallback, useState } from 'react';
 import { safeZones } from '../theme';
+import { getOpenDrawerDirection } from '../utils/rtl';
 
 export default function ExploreScreen() {
   const styles = exploreStyles;
@@ -18,7 +19,7 @@ export default function ExploreScreen() {
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      if (movement === 'left' && focusedIndex === 0) {
+      if (movement === getOpenDrawerDirection() && focusedIndex === 0) {
         navigation.dispatch(DrawerActions.openDrawer());
         toggleMenu(true);
       }

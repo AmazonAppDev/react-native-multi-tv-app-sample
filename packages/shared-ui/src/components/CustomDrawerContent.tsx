@@ -7,6 +7,7 @@ import { useMenuContext } from '../components/MenuContext';
 import { safeZones, colors } from '../theme';
 import { useCallback } from 'react';
 import { Direction } from '@bam.tech/lrud';
+import { getCloseDrawerDirection } from '../utils/rtl';
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const navigation = props.navigation;
@@ -20,7 +21,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
-      if (movement === 'right') {
+      if (movement === getCloseDrawerDirection()) {
         navigation.closeDrawer();
         toggleMenu(false);
       }
@@ -185,7 +186,7 @@ const drawerStyles = StyleSheet.create({
     icon: {
       width: scaledPixels(32),
       height: scaledPixels(32),
-      marginRight: scaledPixels(20),
+      marginEnd: scaledPixels(20),
     },
     menuText: {
       color: colors.text,
