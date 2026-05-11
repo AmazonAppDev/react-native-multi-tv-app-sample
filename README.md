@@ -1,6 +1,6 @@
 # React Native Multi-TV App Sample
 
-[![React Native](https://img.shields.io/badge/React%20Native-v0.74.2-blue.svg)](https://reactnative.dev/)
+[![React Native](https://img.shields.io/badge/React%20Native-v0.81-blue.svg)](https://reactnative.dev/)
 [![License: MIT-0](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/AmazonAppDev/react-native-multi-tv-app-sample/blob/main/LICENSE)
 
 A production-ready TV application template built with React Native, supporting Android TV, Apple TV, Fire TV (with Fire OS), Fire TV (with Vega OS) and Web TV platforms. This monorepo showcases best practices for building cross-platform TV applications with shared UI components, efficient focus management, and platform-specific optimizations.
@@ -10,7 +10,6 @@ A production-ready TV application template built with React Native, supporting A
 ## Table of Contents
 
 - [Features](#features)
-- [Platform Support](#platform-support)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
 - [Building and Running](#building-and-running)
@@ -111,7 +110,7 @@ react-native-multi-tv-app-sample/
 │ Apps                     │ Packages                     │
 ├──────────────────────────┼──────────────────────────────┤
 │ expo-multi-tv            │ shared-ui                    │
-│   ├─ Expo SDK 51         │   ├─ Components              │
+│   ├─ Expo SDK 54         │   ├─ Components              │
 │   ├─ React Navigation    │   ├─ Screens                 │
 │   ├─ react-native-tvos   │   ├─ Navigation              │
 │   └─ Platforms:          │   ├─ Hooks                   │
@@ -310,8 +309,8 @@ Universal TV application built with Expo, supporting Android TV, Apple TV, Fire 
 
 **Key Technologies:**
 
-- Expo SDK 51
-- React Navigation 6
+- Expo SDK 54
+- React Navigation 7
 - react-native-tvos
 - React TV Space Navigation
 
@@ -404,12 +403,12 @@ This project is built with modern React Native and TV development tools:
 
 | Technology                | Version | Purpose                    |
 | ------------------------- | ------- | -------------------------- |
-| React Native              | v0.74   | Core framework (tvOS fork) |
-| Expo                      | SDK 51  | Development platform       |
-| TypeScript                | v5.3    | Type safety                |
+| React Native              | v0.81   | Core framework (tvOS fork) |
+| Expo                      | SDK 54  | Development platform       |
+| TypeScript                | v5.7    | Type safety                |
 | Yarn Workspaces           | v4.5    | Monorepo management        |
-| React Navigation          | v6      | Screen navigation          |
-| react-tv-space-navigation | v3.6    | TV focus management        |
+| React Navigation          | v7      | Screen navigation          |
+| react-tv-space-navigation | v6.0.0-beta1   | TV focus management        |
 | react-native-video        | Latest  | Video playback             |
 | Amazon Vega SDK           | Latest  | Fire TV Vega OS            |
 
