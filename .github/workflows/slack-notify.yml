@@ -1,4 +1,5 @@
 name: Slack Notifications
+
 on:
   issues:
     types: [opened]
@@ -7,26 +8,55 @@ on:
   issue_comment:
     types: [created]
 
+permissions:
+  contents: read
+
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
       - name: Send to Slack
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          COMMENT_URL: ${{ github.event.comment.html_url }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          if [ "${{ github.event_name }}" = "issues" ]; then
-            TITLE="${{ github.event.issue.title }}"
-            URL="${{ github.event.issue.html_url }}"
-            EVENT="🟢 New Issue"
-          elif [ "${{ github.event_name }}" = "pull_request" ]; then
-            TITLE="${{ github.event.pull_request.title }}"
-            URL="${{ github.event.pull_request.html_url }}"
-            EVENT="🔵 New PR"
-          elif [ "${{ github.event_name }}" = "issue_comment" ]; then
-            TITLE="${{ github.event.issue.title }}"
-            URL="${{ github.event.comment.html_url }}"
-            EVENT="💬 New Comment"
-          fi
+          case "$EVENT_NAME" in
+            issues)
+              TITLE="$ISSUE_TITLE"
+              URL="$ISSUE_URL"
+              EVENT="🟢 New Issue"
+              ;;
+            pull_request)
+              TITLE="$PR_TITLE"
+              URL="$PR_URL"
+              EVENT="🔵 New PR"
+              ;;
+            issue_comment)
+              TITLE="$ISSUE_TITLE"
+              URL="$COMMENT_URL"
+              EVENT="💬 New Comment"
+              ;;
+            *)
+              echo "Unsupported event: $EVENT_NAME" >&2
+              exit 1
+              ;;
+          esac
 
-          curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+          PAYLOAD=$(jq -n \
+            --arg repo  "$REPO" \
+            --arg event "$EVENT" \
+            --arg title "$TITLE" \
+            --arg url   "$URL" \
+            --arg user  "$ACTOR" \
+            '{repo: $repo, event: $event, title: $title, url: $url, user: $user}')
+
+          curl -sS -X POST "$SLACK_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d "{\"repo\":\"${{ github.repository }}\",\"event\":\"$EVENT\",\"title\":\"$TITLE\",\"url\":\"$URL\",\"user\":\"${{ github.actor }}\"}"
+            --data-binary "$PAYLOAD"
