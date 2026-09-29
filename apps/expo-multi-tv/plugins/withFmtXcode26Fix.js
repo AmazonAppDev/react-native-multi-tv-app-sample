@@ -2,6 +2,8 @@ const { withDangerousMod } = require("expo/config-plugins");
 const fs = require("fs");
 const path = require("path");
 
+const MARKER = "Xcode 26.4 fmt consteval workaround";
+
 function withFmtXcode26Fix(config) {
   return withDangerousMod(config, [
     "ios",
@@ -12,17 +14,23 @@ function withFmtXcode26Fix(config) {
       );
       let podfile = fs.readFileSync(podfilePath, "utf8");
 
-      if (podfile.includes("CLANG_CXX_LANGUAGE_STANDARD") && podfile.includes("fmt")) {
+      if (podfile.includes(MARKER)) {
         return config;
       }
 
+      // fmt 11.0.2 (bundled with RN 0.81) fails to compile with Xcode 26.4+
+      // because of consteval. Its headers are also built by React/Folly pods
+      // in C++20, so patch base.h to disable consteval for every consumer.
+      // See facebook/react-native#55601. Remove once RN ships fmt >= 12.
       const fmtFix = `
-    # Fix fmt consteval errors on Xcode 26+ by compiling fmt with C++17
-    installer.pods_project.targets.each do |target|
-      if target.name == 'fmt'
-        target.build_configurations.each do |bc|
-          bc.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
-        end
+    # ${MARKER} (facebook/react-native#55601)
+    fmt_base = File.join(installer.sandbox.root, 'fmt', 'include', 'fmt', 'base.h')
+    if File.exist?(fmt_base)
+      content = File.read(fmt_base)
+      patched = content.gsub(/^#  define FMT_USE_CONSTEVAL 1$/, '#  define FMT_USE_CONSTEVAL 0')
+      if patched != content
+        File.chmod(0644, fmt_base)
+        File.write(fmt_base, patched)
       end
     end`;
 
