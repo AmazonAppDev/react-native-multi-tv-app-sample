@@ -12,7 +12,7 @@
     "min-document": "^2.19.1",
     "logkitty": "^0.7.1",
     "node-fetch": "^2.6.7",
-    "ws": "^8.17.1"
+    "ws": "^8.21.0"
   },
   "scripts": {
     "dev": "yarn workspace @multi-tv/expo-multi-tv start",
