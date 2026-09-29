@@ -26,15 +26,23 @@ const withAndroidMainActivityImport = (config) => {
 
 const withAndroidMainActivityBody = (config) => {
   return withMainActivity(config, (config) => {
+    // Forward keys from dispatchKeyEvent: DPAD_CENTER/ENTER are consumed by the
+    // focused view and never reach onKeyDown/onKeyUp on Android TV (#108).
     const newSrc = [
+      "override fun dispatchKeyEvent(event: KeyEvent): Boolean {",
+      "  when (event.action) {",
+      "    KeyEvent.ACTION_DOWN -> KeyEventModule.getInstance().onKeyDownEvent(event.keyCode, event)",
+      "    KeyEvent.ACTION_UP -> KeyEventModule.getInstance().onKeyUpEvent(event.keyCode, event)",
+      "  }",
+      "  return super.dispatchKeyEvent(event)",
+      "}",
+      "",
       "override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {",
-      "  KeyEventModule.getInstance().onKeyDownEvent(keyCode, event)",
       "  super.onKeyDown(keyCode, event)",
       "  return true",
       "}",
       "",
       "override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {",
-      "  KeyEventModule.getInstance().onKeyUpEvent(keyCode, event)",
       "  super.onKeyUp(keyCode, event)",
       "  return true",
       "}",

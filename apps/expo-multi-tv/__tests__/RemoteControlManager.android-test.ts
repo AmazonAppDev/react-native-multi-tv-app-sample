@@ -14,7 +14,6 @@ jest.mock('react-native-keyevent', () => ({
 
 const keyEventMock = KeyEvent as jest.Mocked<typeof KeyEvent>;
 const onKeyDown = keyEventMock.onKeyDownListener.mock.calls[0][0];
-const onKeyUp = keyEventMock.onKeyUpListener.mock.calls[0][0];
 
 describe('RemoteControlManager.android', () => {
   const listener = jest.fn();
@@ -37,11 +36,9 @@ describe('RemoteControlManager.android', () => {
     expect(listener).toHaveBeenCalledWith(SupportedKeys.Right);
   });
 
-  it.each([23, 66])('emits Enter for key code %i only on key up', (keyCode) => {
+  it.each([23, 66])('emits Enter for key code %i on key down', (keyCode) => {
     onKeyDown({ keyCode });
-    expect(listener).not.toHaveBeenCalled();
 
-    onKeyUp({ keyCode });
     expect(listener).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledWith(SupportedKeys.Enter);
   });
