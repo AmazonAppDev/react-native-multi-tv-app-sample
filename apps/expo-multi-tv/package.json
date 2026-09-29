@@ -51,7 +51,7 @@
     "react-tv-space-navigation": "6.0.0-beta1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.29.6",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@react-native-tvos/config-tv": "^0.0.10",
