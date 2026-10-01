@@ -44,6 +44,9 @@
   "devDependencies": {
     "@amazon-devices/kepler-cli-platform": "^0",
     "@babel/core": "^7.29.6",
+    "@babel/plugin-transform-arrow-functions": "^7.27.1",
+    "@babel/plugin-transform-shorthand-properties": "^7.27.1",
+    "@babel/plugin-transform-template-literals": "^7.27.1",
     "@babel/traverse": "^7.20.0",
     "@react-native-community/cli": "17.0.1",
     "@react-native-community/cli-tools": "^11.0.0",
