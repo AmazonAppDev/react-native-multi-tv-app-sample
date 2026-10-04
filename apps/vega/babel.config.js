@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: MIT-0
  */
 module.exports = {
-  presets: ['module:metro-react-native-babel-preset'],
+  presets: ['module:@react-native/babel-preset'],
   plugins: [
-    // Reanimated plugin must be listed last
-    '@amazon-devices/react-native-reanimated/plugin',
+    // Worklets plugin must be listed last for Reanimated 4
+    '@amazon-devices/react-native-worklets/plugin',
   ],
 };

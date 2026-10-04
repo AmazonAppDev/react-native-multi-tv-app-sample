@@ -1,6 +1,19 @@
 {
-    "extends": "@tsconfig/react-native/tsconfig.json",
-    "compilerOptions": {
-        "types": ["jest", "@amazon-devices/react-native-kepler"], /* Override "jest", "react-native" from @tsconfig/react-native */
-    },
+  "extends": "@react-native/typescript-config",
+  "compilerOptions": {
+    "types": [
+      "jest",
+      "@amazon-devices/react-native-kepler"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "test/**/*.ts",
+    "test/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
 }

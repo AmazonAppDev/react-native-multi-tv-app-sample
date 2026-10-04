@@ -42,6 +42,7 @@ const config = {
       const systemMappings = {
         'react-native-gesture-handler': '@amazon-devices/react-native-gesture-handler',
         'react-native-reanimated': '@amazon-devices/react-native-reanimated',
+        'react-native-worklets': '@amazon-devices/react-native-worklets',
         'react-native-safe-area-context': '@amazon-devices/react-native-safe-area-context',
         'react-native-screens': '@amazon-devices/react-native-screens',
       };
@@ -60,7 +61,7 @@ const config = {
       return modules;
     })(),
     resolverMainFields: ['react-native', 'browser', 'main'],
-    platforms: ['native', 'ios', 'android', 'tv'],
+    platforms: ['kepler', 'native', 'ios', 'android', 'tv'],
     blockList: [
       // Block standard react-navigation packages from parent node_modules
       new RegExp(

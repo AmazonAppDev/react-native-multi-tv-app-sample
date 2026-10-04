@@ -16,7 +16,7 @@ target = "1.2"
 [components]
 [[components.interactive]]
 id = "com.giolaq.multitv.vega.main"
-runtime-module = "/com.amazon.kepler.keplerscript.runtime.loader_2@IKeplerScript_2_0"
+runtime-module = "/com.amazon.kepler.runtime.react_native_kepler_4@IReactNativeKepler_0"
 launch-type = "singleton"
 categories = [
     "com.amazon.category.main",
