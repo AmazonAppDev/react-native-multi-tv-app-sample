@@ -438,6 +438,11 @@ Contributions are welcome! This project is an open-source sample designed to hel
 
 ### iOS Build Issues
 
+**Error: "❌  (ios/Pods/fmt/include/xxx)"**
+
+- This error is related to [this blog post](https://bleepingswift.com/blog/fmt-consteval-error-xcode-26-4-react-native)
+- Solution: Downgrade Xcode to [version 26.3](https://xcodereleases.com) or below
+
 **Error: "can't access lexical declaration 'X' before initialization"**
 
 - This typically occurs when functions are referenced before they're defined
