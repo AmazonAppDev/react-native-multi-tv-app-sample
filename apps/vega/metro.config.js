@@ -42,6 +42,7 @@ const config = {
       const systemMappings = {
         'react-native-gesture-handler': '@amazon-devices/react-native-gesture-handler',
         'react-native-reanimated': '@amazon-devices/react-native-reanimated',
+        'react-native-worklets': '@amazon-devices/react-native-worklets',
         'react-native-safe-area-context': '@amazon-devices/react-native-safe-area-context',
         'react-native-screens': '@amazon-devices/react-native-screens',
       };
@@ -60,27 +61,27 @@ const config = {
       return modules;
     })(),
     resolverMainFields: ['react-native', 'browser', 'main'],
-    platforms: ['native', 'ios', 'android', 'tv'],
+    platforms: ['kepler', 'native', 'ios', 'android', 'tv'],
     blockList: [
       // Block standard react-navigation packages from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', '@react-navigation').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', '@react-navigation').replace(/[/\\]/g, '[/\\\\]')
       ),
       // Block standard gesture handler from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', 'react-native-gesture-handler').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', 'react-native-gesture-handler').replace(/[/\\]/g, '[/\\\\]')
       ),
       // Block standard reanimated from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', 'react-native-reanimated').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', 'react-native-reanimated').replace(/[/\\]/g, '[/\\\\]')
       ),
       // Block standard screens from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', 'react-native-screens').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', 'react-native-screens').replace(/[/\\]/g, '[/\\\\]')
       ),
       // Block standard safe-area-context from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', 'react-native-safe-area-context').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', 'react-native-safe-area-context').replace(/[/\\]/g, '[/\\\\]')
       ),
     ],
   },
