@@ -27,14 +27,18 @@ export default function VegaCustomDrawerContent(props: any) {
           {...props}
           style={styles.container}
           scrollEnabled={false}
+          // Drawer v8 adds its own start/end padding (spacing + safe-area insets) on every
+          // platform; our items already apply action-safe padding, so drop it to avoid wrapping.
           contentContainerStyle={{
-            ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
+            paddingStart: 0,
+            paddingEnd: 0,
+            ...(Platform.OS === 'ios' && Platform.isTV && { paddingTop: 0 }),
           }}
         >
           <View style={styles.header}>
             <Image source={require('../assets/kepler.png')} style={styles.profilePic} />
-            <Text style={styles.userName}>Pioneer Tom</Text>
-            <Text style={styles.switchAccount}>Switch account</Text>
+            <Text style={styles.userName} numberOfLines={1}>Pioneer Tom</Text>
+            <Text style={styles.switchAccount} numberOfLines={1}>Switch account</Text>
           </View>
           {drawerItems.map((item, index) =>
             index === 0 ? (
@@ -47,7 +51,7 @@ export default function VegaCustomDrawerContent(props: any) {
                 >
                   {({ isFocused }) => (
                     <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                      <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+                      <Text style={[styles.menuText, isFocused && styles.menuTextFocused]} numberOfLines={1}>{item.label}</Text>
                     </View>
                   )}
                 </SpatialNavigationFocusableView>
@@ -62,7 +66,7 @@ export default function VegaCustomDrawerContent(props: any) {
               >
                 {({ isFocused }) => (
                   <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                    <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+                    <Text style={[styles.menuText, isFocused && styles.menuTextFocused]} numberOfLines={1}>{item.label}</Text>
                   </View>
                 )}
               </SpatialNavigationFocusableView>
@@ -111,7 +115,7 @@ const drawerStyles = StyleSheet.create({
       paddingTop: scaledPixels(safeZones.titleSafe.vertical),
     },
     header: {
-      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      paddingHorizontal: scaledPixels(24),
       paddingVertical: scaledPixels(24),
       marginBottom: scaledPixels(16),
     },
