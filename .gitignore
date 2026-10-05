@@ -25,6 +25,7 @@ yarn-error.log
 
 
 
+# Editor workspace files (machine-specific paths)
 # Vega build output (machine-specific paths)
 apps/vega/buildinfo.json
 
