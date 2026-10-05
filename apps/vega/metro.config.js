@@ -65,23 +65,23 @@ const config = {
     blockList: [
       // Block standard react-navigation packages from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', '@react-navigation').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', '@react-navigation').replace(/[/\\]/g, '[/\\\\]')
       ),
       // Block standard gesture handler from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', 'react-native-gesture-handler').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', 'react-native-gesture-handler').replace(/[/\\]/g, '[/\\\\]')
       ),
       // Block standard reanimated from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', 'react-native-reanimated').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', 'react-native-reanimated').replace(/[/\\]/g, '[/\\\\]')
       ),
       // Block standard screens from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', 'react-native-screens').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', 'react-native-screens').replace(/[/\\]/g, '[/\\\\]')
       ),
       // Block standard safe-area-context from parent node_modules
       new RegExp(
-        path.resolve(__dirname, '..', 'node_modules', 'react-native-safe-area-context').replace(/[/\\]/g, '[/\\\\]')
+        path.resolve(__dirname, '../..', 'node_modules', 'react-native-safe-area-context').replace(/[/\\]/g, '[/\\\\]')
       ),
     ],
   },
