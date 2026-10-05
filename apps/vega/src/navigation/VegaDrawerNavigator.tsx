@@ -101,7 +101,7 @@ export default function VegaDrawerNavigator() {
 
 const drawerStyles = StyleSheet.create({
     drawerStyle: {
-      width: scaledPixels(300),
+      width: scaledPixels(420),
       backgroundColor: '#2c3e50',
       paddingTop: scaledPixels(0),
     },
