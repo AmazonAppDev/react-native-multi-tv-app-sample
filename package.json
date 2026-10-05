@@ -8,6 +8,7 @@
   ],
   "packageManager": "yarn@4.5.0",
   "resolutions": {
+    "@amazon-devices/kepler-media-controls": "~1.0.25",
     "js-yaml": "^3.15.1",
     "min-document": "^2.19.1",
     "logkitty": "^0.7.1",

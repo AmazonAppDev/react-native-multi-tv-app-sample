@@ -137,6 +137,66 @@ id = "/com.amazon.vega.os@IVega_1_2"
 ## ------------------------------------------------------------------------------
 ## Offers
 ## ------------------------------------------------------------------------------
+
+[[needs.module]]
+id = "/com.amazon.kepler.kepler_media_controls_1@IKeplerMediaControls_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.keplermediadescriptor_1@IKeplermediadescriptor_1"
+
+[[needs.module]]
+id = "/com.amazon.kepler.gesture_handler_4@IGestureHandler_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.keplerscript_4@IKeplerScript_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.reanimated_4@IReanimated_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.safe_area_context_8@ISafeAreaContext_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.screens_3@IScreens_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.w3cmedia_2@IW3cmedia_3"
+
+[[needs.module]]
+id = "/com.amazon.kepler.worklets_1@IWorklets_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.navigation__core_8@INavigation__Core_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.navigation__drawer_8@INavigation__Drawer_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.navigation__elements_8@INavigation__Elements_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.navigation__native_8@INavigation__Native_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.navigation__native_stack_8@INavigation__NativeStack_0"
+
+[[needs.module]]
+id = "/com.amazon.kepler.navigation__routers_8@INavigation__Routers_0"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 [offers]
 #Required for GIPC SR
 [[offers.service]]

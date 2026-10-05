@@ -24,3 +24,9 @@ yarn-error.log
 .DS_Store
 
 
+
+# Vega build output (machine-specific paths)
+apps/vega/buildinfo.json
+
+# Editor workspace files
+*.code-workspace

@@ -58,19 +58,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/kepler-media-controls@npm:^1.0.0":
-  version: 1.0.17
-  resolution: "@amazon-devices/kepler-media-controls@npm:1.0.17"
-  peerDependencies:
-    "@amazon-devices/kepler-media-types": ^1.0.0
-    "@amazon-devices/keplerscript-turbomodule-api": ^1.0.0
-    "@amazon-devices/react-native-kepler": ^2.0.0
-    react: 18.2.0
-    react-native: 0.72.0
-  checksum: 10c0/57908b868cf6f30c2206f2e9d37ffe03a5b262b9078ee7ed7a48d982bfd09cda6a3a3e4f3118f3ecf987759527fef9a94de797a29edd6e003aecd575cc7a992a
-  languageName: node
-  linkType: hard
-
 "@amazon-devices/kepler-media-controls@npm:~1.0.25":
   version: 1.0.25
   resolution: "@amazon-devices/kepler-media-controls@npm:1.0.25"
@@ -321,7 +308,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/react-navigation__core@npm:^8.0.0, @amazon-devices/react-navigation__core@npm:^8.0.1":
+"@amazon-devices/react-navigation__core@npm:^8.0.1, @amazon-devices/react-navigation__core@npm:~8.0.1":
   version: 8.0.9000000001
   resolution: "@amazon-devices/react-navigation__core@npm:8.0.9000000001"
   dependencies:
@@ -339,7 +326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/react-navigation__drawer@npm:^8.0.0":
+"@amazon-devices/react-navigation__drawer@npm:~8.0.1":
   version: 8.0.9000000001
   resolution: "@amazon-devices/react-navigation__drawer@npm:8.0.9000000001"
   dependencies:
@@ -360,7 +347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/react-navigation__elements@npm:^8.0.0, @amazon-devices/react-navigation__elements@npm:^8.0.1":
+"@amazon-devices/react-navigation__elements@npm:^8.0.1, @amazon-devices/react-navigation__elements@npm:~8.0.1":
   version: 8.0.9000000001
   resolution: "@amazon-devices/react-navigation__elements@npm:8.0.9000000001"
   dependencies:
@@ -381,7 +368,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/react-navigation__native-stack@npm:^8.0.0":
+"@amazon-devices/react-navigation__native-stack@npm:~8.0.1":
   version: 8.0.9000000001
   resolution: "@amazon-devices/react-navigation__native-stack@npm:8.0.9000000001"
   dependencies:
@@ -400,7 +387,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/react-navigation__native@npm:^8.0.0":
+"@amazon-devices/react-navigation__native@npm:~8.0.1":
   version: 8.0.9000000001
   resolution: "@amazon-devices/react-navigation__native@npm:8.0.9000000001"
   dependencies:
@@ -417,7 +404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/react-navigation__routers@npm:^8.0.0, @amazon-devices/react-navigation__routers@npm:^8.0.1":
+"@amazon-devices/react-navigation__routers@npm:^8.0.1, @amazon-devices/react-navigation__routers@npm:~8.0.1":
   version: 8.0.9000000001
   resolution: "@amazon-devices/react-navigation__routers@npm:8.0.9000000001"
   dependencies:
@@ -1932,7 +1919,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bam.tech/lrud@npm:*, @bam.tech/lrud@npm:^8.0.2":
+"@bam.tech/lrud@npm:^8.0.2, @bam.tech/lrud@npm:~8.0.2":
   version: 8.0.2
   resolution: "@bam.tech/lrud@npm:8.0.2"
   dependencies:
@@ -3440,18 +3427,18 @@ __metadata:
     "@amazon-devices/react-native-screens": "npm:~3.0.0"
     "@amazon-devices/react-native-w3cmedia": "npm:~2.3.2"
     "@amazon-devices/react-native-worklets": "npm:~1.0.0"
-    "@amazon-devices/react-navigation__core": "npm:^8.0.0"
-    "@amazon-devices/react-navigation__drawer": "npm:^8.0.0"
-    "@amazon-devices/react-navigation__elements": "npm:^8.0.0"
-    "@amazon-devices/react-navigation__native": "npm:^8.0.0"
-    "@amazon-devices/react-navigation__native-stack": "npm:^8.0.0"
-    "@amazon-devices/react-navigation__routers": "npm:^8.0.0"
+    "@amazon-devices/react-navigation__core": "npm:~8.0.1"
+    "@amazon-devices/react-navigation__drawer": "npm:~8.0.1"
+    "@amazon-devices/react-navigation__elements": "npm:~8.0.1"
+    "@amazon-devices/react-navigation__native": "npm:~8.0.1"
+    "@amazon-devices/react-navigation__native-stack": "npm:~8.0.1"
+    "@amazon-devices/react-navigation__routers": "npm:~8.0.1"
     "@babel/core": "npm:^7.29.6"
     "@babel/plugin-transform-arrow-functions": "npm:^7.27.1"
     "@babel/plugin-transform-shorthand-properties": "npm:^7.27.1"
     "@babel/plugin-transform-template-literals": "npm:^7.27.1"
     "@babel/traverse": "npm:^7.20.0"
-    "@bam.tech/lrud": "npm:*"
+    "@bam.tech/lrud": "npm:~8.0.2"
     "@multi-tv/shared-ui": "workspace:*"
     "@react-native-community/cli": "npm:11.3.2"
     "@react-native-community/cli-tools": "npm:11.3.2"
@@ -3468,14 +3455,13 @@ __metadata:
     babel-jest: "npm:^29.7.0"
     eslint: "npm:^8.12.0"
     jest: "npm:^29.7.0"
+    mitt: "npm:^3.0.1"
     mustache: "npm:^4.2.0"
     npm-run-all: "npm:^4.1.5"
     prettier: "npm:^2.6.2"
     react: "npm:19.2.0"
     react-native: "npm:0.83.0"
-    react-native-keyevent: "npm:*"
-    react-native-pixel-perfect: "npm:*"
-    react-native-video: "npm:*"
+    react-native-pixel-perfect: "npm:~1.0.2"
     react-test-renderer: "npm:19.2.0"
     react-tv-space-navigation: "npm:6.0.0-beta1"
     ts-jest: "npm:^29.1.0"
@@ -12557,7 +12543,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mitt@npm:3.0.1":
+"mitt@npm:3.0.1, mitt@npm:^3.0.1":
   version: 3.0.1
   resolution: "mitt@npm:3.0.1"
   checksum: 10c0/3ab4fdecf3be8c5255536faa07064d05caa3dd332bd318ff02e04621f7b3069ca1de9106cfe8e7ced675abfc2bec2ce4c4ef321c4a1bb1fb29df8ae090741913
@@ -13880,7 +13866,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-keyevent@npm:*, react-native-keyevent@npm:^0.3.2":
+"react-native-keyevent@npm:^0.3.2":
   version: 0.3.2
   resolution: "react-native-keyevent@npm:0.3.2"
   peerDependencies:
@@ -13898,7 +13884,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-native-pixel-perfect@npm:*, react-native-pixel-perfect@npm:^1.0.2":
+"react-native-pixel-perfect@npm:^1.0.2, react-native-pixel-perfect@npm:~1.0.2":
   version: 1.0.2
   resolution: "react-native-pixel-perfect@npm:1.0.2"
   peerDependencies:
@@ -13954,7 +13940,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-video@npm:*, react-native-video@npm:^6.8.0":
+"react-native-video@npm:^6.8.0":
   version: 6.19.1
   resolution: "react-native-video@npm:6.19.1"
   peerDependencies:
