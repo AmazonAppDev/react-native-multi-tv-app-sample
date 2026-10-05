@@ -24,3 +24,6 @@ yarn-error.log
 .DS_Store
 
 
+
+# Editor workspace files (machine-specific paths)
+*.code-workspace
