@@ -19,36 +19,10 @@ import { RootStackParamList } from '../navigation/types';
 import { fetchMoviesData, CardData } from '../data/moviesData';
 import { colors, safeZones } from '../theme';
 import PlatformLinearGradient from '../components/PlatformLinearGradient';
+import TVFocusableCard from '../components/TVFocusableCard';
 import { getOpenDrawerDirection } from '../utils/rtl';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DrawerNavigator'>;
-
-// Memoized MovieItem component to prevent unnecessary re-renders and optimize image source
-const MovieItem = React.memo(
-  ({
-    item,
-    isFocused,
-    styles,
-  }: {
-    item: CardData;
-    isFocused: boolean;
-    styles: any;
-  }) => {
-    const imageSource = useMemo(() => ({ uri: item.headerImage }), [item.headerImage]);
-
-    return (
-      <View style={[styles.highlightThumbnail, isFocused && styles.highlightThumbnailFocused]}>
-        <Image
-          source={imageSource}
-          style={styles.cardImage}
-          resizeMode="cover"
-          onError={(error) => console.log('Image load error:', item.title, error.nativeEvent.error)}
-          onLoad={() => console.log('Image loaded:', item.title)}
-        />
-      </View>
-    );
-  },
-);
 
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -131,7 +105,10 @@ export default function HomeScreen() {
 
   const renderItem = useCallback(
     ({ item, index }: { item: CardData; index: number }) => (
-      <SpatialNavigationFocusableView
+      <TVFocusableCard
+        imageUri={item.headerImage}
+        title={item.title}
+        subtitle={[item.category, item.releaseYear].filter(Boolean).join(' • ')}
         onSelect={() => {
           navigation.navigate('Details', {
             title: item.title,
@@ -148,9 +125,7 @@ export default function HomeScreen() {
           });
         }}
         onFocus={() => setFocusedIndex(index)}
-      >
-        {({ isFocused }) => <MovieItem item={item} isFocused={isFocused} styles={gridStyles} />}
-      </SpatialNavigationFocusableView>
+      />
     ),
     [navigation],
   );
@@ -257,29 +232,6 @@ const gridStyles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: scaledPixels(32),
   },
-  highlightThumbnail: {
-    width: scaledPixels(420),
-    height: scaledPixels(260),
-    marginEnd: scaledPixels(20),
-    backgroundColor: colors.card,
-    borderRadius: scaledPixels(12),
-    borderWidth: scaledPixels(5),
-    borderColor: 'transparent',
-    overflow: 'hidden',
-  },
-  highlightThumbnailFocused: {
-    borderColor: colors.focusBorder,
-    borderWidth: scaledPixels(6),
-    transform: [{ scale: 1.1 }],
-    shadowColor: colors.focus,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.9,
-    shadowRadius: scaledPixels(20),
-    elevation: 15,
-  },
   highlightsContainer: {
     paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
     paddingVertical: scaledPixels(16),
@@ -318,10 +270,5 @@ const gridStyles = StyleSheet.create({
   },
   highlightsList: {
     paddingStart: scaledPixels(20),
-  },
-  cardImage: {
-    width: '100%',
-    height: '100%',
-    borderRadius: scaledPixels(8),
   },
 });
