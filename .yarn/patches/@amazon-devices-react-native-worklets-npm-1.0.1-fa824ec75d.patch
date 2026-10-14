@@ -1,0 +1,14 @@
+diff --git a/plugin/index.js b/plugin/index.js
+index 4a52df10efcc6aa55969d4a2585996c33f698417..09006fe9e1a3c08d452cee47ae7787e8e6104e49 100644
+--- a/plugin/index.js
++++ b/plugin/index.js
+@@ -788,7 +788,8 @@ var require_workletFactory = __commonJS({
+     var types_2 = require_types();
+     var utils_1 = require_utils();
+     var workletStringCode_1 = require_workletStringCode();
+-    var REAL_VERSION = require("../package.json").version;
++    // Amazon 1.0.1 retains the 1.0.0+0.6.0 runtime; match src/utils/jsVersion.ts.
++    var REAL_VERSION = "1.0.0+0.6.0";
+     var MOCK_VERSION = "x.y.z";
+     function makeWorkletFactory(fun, state) {
+       var _a;
