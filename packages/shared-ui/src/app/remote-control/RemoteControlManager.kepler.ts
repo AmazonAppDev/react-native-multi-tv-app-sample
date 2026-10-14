@@ -12,6 +12,7 @@ const EVENT_TYPE_MAPPING: Record<string, SupportedKeys> = {
   up: SupportedKeys.Up,
   select: SupportedKeys.Enter,
   enter: SupportedKeys.Enter,
+  kpenter: SupportedKeys.Enter, // Vega simulator OK button (keypad Enter)
   back: SupportedKeys.Back,
   playpause: SupportedKeys.PlayPause,
   skip_backward: SupportedKeys.Rewind,

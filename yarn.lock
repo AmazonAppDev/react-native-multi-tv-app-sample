@@ -268,9 +268,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/react-native-w3cmedia@npm:~2.3.2":
-  version: 2.3.2
-  resolution: "@amazon-devices/react-native-w3cmedia@npm:2.3.2"
+"@amazon-devices/react-native-w3cmedia@npm:2.3.4-rn-83":
+  version: 2.3.4-rn-83
+  resolution: "@amazon-devices/react-native-w3cmedia@npm:2.3.4-rn-83"
   dependencies:
     "@amazon-devices/kepler-media-controls": "npm:^1.0.0"
     "@amazon-devices/kepler-media-types": "npm:^1.0.0"
@@ -281,11 +281,11 @@ __metadata:
     "@amazon-devices/react-native-kepler": "*"
     react: "*"
     react-native: "*"
-  checksum: 10c0/cfe5dace2ab7083c6a1d49cb2e631f6f5e22aa082a861b74b39440803af5a4bc81187688b84271dd1eb0d3941e8a2965c6d67ce92b3c33bbde408dd919d7381e
+  checksum: 10c0/2c6758709ac2cd0f5f6b3f8083cc97ef516dfdda255c1500d8ea613c85fa3adac457d665afce525cc205d8c439f47fa63689a0eba546fad0e5343b1d33752ff7
   languageName: node
   linkType: hard
 
-"@amazon-devices/react-native-worklets@npm:~1.0.0":
+"@amazon-devices/react-native-worklets@npm:1.0.1":
   version: 1.0.1
   resolution: "@amazon-devices/react-native-worklets@npm:1.0.1"
   dependencies:
@@ -305,6 +305,29 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/c873cb57a472b72bcafa005a873564cc03d7072e97e71836112c3de023ea54226fdf7ffd157cc118b3af32386cf9190f771155392dc858872313a4a29a7525c8
+  languageName: node
+  linkType: hard
+
+"@amazon-devices/react-native-worklets@patch:@amazon-devices/react-native-worklets@npm%3A1.0.1#~/.yarn/patches/@amazon-devices-react-native-worklets-npm-1.0.1-fa824ec75d.patch":
+  version: 1.0.1
+  resolution: "@amazon-devices/react-native-worklets@patch:@amazon-devices/react-native-worklets@npm%3A1.0.1#~/.yarn/patches/@amazon-devices-react-native-worklets-npm-1.0.1-fa824ec75d.patch::version=1.0.1&hash=9baffe"
+  dependencies:
+    "@babel/plugin-transform-arrow-functions": "npm:^7.0.0-0"
+    "@babel/plugin-transform-class-properties": "npm:^7.0.0-0"
+    "@babel/plugin-transform-classes": "npm:^7.0.0-0"
+    "@babel/plugin-transform-nullish-coalescing-operator": "npm:^7.0.0-0"
+    "@babel/plugin-transform-optional-chaining": "npm:^7.0.0-0"
+    "@babel/plugin-transform-shorthand-properties": "npm:^7.0.0-0"
+    "@babel/plugin-transform-template-literals": "npm:^7.0.0-0"
+    "@babel/plugin-transform-unicode-regex": "npm:^7.0.0-0"
+    "@babel/preset-typescript": "npm:^7.16.7"
+    convert-source-map: "npm:^2.0.0"
+    semver: "npm:7.7.2"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/46adb426440bc57ad7a0cbfa1a6567587c2b01918993a59161cc7a0ab892d3683e402c6c9588a2ff740d3c589d83a5153af5de0b92d48a9ec6c13ac623418ef0
   languageName: node
   linkType: hard
 
@@ -3425,8 +3448,8 @@ __metadata:
     "@amazon-devices/react-native-reanimated": "npm:~4.0.0+4.1.3"
     "@amazon-devices/react-native-safe-area-context": "npm:~8.0.9000000000+5.2.0"
     "@amazon-devices/react-native-screens": "npm:~3.0.0"
-    "@amazon-devices/react-native-w3cmedia": "npm:~2.3.2"
-    "@amazon-devices/react-native-worklets": "npm:~1.0.0"
+    "@amazon-devices/react-native-w3cmedia": "npm:2.3.4-rn-83"
+    "@amazon-devices/react-native-worklets": "patch:@amazon-devices/react-native-worklets@npm%3A1.0.1#~/.yarn/patches/@amazon-devices-react-native-worklets-npm-1.0.1-fa824ec75d.patch"
     "@amazon-devices/react-navigation__core": "npm:~8.0.1"
     "@amazon-devices/react-navigation__drawer": "npm:~8.0.1"
     "@amazon-devices/react-navigation__elements": "npm:~8.0.1"

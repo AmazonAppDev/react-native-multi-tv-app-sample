@@ -198,6 +198,19 @@ The Vega Babel configuration uses the React Native preset and Worklets plugin,
 and its manifest selects the React Native 4.x runtime. Custom native packages
 must support this runtime. See [Amazon's migration guide](https://developer.amazon.com/docs/vega/0.24/rn-migration-dependencies).
 
+Vega also applies a Yarn patch to Amazon Worklets 1.0.1: its Babel plugin uses
+the package version, but its runtime still identifies itself as `1.0.0+0.6.0`.
+The patch aligns the plugin's emitted version with that runtime so debug mode
+does not fail its compatibility check. Keep the patch until Amazon ships a
+consistent package; after changing it, restart Metro with `yarn dev:vega --reset-cache`.
+
+Vega pins W3C Media to Amazon's RN 0.83 prerelease (`2.3.4-rn-83`) and sets
+`kepler.useSystemJsBundles` to `false`. This packages the media JavaScript with
+the app: system bundle splitting caused a missing W3C Media module at playback
+startup on the SDK 0.24.12112 virtual device. Keep this setting for both builds
+and Metro development sessions; it trades a larger app bundle for avoiding that
+runtime mismatch.
+
 ### Platform-Specific Instructions
 
 #### Android TV
