@@ -49,6 +49,7 @@ A production-ready TV application template built with React Native, supporting A
   - Native controls on iOS/tvOS
   - Custom overlay on Android TV, Fire TV, and Web
   - Hardware-accelerated rendering on Fire TV Vega with W3C Media APIs
+- **Client-Side Video Ads (Fire TV Vega, optional)**: pre-, mid- and post-rolls from a VMAP or VAST tag, off by default (see [Client-side ads on Fire TV Vega](#client-side-ads-on-fire-tv-vega))
 
 ### Dynamic Content Loading
 
@@ -259,6 +260,18 @@ Or directly from the app directory:
 cd apps/vega
 yarn build
 ```
+
+##### Client-side ads on Fire TV Vega
+
+The Vega player screen can play video ads from your own ad server: VAST 4 and VMAP 1, pre-, mid- and post-rolls, IAB tracking, play/pause from the remote and Alexa during the ad. It uses [react-native-vega-ads](https://github.com/kalenkou/react-native-vega-ads) (Apache-2.0), which plays each ad on its own w3cmedia `VideoPlayer` above the content, as in Amazon's client-side ad insertion guide.
+
+Ads are off by default. To try them:
+
+1. Open `packages/shared-ui/src/utils/adSchedule.kepler.ts`.
+2. Set `AD_SCHEDULE` to `GOOGLE_IMA_SAMPLE_VMAP` (Google's public IMA sample: a pre-roll, a mid-roll at 0:15 and a post-roll), or to your own VMAP URL or VAST tags.
+3. Build and run the Vega app.
+
+While an ad plays, the seek keys do nothing and Back leaves the player, as it does during the movie. Ad media URLs must be HTTPS. The changes are in `PlayerScreen.vega.tsx`; the other platforms are not affected.
 
 ### Available Commands
 
