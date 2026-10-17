@@ -363,6 +363,22 @@ export { MyComponent } from './components/MyComponent';
 import { MyComponent } from '@multi-tv/shared-ui';
 ```
 
+### Adding a Shared Package
+
+Any folder under `packages/` with a `package.json` is picked up automatically by both apps' Metro configs (watched for changes and resolvable by package name), so no Metro edits are needed:
+
+1. Create `packages/my-package/package.json` with a scoped name and a `main` entry pointing at the source, for example:
+   ```json
+   { "name": "@multi-tv/my-package", "version": "1.0.0", "private": true, "main": "src/index.ts" }
+   ```
+2. Add it to the apps that use it (`apps/vega/package.json`, `apps/expo-multi-tv/package.json`):
+   ```json
+   "@multi-tv/my-package": "workspace:*"
+   ```
+3. Run `yarn install` at the repo root, then import it: `import { thing } from '@multi-tv/my-package';`
+
+Keep shared packages free of platform-specific dependencies where possible. Platform code belongs in `.kepler.ts`, `.android.ts` or `.ios.ts` files, or in the app.
+
 ### Remote Control Implementation
 
 The project includes platform-specific remote control managers:
@@ -483,7 +499,7 @@ Contributions are welcome! This project is an open-source sample designed to hel
 
 **Vega SDK Not Found**
 
-- Ensure Vega SDK is installed and in PATH
+- Ensure Vega SDK is installed and in PATH: `vega --version` should print the active SDK and CLI versions (run `source ~/vega/env` if not)
 - Check SDK path: `echo $KEPLER_SDK_HOME`
 - Download from: [Amazon Vega Developer Portal](https://developer.amazon.com/vega)
 
