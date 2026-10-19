@@ -1,6 +1,7 @@
 # React Native Multi-TV App Sample
 
-[![React Native](https://img.shields.io/badge/React%20Native-v0.81-blue.svg)](https://reactnative.dev/)
+[![React Native TV (Expo)](https://img.shields.io/badge/React%20Native%20TV%20%28Expo%29-v0.81-blue.svg)](https://github.com/react-native-tvos/react-native-tvos)
+[![React Native (Vega)](https://img.shields.io/badge/React%20Native%20%28Vega%29-v0.83-blue.svg)](https://reactnative.dev/)
 [![License: MIT-0](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/AmazonAppDev/react-native-multi-tv-app-sample/blob/main/LICENSE)
 
 A production-ready TV application template built with React Native, supporting Android TV, Apple TV, Fire TV (with Fire OS), Fire TV (with Vega OS) and Web TV platforms. This monorepo showcases best practices for building cross-platform TV applications with shared UI components, efficient focus management, and platform-specific optimizations.
@@ -134,12 +135,12 @@ The `@multi-tv/shared-ui` package contains all reusable UI components, screens, 
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js**: v18 or higher
+- **Node.js**: v22.14.0 or higher (required by the Vega React Native 0.83 app)
 - **Yarn**: v4.5.0 (configured via packageManager field)
 - **Platform-specific tools**:
   - **Android TV**: Android Studio with Android SDK
   - **Apple TV**: Xcode (macOS required) with tvOS SDK
-  - **Fire TV**: [Amazon Vega SDK](https://developer.amazon.com/docs/vega/0.21/install-vega-sdk.html)
+  - **Fire TV**: [Amazon Vega SDK 0.24](https://developer.amazon.com/docs/vega/0.24/install-vega-sdk)
   - **Web**: Modern web browser
 
 ### Installation
@@ -172,6 +173,30 @@ yarn dev:ios
 yarn dev:web
 
 ```
+
+### Vega SDK and runtime
+
+The Vega workspace uses SDK 0.24, React Native 0.83.0, and React 19.2.0.
+The Expo workspace uses its own Expo SDK 54 / react-native-tvos 0.81 toolchain.
+Use Node.js 22.14.0 or newer and a device or virtual device running Vega OS 1.2.
+
+```bash
+vega sdk install 0.24.12112
+vega sdk use 0.24.12112
+source ~/vega/env
+vega --version
+yarn install --immutable
+yarn build:vega:debug
+```
+
+Keep the checkout path free of spaces: the current Vega manifest builder invokes
+an unquoted executable path and fails before bundling otherwise. Use the SDK
+manager's `vega` command from `~/vega/bin`; remove any older SDK `bin` directory
+that takes precedence in your shell's PATH.
+
+The Vega Babel configuration uses the React Native preset and Worklets plugin,
+and its manifest selects the React Native 4.x runtime. Custom native packages
+must support this runtime. See [Amazon's migration guide](https://developer.amazon.com/docs/vega/0.24/rn-migration-dependencies).
 
 ### Platform-Specific Instructions
 
@@ -320,7 +345,8 @@ Fire TV optimized application using Amazon's Vega SDK.
 
 **Key Technologies:**
 
-- Amazon Vega SDK
+- Amazon Vega SDK 0.24 (verified with 0.24.12112), targeting Vega OS 1.2
+- React Native 0.83.0 and React 19.2.0
 - @amazon-devices packages
 - Native Fire TV remote integration
 - Custom navigation optimizations
@@ -403,14 +429,15 @@ This project is built with modern React Native and TV development tools:
 
 | Technology                | Version | Purpose                    |
 | ------------------------- | ------- | -------------------------- |
-| React Native              | v0.81   | Core framework (tvOS fork) |
+| React Native TV (Expo)     | v0.81   | Android TV, Apple TV, and web |
+| React Native (Vega)        | v0.83   | Fire TV Vega OS framework  |
 | Expo                      | SDK 54  | Development platform       |
 | TypeScript                | v5.7    | Type safety                |
 | Yarn Workspaces           | v4.5    | Monorepo management        |
 | React Navigation          | v7      | Screen navigation          |
 | react-tv-space-navigation | v6.0.0-beta1   | TV focus management        |
 | react-native-video        | Latest  | Video playback             |
-| Amazon Vega SDK           | Latest  | Fire TV Vega OS            |
+| Amazon Vega SDK           | 0.24    | Fire TV Vega OS            |
 
 ## Contributing
 
