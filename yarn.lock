@@ -17,7 +17,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/js-bundle-system-allow-list@npm:*, @amazon-devices/js-bundle-system-allow-list@npm:^0":
+"@amazon-devices/js-bundle-system-allow-list@npm:^0":
   version: 0.0.21
   resolution: "@amazon-devices/js-bundle-system-allow-list@npm:0.0.21"
   checksum: 10c0/2c7324cd344aa099795213c904eadff85b9fe3e2e899bfabbe648f301aeefa833baa5aec3b120cf51c20c2f60dbdb388183697304c49868cf3e15415711290fc
@@ -110,20 +110,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amazon-devices/keplerscript-commonmodules@npm:^1.0.0":
-  version: 1.0.1756501375
-  resolution: "@amazon-devices/keplerscript-commonmodules@npm:1.0.1756501375"
+"@amazon-devices/keplerscript-commonmodules@npm:~1.1.0":
+  version: 1.1.0
+  resolution: "@amazon-devices/keplerscript-commonmodules@npm:1.1.0"
   dependencies:
-    "@amazon-devices/js-bundle-system-allow-list": "npm:*"
-  dependenciesMeta:
-    "@amazon-devices/js-bundle-system-allow-list":
-      optional: true
+    babel-plugin-syntax-hermes-parser: "npm:^0.25.1"
+    metro-react-native-babel-preset: "npm:^0.76.9"
   bin:
     compare-bundle-maps: bin/compare-bundle-maps
-    find-files: findFiles.js
-    modify-allow-list: bin/modifyAllowListScript.js
+    find-files: bin/findFiles.js
+    generate-system-bundle-exclusion-list: bin/generateSystemBundleExclusionList.js
     validate-js-acr: bin/validate-js-acr
-  checksum: 10c0/dd2a88ab786a23b395843f2f9b0a74832bff9de85f296d7e613c35b734a62e71514fc04f42fb9e32d2627eedda5ea7633a46a4d786946eac7f7a4dfeec14dae0
+  checksum: 10c0/38849f9c183358cb53af15cb42790ff7493b5e1edc7d976a3acd030d4a7f915268fa5e7ca53ba783fbff06b8ebed43a1be2e1eb35b49f3847b878f66928120a9
   languageName: node
   linkType: hard
 
@@ -5801,6 +5799,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-syntax-hermes-parser@npm:^0.25.1":
+  version: 0.25.1
+  resolution: "babel-plugin-syntax-hermes-parser@npm:0.25.1"
+  dependencies:
+    hermes-parser: "npm:0.25.1"
+  checksum: 10c0/8f4a0cb65056162b2d4c64d0ccd4d2fdeac8218e83e0338e92564ead659fd9b9351277ed2a10e958d0d8dc4c60591d5b1a40aa425bf0cbf67224e9767c557abf
+  languageName: node
+  linkType: hard
+
 "babel-plugin-syntax-trailing-function-commas@npm:^7.0.0-beta.0":
   version: 7.0.0-beta.0
   resolution: "babel-plugin-syntax-trailing-function-commas@npm:7.0.0-beta.0"
@@ -9006,6 +9013,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hermes-parser@npm:0.25.1, hermes-parser@npm:^0.25.1":
+  version: 0.25.1
+  resolution: "hermes-parser@npm:0.25.1"
+  dependencies:
+    hermes-estree: "npm:0.25.1"
+  checksum: 10c0/3abaa4c6f1bcc25273f267297a89a4904963ea29af19b8e4f6eabe04f1c2c7e9abd7bfc4730ddb1d58f2ea04b6fee74053d8bddb5656ec6ebf6c79cc8d14202c
+  languageName: node
+  linkType: hard
+
 "hermes-parser@npm:0.29.1, hermes-parser@npm:^0.29.1":
   version: 0.29.1
   resolution: "hermes-parser@npm:0.29.1"
@@ -9048,15 +9064,6 @@ __metadata:
   dependencies:
     hermes-estree: "npm:0.8.0"
   checksum: 10c0/c239f757f8461c2ee376cfd8dd8f3b640bb375b960dee99249ed8648e0ce27a7dc9d735e018ebd2522ffdee3ae6296ec51211efb2ac64476d76bf2ba60e795a7
-  languageName: node
-  linkType: hard
-
-"hermes-parser@npm:^0.25.1":
-  version: 0.25.1
-  resolution: "hermes-parser@npm:0.25.1"
-  dependencies:
-    hermes-estree: "npm:0.25.1"
-  checksum: 10c0/3abaa4c6f1bcc25273f267297a89a4904963ea29af19b8e4f6eabe04f1c2c7e9abd7bfc4730ddb1d58f2ea04b6fee74053d8bddb5656ec6ebf6c79cc8d14202c
   languageName: node
   linkType: hard
 
@@ -11759,6 +11766,55 @@ __metadata:
   peerDependencies:
     "@babel/core": "*"
   checksum: 10c0/d12830618c98a3d9be76aec3040f5f7a414ab5521243f9f44cdf8ed60151ab46ca311aa47bf47cd1a21b283b5d6328bd8e0b20466ed7a934734382b4379730d3
+  languageName: node
+  linkType: hard
+
+"metro-react-native-babel-preset@npm:^0.76.9":
+  version: 0.76.9
+  resolution: "metro-react-native-babel-preset@npm:0.76.9"
+  dependencies:
+    "@babel/core": "npm:^7.20.0"
+    "@babel/plugin-proposal-async-generator-functions": "npm:^7.0.0"
+    "@babel/plugin-proposal-class-properties": "npm:^7.18.0"
+    "@babel/plugin-proposal-export-default-from": "npm:^7.0.0"
+    "@babel/plugin-proposal-nullish-coalescing-operator": "npm:^7.18.0"
+    "@babel/plugin-proposal-numeric-separator": "npm:^7.0.0"
+    "@babel/plugin-proposal-object-rest-spread": "npm:^7.20.0"
+    "@babel/plugin-proposal-optional-catch-binding": "npm:^7.0.0"
+    "@babel/plugin-proposal-optional-chaining": "npm:^7.20.0"
+    "@babel/plugin-syntax-dynamic-import": "npm:^7.8.0"
+    "@babel/plugin-syntax-export-default-from": "npm:^7.0.0"
+    "@babel/plugin-syntax-flow": "npm:^7.18.0"
+    "@babel/plugin-syntax-nullish-coalescing-operator": "npm:^7.0.0"
+    "@babel/plugin-syntax-optional-chaining": "npm:^7.0.0"
+    "@babel/plugin-transform-arrow-functions": "npm:^7.0.0"
+    "@babel/plugin-transform-async-to-generator": "npm:^7.20.0"
+    "@babel/plugin-transform-block-scoping": "npm:^7.0.0"
+    "@babel/plugin-transform-classes": "npm:^7.0.0"
+    "@babel/plugin-transform-computed-properties": "npm:^7.0.0"
+    "@babel/plugin-transform-destructuring": "npm:^7.20.0"
+    "@babel/plugin-transform-flow-strip-types": "npm:^7.20.0"
+    "@babel/plugin-transform-function-name": "npm:^7.0.0"
+    "@babel/plugin-transform-literals": "npm:^7.0.0"
+    "@babel/plugin-transform-modules-commonjs": "npm:^7.0.0"
+    "@babel/plugin-transform-named-capturing-groups-regex": "npm:^7.0.0"
+    "@babel/plugin-transform-parameters": "npm:^7.0.0"
+    "@babel/plugin-transform-react-display-name": "npm:^7.0.0"
+    "@babel/plugin-transform-react-jsx": "npm:^7.0.0"
+    "@babel/plugin-transform-react-jsx-self": "npm:^7.0.0"
+    "@babel/plugin-transform-react-jsx-source": "npm:^7.0.0"
+    "@babel/plugin-transform-runtime": "npm:^7.0.0"
+    "@babel/plugin-transform-shorthand-properties": "npm:^7.0.0"
+    "@babel/plugin-transform-spread": "npm:^7.0.0"
+    "@babel/plugin-transform-sticky-regex": "npm:^7.0.0"
+    "@babel/plugin-transform-typescript": "npm:^7.5.0"
+    "@babel/plugin-transform-unicode-regex": "npm:^7.0.0"
+    "@babel/template": "npm:^7.0.0"
+    babel-plugin-transform-flow-enums: "npm:^0.0.2"
+    react-refresh: "npm:^0.4.0"
+  peerDependencies:
+    "@babel/core": "*"
+  checksum: 10c0/62966203a5abcadda16a180d5601446e0ab41f8d37c99edb9b6edcaa6a00498f3cc42f259e1da4419ebdd22ca78a734c6b0b2be4b5fce0329dc1a08231e108df
   languageName: node
   linkType: hard
 
@@ -16062,21 +16118,21 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>":
   version: 5.8.3
-  resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=8c6c40"
+  resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/92ea03509e06598948559ddcdd8a4ae5a7ab475766d5589f1b796f5731b3d631a4c7ddfb86a3bd44d58d10102b132cd4b4994dda9b63e6273c66d77d6a271dbd
+  checksum: 10c0/39117e346ff8ebd87ae1510b3a77d5d92dae5a89bde588c747d25da5c146603a99c8ee588c7ef80faaf123d89ed46f6dbd918d534d641083177d5fac38b8a1cb
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@npm%3A~5.7.0#optional!builtin<compat/typescript>":
   version: 5.7.3
-  resolution: "typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=8c6c40"
+  resolution: "typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/3b56d6afa03d9f6172d0b9cdb10e6b1efc9abc1608efd7a3d2f38773d5d8cfb9bbc68dfb72f0a7de5e8db04fc847f4e4baeddcd5ad9c9feda072234f0d788896
+  checksum: 10c0/6fd7e0ed3bf23a81246878c613423730c40e8bdbfec4c6e4d7bf1b847cbb39076e56ad5f50aa9d7ebd89877999abaee216002d3f2818885e41c907caaa192cc4
   languageName: node
   linkType: hard
 
