@@ -2,15 +2,22 @@ import { scaledPixels, colors, safeZones } from '@multi-tv/shared-ui';
 import { DrawerContentScrollView } from '@amazon-devices/react-navigation__drawer';
 import { View, StyleSheet, Image, Platform, Text } from 'react-native';
 import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from 'react-tv-space-navigation';
-import { useNavigation } from '@amazon-devices/react-navigation__native';
-import { DrawerNavigationProp } from '@amazon-devices/react-navigation__drawer';
-import { DrawerParamList } from '../navigation/types';
+import { useCallback } from 'react';
+import type { Direction } from '@bam.tech/lrud';
+import type { DrawerContentComponentProps } from '@amazon-devices/react-navigation__drawer';
 import { useMenuContext } from '@multi-tv/shared-ui';
 
-export default function VegaCustomDrawerContent(props: any) {
-  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+export default function VegaCustomDrawerContent(props: DrawerContentComponentProps) {
+  const navigation = props.navigation;
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const styles = drawerStyles;
+
+  const onDirectionHandledWithoutMovement = useCallback((direction: Direction) => {
+    if (direction === 'right') {
+      navigation.closeDrawer();
+      toggleMenu(false);
+    }
+  }, [navigation, toggleMenu]);
 
   const drawerItems = [
     { name: 'Home', label: 'Home' },
@@ -19,7 +26,7 @@ export default function VegaCustomDrawerContent(props: any) {
   ] as const;
 
   return (
-    <SpatialNavigationRoot isActive={isMenuOpen}>
+    <SpatialNavigationRoot isActive={isMenuOpen} onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
       <View style={styles.drawerContainer}>
         {/* Gradient-like scrim overlay */}
         <View style={styles.scrimOverlay} />
@@ -46,7 +53,7 @@ export default function VegaCustomDrawerContent(props: any) {
                 <SpatialNavigationFocusableView
                   onSelect={() => {
                     toggleMenu(false);
-                    navigation.navigate(item.name as keyof DrawerParamList);
+                    navigation.navigate(item.name);
                   }}
                 >
                   {({ isFocused }) => (
@@ -61,7 +68,7 @@ export default function VegaCustomDrawerContent(props: any) {
                 key={index}
                 onSelect={() => {
                   toggleMenu(false);
-                  navigation.navigate(item.name as keyof DrawerParamList);
+                  navigation.navigate(item.name);
                 }}
               >
                 {({ isFocused }) => (

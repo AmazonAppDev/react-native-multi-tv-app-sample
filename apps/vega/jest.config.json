@@ -9,7 +9,7 @@
   "moduleNameMapper": {
     "^~/(.*)$": "<rootDir>/src/$1"
   },
-  "modulePaths": ["<rootDir>/src"],
+  "modulePaths": ["<rootDir>/src", "<rootDir>/node_modules"],
   "roots": [
     "<rootDir>/src/",
     "<rootDir>/test/",
