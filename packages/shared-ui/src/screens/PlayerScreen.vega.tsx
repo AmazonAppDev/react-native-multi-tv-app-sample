@@ -9,6 +9,7 @@ import {
   useKeplerAppStateManager,
 } from '@amazon-devices/react-native-kepler';
 import { VideoPlayer as W3CVideoPlayer } from '@amazon-devices/react-native-w3cmedia';
+import { AdOverlay, AdSurfaceLayers, useVegaAds } from 'react-native-vega-ads';
 import RemoteControlManager from '../app/remote-control/RemoteControlManager';
 import { SupportedKeys } from '../app/remote-control/SupportedKeys';
 import VideoOverlay from '../components/player/VideoOverlay.vega';
@@ -16,6 +17,7 @@ import ExitButton from '../components/player/ExitButton';
 import VideoPlayer from '../components/player/VideoPlayer.vega';
 import { RootStackParamList } from '../navigation/types';
 import { VideoHandler } from '../utils/VideoHandler.kepler';
+import { AD_SCHEDULE } from '../utils/adSchedule.kepler';
 
 type PlayerScreenRouteProp = RouteProp<RootStackParamList, 'Player'>;
 type PlayerScreenNavigationProp = NativeStackNavigationProp<
@@ -35,6 +37,7 @@ type PlayerScreenNavigationProp = NativeStackNavigationProp<
  * - Integrates with Kepler Media Controls (KMC)
  * - Uses KeplerVideoSurfaceView for hardware-accelerated rendering
  * - Handles Fire TV remote control events
+ * - Plays client-side video ads (VAST/VMAP) when AD_SCHEDULE is set (off by default)
  */
 export default function PlayerScreen() {
   const route = useRoute<PlayerScreenRouteProp>();
@@ -65,6 +68,20 @@ export default function PlayerScreen() {
   const currentTimeRef = useRef<number>(0);
   const durationRef = useRef<number>(0);
   const videoHandlerRef = useRef<VideoHandler | null>(null);
+
+  // Client-side ads on their own players above the content; AD_SCHEDULE null changes nothing.
+  const adsEnabled = AD_SCHEDULE !== null;
+  const ads = useVegaAds({
+    source: AD_SCHEDULE,
+    contentPlayer: adsEnabled && isVideoInitialized ? videoRef.current : null,
+    contentMediaControlHandler:
+      videoHandlerRef.current?.mediaControlHandler ?? undefined,
+    onEvent: (name) => console.log('[PlayerScreen.kepler] - Ads:', name),
+  });
+  const adPlayingRef = useRef<boolean>(false);
+  adPlayingRef.current = ads.playing;
+  // Ad surfaces come after the content surface: Vega draws later surfaces on top, whatever the zIndex.
+  const [contentSurfaceReady, setContentSurfaceReady] = useState<boolean>(false);
 
   // Update refs when state changes
   useEffect(() => {
@@ -193,12 +210,13 @@ export default function PlayerScreen() {
    * Handle video end - pause, show controls, and navigate back
    */
   useEffect(() => {
-    if (isVideoEnded) {
+    // With ads, wait for the post-roll after the content ends.
+    if (adsEnabled ? ads.ended : isVideoEnded) {
       setPaused(true);
       setControlsVisible(true);
       navigateBack();
     }
-  }, [isVideoEnded, navigateBack]);
+  }, [adsEnabled, ads.ended, isVideoEnded, navigateBack]);
 
   /**
    * Show controls when video starts
@@ -214,6 +232,10 @@ export default function PlayerScreen() {
    */
   useEffect(() => {
     const handleKeyDown = (key: SupportedKeys) => {
+      // During an ad: play/pause works, seeking is blocked, Back still leaves the player.
+      if (adPlayingRef.current && key !== SupportedKeys.Back) {
+        return;
+      }
       try {
         switch (key) {
           case SupportedKeys.Right:
@@ -262,15 +284,18 @@ export default function PlayerScreen() {
   const onSurfaceViewCreated = useCallback((surfaceHandle: string) => {
     console.log('[PlayerScreen.kepler] - Surface view created:', surfaceHandle);
     surfaceHandleRef.current = surfaceHandle;
+    setContentSurfaceReady(true);
 
     // Set surface handle on video player
     if (videoRef.current) {
       videoRef.current.setSurfaceHandle(surfaceHandle);
-      // Start playback once surface is set
-      videoRef.current.play();
+      // Start playback once surface is set; with ads, the ads hook starts it after the pre-roll
+      if (!adsEnabled) {
+        videoRef.current.play();
+      }
       setPaused(false);
     }
-  }, []);
+  }, [adsEnabled]);
 
   /**
    * Handle surface view destruction
@@ -284,6 +309,7 @@ export default function PlayerScreen() {
       videoRef.current.clearSurfaceHandle(surfaceHandle);
     }
     surfaceHandleRef.current = null;
+    setContentSurfaceReady(false);
   }, []);
 
   /**
@@ -341,10 +367,15 @@ export default function PlayerScreen() {
           isVideoInitialized={isVideoInitialized}
         />
 
+        {/* Ad surfaces above the content surface, only when ads are on */}
+        {adsEnabled && contentSurfaceReady && (
+          <AdSurfaceLayers surfaces={ads.surfaces} />
+        )}
+
         {/* Custom controls overlay with buffering indicator */}
         {!!durationRef.current && (
           <VideoOverlay
-            visible={controlsVisible}
+            visible={controlsVisible && !ads.playing}
             paused={paused}
             onPlayPause={togglePausePlay}
             onExit={navigateBack}
@@ -353,6 +384,9 @@ export default function PlayerScreen() {
             isBuffering={isVideoBuffering}
           />
         )}
+
+        {/* "Ad 1 of 2 · 0:12" and the Skip button */}
+        {adsEnabled && <AdOverlay ui={ads.ui} onSkip={ads.skip} />}
       </View>
     </SpatialNavigationRoot>
   );

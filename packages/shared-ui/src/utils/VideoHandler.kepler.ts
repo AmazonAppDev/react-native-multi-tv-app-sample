@@ -1,5 +1,8 @@
 import { IComponentInstance } from '@amazon-devices/react-native-kepler';
-import { VideoPlayer } from '@amazon-devices/react-native-w3cmedia';
+import {
+  KeplerMediaControlHandler,
+  VideoPlayer,
+} from '@amazon-devices/react-native-w3cmedia';
 import React from 'react';
 import { Platform } from 'react-native';
 
@@ -64,6 +67,9 @@ export class VideoHandler {
 
   /** Updates buffering indicator visibility */
   public setShowBuffering: React.Dispatch<React.SetStateAction<boolean>>;
+
+  /** Media controls handler of the content, kept so that ads can give it back after a break */
+  public mediaControlHandler: KeplerMediaControlHandler | null = null;
 
   /**
    * Constructor - Initializes the VideoHandler with required dependencies
@@ -147,12 +153,13 @@ export class VideoHandler {
           '[VideoHandler] - preBufferVideo - KMC: set Media Control Focus',
         );
         const { AppOverrideMediaControlHandler } = await import('./AppOverrideMediaControlHandler.kepler');
+        this.mediaControlHandler = new AppOverrideMediaControlHandler(
+          this.videoRef.current as VideoPlayer,
+          false,
+        );
         await this.videoRef.current.setMediaControlFocus(
           componentInstance,
-          new AppOverrideMediaControlHandler(
-            this.videoRef.current as VideoPlayer,
-            false,
-          ),
+          this.mediaControlHandler,
         );
       } catch (error) {
         console.error('[VideoHandler] - Error during KMC execution', error);

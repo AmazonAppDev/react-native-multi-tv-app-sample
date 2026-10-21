@@ -2407,6 +2407,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dailymotion/vast-client@npm:6.5.0":
+  version: 6.5.0
+  resolution: "@dailymotion/vast-client@npm:6.5.0"
+  dependencies:
+    "@xmldom/xmldom": "npm:^0.8.3"
+  checksum: 10c0/9a3406592c22a6670a8861a2cdb72b56106219fba41432186fcaa6c3cbe03e05da3e1510cb10a02a66f08683a3ad1eeb636051fa6e4753973a224c5143fb72d7
+  languageName: node
+  linkType: hard
+
+"@dailymotion/vmap@npm:3.3.3":
+  version: 3.3.3
+  resolution: "@dailymotion/vmap@npm:3.3.3"
+  checksum: 10c0/1d0fdf967abbe44b9e95bfabb49901034ce9ffe2c27dd78690511a7b7bd5d86b8793952bea2c7b29683e4c350d0a39fcbd1affb04196a0d2c9bbb071737464ae
+  languageName: node
+  linkType: hard
+
 "@egjs/hammerjs@npm:^2.0.17":
   version: 2.0.17
   resolution: "@egjs/hammerjs@npm:2.0.17"
@@ -3978,6 +3994,7 @@ __metadata:
     react-native: "npm:0.72.0"
     react-native-keyevent: "npm:*"
     react-native-pixel-perfect: "npm:*"
+    react-native-vega-ads: "npm:^0.1.0"
     react-native-video: "npm:*"
     react-test-renderer: "npm:18.2.0"
     react-tv-space-navigation: "npm:*"
@@ -5855,6 +5872,13 @@ __metadata:
   version: 9.3.2
   resolution: "@vscode/sudo-prompt@npm:9.3.2"
   checksum: 10c0/9cf63f7001f31ada248aefe0d289e8769d82d9eeb12845aef863faf44620cbe620897625af4e160ab1c2a684d88247a0dbaead0d9a9447a5807feb4a4fd47016
+  languageName: node
+  linkType: hard
+
+"@xmldom/xmldom@npm:0.8.15, @xmldom/xmldom@npm:^0.8.3":
+  version: 0.8.15
+  resolution: "@xmldom/xmldom@npm:0.8.15"
+  checksum: 10c0/59d09b85824b684fba5a0a224d5b43abea1a0d745e8d8b8136a7013e996eb6da122fdbb3deb32ed1621923a10e1937b1f7917cea43481d9d5b976e8c1ff836c1
   languageName: node
   linkType: hard
 
@@ -16952,6 +16976,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-ads-core@npm:0.1.0":
+  version: 0.1.0
+  resolution: "react-native-ads-core@npm:0.1.0"
+  dependencies:
+    "@dailymotion/vast-client": "npm:6.5.0"
+    "@dailymotion/vmap": "npm:3.3.3"
+    "@xmldom/xmldom": "npm:0.8.15"
+  checksum: 10c0/7f7bf1f7bcb51719d394583dd9f668243355441e4e19cc486e5f98c8d6eb2855e97cde2065818613090cf9e75455b2e3c4239446bcdcb5fb156549f42e2d9730
+  languageName: node
+  linkType: hard
+
 "react-native-drawer-layout@npm:^4.2.2":
   version: 4.2.2
   resolution: "react-native-drawer-layout@npm:4.2.2"
@@ -17085,6 +17120,25 @@ __metadata:
   bin:
     react-native-tscodegen: bin/cli
   checksum: 10c0/de9160a2bc42e43ab4163c39e4bff57bc53a384b6a1f3e98695155002592778fc9253aad8aa6664f97920d1d94aa02509d12c1c45d46169ccc6d0f4dc2729970
+  languageName: node
+  linkType: hard
+
+"react-native-vega-ads@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "react-native-vega-ads@npm:0.1.0"
+  dependencies:
+    react-native-ads-core: "npm:0.1.0"
+  peerDependencies:
+    "@amazon-devices/react-native-kepler": ">=2.0.0"
+    "@amazon-devices/react-native-w3cmedia": ">=2.1.0"
+    react: ">=18.2.0"
+    react-native: ">=0.72.0"
+  peerDependenciesMeta:
+    "@amazon-devices/react-native-kepler":
+      optional: true
+    "@amazon-devices/react-native-w3cmedia":
+      optional: true
+  checksum: 10c0/375db9b002bff9da37026edc1f2e337d87a524cb0bb280bdd1271ba9d1f769f879cdd86f0d58690c2f6dd4abb97260231e61467d208863a3ee3ff9d1900ab325
   languageName: node
   linkType: hard
 
