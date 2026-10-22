@@ -27,6 +27,8 @@ export type CatalogItem = {
   sources: Array<{
     type: string;
     url: string;
+    /** This version has Audio Description (a narrated description of the picture) in its soundtrack. */
+    audio_description?: boolean;
   }>;
   description: string;
   /** Optional sidecar captions. Shown when the viewer turns on Closed Captions in the TV's settings. */
@@ -55,13 +57,18 @@ export type CardData = {
   contentRating?: string;
   trending?: boolean;
   captions?: CaptionTrack[];
+  /** The Audio Description version of the movie, played when the viewer turns Audio Description on. */
+  describedMovie?: string;
 };
 
 const CATALOG_URL = 'https://giolaq.github.io/scrap-tv-feed/catalog.json';
 
 // Transform catalog item to CardData format
 export const transformCatalogItem = (item: CatalogItem): CardData => {
-  const videoSource = item.sources.find(s => s.type === 'video/mp4') || item.sources[0];
+  // The Audio Description version is an alternative, never the default.
+  const standardSources = item.sources.filter(s => !s.audio_description);
+  const videoSource = standardSources.find(s => s.type === 'video/mp4') || standardSources[0];
+  const describedSource = item.sources.find(s => s.audio_description);
 
   return {
     id: item.id,
@@ -78,6 +85,7 @@ export const transformCatalogItem = (item: CatalogItem): CardData => {
     contentRating: item.content_rating,
     trending: item.trending,
     captions: item.captions,
+    describedMovie: describedSource?.url,
   };
 };
 

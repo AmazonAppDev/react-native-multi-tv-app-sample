@@ -28,6 +28,7 @@ export default function DetailsScreen() {
     contentRating,
     duration,
     captions,
+    describedMovie,
   } = route.params;
 
   const isFocused = useIsFocused();
@@ -60,8 +61,9 @@ export default function DetailsScreen() {
       movie: movie,
       headerImage: headerImage,
       captions: captions,
+      describedMovie: describedMovie,
     });
-  }, [navigation, movie, headerImage, captions]);
+  }, [navigation, movie, headerImage, captions, describedMovie]);
 
   return (
     <SpatialNavigationRoot isActive={isFocused}>

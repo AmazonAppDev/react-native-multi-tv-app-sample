@@ -146,6 +146,7 @@ export default function HomeScreen() {
             contentRating: item.contentRating,
             duration: item.duration,
             captions: item.captions,
+            describedMovie: item.describedMovie,
           });
         }}
         onFocus={() => setFocusedIndex(index)}

@@ -15,11 +15,13 @@ export type RootStackParamList = {
     contentRating?: string;
     duration?: number;
     captions?: CaptionTrack[];
+    describedMovie?: string;
   };
   Player: {
     movie: string;
     headerImage: string;
     captions?: CaptionTrack[];
+    describedMovie?: string;
   };
 };
 
