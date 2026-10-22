@@ -134,8 +134,8 @@ The `@multi-tv/shared-ui` package contains all reusable UI components, screens, 
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js**: v18 or higher
-- **Yarn**: v4.5.0 (configured via packageManager field)
+- **Node.js**: 20.19.4 or later (React Native 0.81 and Expo SDK 54 need it). Node 22 LTS is recommended (`.nvmrc`)
+- **Yarn**: v4.5.0, pinned by the `packageManager` field. Run `corepack enable` once so `yarn` uses that version: a global Yarn 1 cannot install this workspace. Node 25 and later no longer include Corepack; install it with `npm install -g corepack` first
 - **Platform-specific tools**:
   - **Android TV**: Android Studio with Android SDK
   - **Apple TV**: Xcode (macOS required) with tvOS SDK
@@ -150,6 +150,9 @@ Clone the repository and install dependencies:
 # Clone the repository
 git clone https://github.com/AmazonAppDev/react-native-multi-tv-app-sample.git
 cd react-native-multi-tv-app-sample
+
+# Use the pinned Yarn version (once per machine)
+corepack enable
 
 # Install all dependencies
 yarn install
