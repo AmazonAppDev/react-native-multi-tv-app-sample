@@ -1,3 +1,5 @@
+import type { CaptionTrack } from '../data/moviesData';
+
 export type RootStackParamList = {
   DrawerNavigator: undefined;
   Details: {
@@ -12,10 +14,14 @@ export type RootStackParamList = {
     ratingCount?: number;
     contentRating?: string;
     duration?: number;
+    captions?: CaptionTrack[];
+    describedMovie?: string;
   };
   Player: {
     movie: string;
     headerImage: string;
+    captions?: CaptionTrack[];
+    describedMovie?: string;
   };
 };
 
