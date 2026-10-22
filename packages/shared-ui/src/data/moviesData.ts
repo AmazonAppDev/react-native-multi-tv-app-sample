@@ -1,4 +1,14 @@
 // Catalog API types
+
+/** A sidecar caption file (WebVTT) for a title. */
+export type CaptionTrack = {
+  url: string;
+  /** Two-letter ISO 639-1 language code, e.g. "en" or "es". */
+  language: string;
+  /** Name shown in track menus; defaults to the language. */
+  label?: string;
+};
+
 export type CatalogItem = {
   id: string;
   type: string;
@@ -19,6 +29,8 @@ export type CatalogItem = {
     url: string;
   }>;
   description: string;
+  /** Optional sidecar captions. Shown when the viewer turns on Closed Captions in the TV's settings. */
+  captions?: CaptionTrack[];
 };
 
 export type CatalogResponse = {
@@ -42,6 +54,7 @@ export type CardData = {
   ratingCount?: number;
   contentRating?: string;
   trending?: boolean;
+  captions?: CaptionTrack[];
 };
 
 const CATALOG_URL = 'https://giolaq.github.io/scrap-tv-feed/catalog.json';
@@ -64,6 +77,7 @@ export const transformCatalogItem = (item: CatalogItem): CardData => {
     ratingCount: item.rating_count,
     contentRating: item.content_rating,
     trending: item.trending,
+    captions: item.captions,
   };
 };
 
