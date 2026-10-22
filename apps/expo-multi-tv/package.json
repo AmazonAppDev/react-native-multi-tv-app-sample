@@ -57,7 +57,7 @@
     "@babel/core": "^7.29.6",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
-    "@react-native-tvos/config-tv": "^0.0.10",
+    "@react-native-tvos/config-tv": "^0.1.7",
     "@types/jest": "^29.5.12",
     "@types/react": "~19.1.0",
     "babel-plugin-module-resolver": "^4.1.0",
