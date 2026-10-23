@@ -65,6 +65,16 @@ export class VideoHandler {
   /** Updates buffering indicator visibility */
   public setShowBuffering: React.Dispatch<React.SetStateAction<boolean>>;
 
+  /** Updates the paused state from the player's own 'play' and 'pause' events (optional) */
+  public setPaused?: React.Dispatch<React.SetStateAction<boolean>>;
+
+  /**
+   * True once Kepler Media Controls (KMC) have focus for this player. From then on the system delivers the remote's
+   * Play/Pause key to the media control handler, which toggles playback. A screen must not toggle again on the same
+   * key press: the second toggle undoes the first, so a paused video can't be resumed from the remote.
+   */
+  public mediaControlsActive: boolean = false;
+
   /**
    * Constructor - Initializes the VideoHandler with required dependencies
    */
@@ -78,6 +88,7 @@ export class VideoHandler {
     setCurrentTime: React.Dispatch<React.SetStateAction<number>>,
     setDuration: React.Dispatch<React.SetStateAction<number>>,
     setShowBuffering: React.Dispatch<React.SetStateAction<boolean>>,
+    setPaused?: React.Dispatch<React.SetStateAction<boolean>>,
   ) {
     this.videoRef = videoRef;
     this.videoUri = videoUri;
@@ -89,6 +100,7 @@ export class VideoHandler {
     this.setCurrentTime = setCurrentTime;
     this.setDuration = setDuration;
     this.setShowBuffering = setShowBuffering;
+    this.setPaused = setPaused;
   }
 
   /**
@@ -154,6 +166,7 @@ export class VideoHandler {
             false,
           ),
         );
+        this.mediaControlsActive = true;
       } catch (error) {
         console.error('[VideoHandler] - Error during KMC execution', error);
       }
@@ -299,6 +312,22 @@ export class VideoHandler {
     this.setShowBuffering(false);
   };
 
+  /**
+   * Handles the 'play' event - playback was started, by the app or by the media controls
+   */
+  onPlay = () => {
+    console.log('[VideoHandler] - onPlay');
+    this.setPaused?.(false);
+  };
+
+  /**
+   * Handles the 'pause' event - playback was paused, by the app or by the media controls
+   */
+  onPause = () => {
+    console.log('[VideoHandler] - onPause');
+    this.setPaused?.(true);
+  };
+
   // === EVENT LISTENER MANAGEMENT ===
 
   /**
@@ -316,6 +345,8 @@ export class VideoHandler {
     this.videoRef.current?.addEventListener('seeking', this.onSeeking);
     this.videoRef.current?.addEventListener('seeked', this.onSeeked);
     this.videoRef.current?.addEventListener('playing', this.onPlaying);
+    this.videoRef.current?.addEventListener('play', this.onPlay);
+    this.videoRef.current?.addEventListener('pause', this.onPause);
   };
 
   /**
@@ -333,6 +364,8 @@ export class VideoHandler {
     this.videoRef.current?.removeEventListener('seeking', this.onSeeking);
     this.videoRef.current?.removeEventListener('seeked', this.onSeeked);
     this.videoRef.current?.removeEventListener('playing', this.onPlaying);
+    this.videoRef.current?.removeEventListener('play', this.onPlay);
+    this.videoRef.current?.removeEventListener('pause', this.onPause);
   };
 
   // === CLEANUP AND DESTRUCTION ===
@@ -367,6 +400,7 @@ export class VideoHandler {
         console.log('[VideoHandler] - Deinitialize sync completed successfully');
         (global as any).gmedia = null;
         this.videoRef.current = null;
+        this.mediaControlsActive = false;
       }
 
       console.log('[VideoHandler] - Sync destruction completed');
