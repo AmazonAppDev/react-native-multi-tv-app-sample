@@ -12,8 +12,8 @@
     "test:snapshot": "jest --colors --updateSnapshot",
     "lint": "eslint src test --ext .ts,.tsx",
     "lint:fix": "eslint src test --ext .ts,.tsx --fix",
-    "build:release": "react-native build-kepler --build-type Release",
-    "build:debug": "react-native build-kepler --build-type Debug",
+    "build:release": "react-native build-vega --build-type Release",
+    "build:debug": "react-native build-vega --build-type Debug",
     "build:app": "npm-run-all build:release",
     "build": "npm-run-all build:release",
     "release": "npm-run-all lint test build:app"
