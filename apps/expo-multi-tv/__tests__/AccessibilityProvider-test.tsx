@@ -100,7 +100,7 @@ describe('AccessibilityProvider', () => {
 
   it('keeps the defaults on a platform that cannot report a setting, or fails to', async () => {
     const original = info.isHighTextContrastEnabled;
-    // Vega OS and tvOS have no high-text-contrast query, and a native module may be missing.
+    // tvOS has no high-text-contrast query, and a native module may be missing.
     (info as { isHighTextContrastEnabled?: unknown }).isHighTextContrastEnabled = undefined;
     info.isReduceMotionEnabled.mockRejectedValue(null);
     try {
@@ -110,6 +110,16 @@ describe('AccessibilityProvider', () => {
     } finally {
       info.isHighTextContrastEnabled = original;
     }
+  });
+
+  it('keeps the defaults when a listener throws because its native module is missing', async () => {
+    // On Vega OS, addEventListener calls the native module directly, so a missing module throws.
+    info.addEventListener.mockImplementation((() => {
+      throw new Error('AccessibilityInfo native module is not available');
+    }) as never);
+    const renderer = await renderProvider();
+    expect(current.preferences).toEqual({ highContrast: false, largerText: false, reduceMotion: false });
+    await act(async () => renderer.unmount());
   });
 
   it('stops listening when it unmounts', async () => {

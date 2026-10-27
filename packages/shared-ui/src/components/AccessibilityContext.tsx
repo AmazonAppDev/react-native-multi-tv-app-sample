@@ -33,9 +33,11 @@ const AccessibilityContext = createContext<AccessibilityContextType>({
 
 type Subscription = { remove: () => void } | undefined;
 
-// Each platform reports a different subset: Android TV and Fire OS report reduce motion and high
-// text contrast, tvOS and Vega OS report reduce motion, the web reads prefers-reduced-motion.
-// A query the platform does not have, or one that fails, leaves the default in place.
+// Each platform reports a different subset: Android TV, Fire OS and Vega OS report reduce motion
+// and high text contrast, tvOS reports reduce motion, the web reads prefers-reduced-motion. Vega OS
+// sends no reduceMotionChanged event, so there reduce motion is read once, at launch.
+// A query the platform does not have, or one that fails, leaves the default in place, and so does
+// a listener that throws because its native module is missing.
 const watchSystemSetting = (
   query: (() => Promise<boolean>) | undefined,
   eventName: 'reduceMotionChanged' | 'highTextContrastChanged',
@@ -45,7 +47,11 @@ const watchSystemSetting = (
     return undefined;
   }
   query.call(AccessibilityInfo).then(onChange, () => {});
-  return AccessibilityInfo.addEventListener(eventName, onChange) as Subscription;
+  try {
+    return AccessibilityInfo.addEventListener(eventName, onChange) as Subscription;
+  } catch {
+    return undefined;
+  }
 };
 
 interface AccessibilityProviderProps {
