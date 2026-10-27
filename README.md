@@ -435,15 +435,15 @@ A television is watched from three metres away, often by people who do not see a
 | **Larger text**   | Text drawn through the theme is **25% larger**.                                                                                                                                      |
 | **Reduce motion** | Focused items no longer grow when they receive focus.                                                                                                                                |
 
-**Device settings first.** The switches start from what the device reports, and follow it if it changes while the app is open. A choice made in Settings wins over the device until the viewer chooses **Use device settings**.
+**Device settings first.** The switches start from what the device reports, and follow it if it changes while the app is open (except reduce motion on Vega OS, see the table). A choice made in Settings wins over the device until the viewer chooses **Use device settings**.
 
 | Setting       | Android TV / Fire TV (Fire OS)               | Apple TV                              | Fire TV (Vega OS)                     | Web                                  |
 | ------------- | -------------------------------------------- | ------------------------------------- | ------------------------------------- | ------------------------------------ |
-| Reduce motion | `AccessibilityInfo.isReduceMotionEnabled`    | `AccessibilityInfo.isReduceMotionEnabled` | `AccessibilityInfo.isReduceMotionEnabled` | `prefers-reduced-motion`            |
-| High contrast | `AccessibilityInfo.isHighTextContrastEnabled` | Settings screen only                 | Settings screen only                  | Settings screen only                 |
+| Reduce motion | `AccessibilityInfo.isReduceMotionEnabled`    | `AccessibilityInfo.isReduceMotionEnabled` | `AccessibilityInfo.isReduceMotionEnabled`, read at launch only: Vega OS sends no `reduceMotionChanged` event, so a change made while the app runs shows after a restart | `prefers-reduced-motion`            |
+| High contrast | `AccessibilityInfo.isHighTextContrastEnabled` | Settings screen only                 | `AccessibilityInfo.isHighTextContrastEnabled` | Settings screen only                 |
 | Larger text   | Settings screen; the system font size already scales `<Text>` | same                      | same                                  | same                                 |
 
-A platform that cannot report a setting, or whose query fails, keeps the switch off. The toggles are announced as switches with their on/off state to screen readers. Like the other Settings toggles in this sample, the choices are kept in memory; persist `overrides` from `useAccessibility()` if your app needs them to survive a restart.
+A platform that cannot report a setting, or whose query or listener fails, keeps the switch off. The toggles are announced as switches with their on/off state to screen readers. Like the other Settings toggles in this sample, the choices are kept in memory; persist `overrides` from `useAccessibility()` if your app needs them to survive a restart.
 
 **Using the theme in your own components.** `AppNavigator` (and `VegaAppNavigator`) wrap the app in `AccessibilityProvider`. Read the current theme with `useTheme()` and build styles from it:
 
