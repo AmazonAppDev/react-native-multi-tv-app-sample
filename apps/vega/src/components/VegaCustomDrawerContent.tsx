@@ -2,15 +2,22 @@ import { scaledPixels, colors, safeZones } from '@multi-tv/shared-ui';
 import { DrawerContentScrollView } from '@amazon-devices/react-navigation__drawer';
 import { View, StyleSheet, Image, Platform, Text } from 'react-native';
 import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from 'react-tv-space-navigation';
-import { useNavigation } from '@amazon-devices/react-navigation__native';
-import { DrawerNavigationProp } from '@amazon-devices/react-navigation__drawer';
-import { DrawerParamList } from '../navigation/types';
+import { useCallback } from 'react';
+import type { Direction } from '@bam.tech/lrud';
+import type { DrawerContentComponentProps } from '@amazon-devices/react-navigation__drawer';
 import { useMenuContext } from '@multi-tv/shared-ui';
 
-export default function VegaCustomDrawerContent(props: any) {
-  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+export default function VegaCustomDrawerContent(props: DrawerContentComponentProps) {
+  const navigation = props.navigation;
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
   const styles = drawerStyles;
+
+  const onDirectionHandledWithoutMovement = useCallback((direction: Direction) => {
+    if (direction === 'right') {
+      navigation.closeDrawer();
+      toggleMenu(false);
+    }
+  }, [navigation, toggleMenu]);
 
   const drawerItems = [
     { name: 'Home', label: 'Home' },
@@ -19,7 +26,7 @@ export default function VegaCustomDrawerContent(props: any) {
   ] as const;
 
   return (
-    <SpatialNavigationRoot isActive={isMenuOpen}>
+    <SpatialNavigationRoot isActive={isMenuOpen} onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
       <View style={styles.drawerContainer}>
         {/* Gradient-like scrim overlay */}
         <View style={styles.scrimOverlay} />
@@ -27,14 +34,18 @@ export default function VegaCustomDrawerContent(props: any) {
           {...props}
           style={styles.container}
           scrollEnabled={false}
+          // Drawer v8 adds its own start/end padding (spacing + safe-area insets) on every
+          // platform; our items already apply action-safe padding, so drop it to avoid wrapping.
           contentContainerStyle={{
-            ...(Platform.OS === 'ios' && Platform.isTV && { paddingStart: 0, paddingEnd: 0, paddingTop: 0 }),
+            paddingStart: 0,
+            paddingEnd: 0,
+            ...(Platform.OS === 'ios' && Platform.isTV && { paddingTop: 0 }),
           }}
         >
           <View style={styles.header}>
             <Image source={require('../assets/kepler.png')} style={styles.profilePic} />
-            <Text style={styles.userName}>Pioneer Tom</Text>
-            <Text style={styles.switchAccount}>Switch account</Text>
+            <Text style={styles.userName} numberOfLines={1}>Pioneer Tom</Text>
+            <Text style={styles.switchAccount} numberOfLines={1}>Switch account</Text>
           </View>
           {drawerItems.map((item, index) =>
             index === 0 ? (
@@ -42,12 +53,12 @@ export default function VegaCustomDrawerContent(props: any) {
                 <SpatialNavigationFocusableView
                   onSelect={() => {
                     toggleMenu(false);
-                    navigation.navigate(item.name as keyof DrawerParamList);
+                    navigation.navigate(item.name);
                   }}
                 >
                   {({ isFocused }) => (
                     <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                      <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+                      <Text style={[styles.menuText, isFocused && styles.menuTextFocused]} numberOfLines={1}>{item.label}</Text>
                     </View>
                   )}
                 </SpatialNavigationFocusableView>
@@ -57,12 +68,12 @@ export default function VegaCustomDrawerContent(props: any) {
                 key={index}
                 onSelect={() => {
                   toggleMenu(false);
-                  navigation.navigate(item.name as keyof DrawerParamList);
+                  navigation.navigate(item.name);
                 }}
               >
                 {({ isFocused }) => (
                   <View style={[styles.menuItem, isFocused && styles.menuItemFocused]}>
-                    <Text style={[styles.menuText, isFocused && styles.menuTextFocused]}>{item.label}</Text>
+                    <Text style={[styles.menuText, isFocused && styles.menuTextFocused]} numberOfLines={1}>{item.label}</Text>
                   </View>
                 )}
               </SpatialNavigationFocusableView>
@@ -111,7 +122,7 @@ const drawerStyles = StyleSheet.create({
       paddingTop: scaledPixels(safeZones.titleSafe.vertical),
     },
     header: {
-      paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
+      paddingHorizontal: scaledPixels(24),
       paddingVertical: scaledPixels(24),
       marginBottom: scaledPixels(16),
     },
