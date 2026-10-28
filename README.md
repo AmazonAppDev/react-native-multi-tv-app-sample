@@ -369,15 +369,25 @@ Any folder under `packages/` with a `package.json` is picked up automatically by
 
 1. Create `packages/my-package/package.json` with a scoped name and a `main` entry pointing at the source, for example:
    ```json
-   { "name": "@multi-tv/my-package", "version": "1.0.0", "private": true, "main": "src/index.ts" }
+   {
+     "name": "@multi-tv/my-package",
+     "version": "1.0.0",
+     "private": true,
+     "main": "src/index.ts",
+     "peerDependencies": {
+       "react": "*",
+       "react-native": "*"
+     }
+   }
    ```
+   List `react` and `react-native` under `peerDependencies`, not `dependencies` (as `shared-ui` does). Otherwise Yarn can install a second copy of React for the package, which causes "Invalid hook call" errors at runtime.
 2. Add it to the apps that use it (`apps/vega/package.json`, `apps/expo-multi-tv/package.json`):
    ```json
    "@multi-tv/my-package": "workspace:*"
    ```
 3. Run `yarn install` at the repo root, then import it: `import { thing } from '@multi-tv/my-package';`
 
-Keep shared packages free of platform-specific dependencies where possible. Platform code belongs in `.kepler.ts`, `.android.ts` or `.ios.ts` files, or in the app.
+Keep shared packages free of platform-specific dependencies where possible. Platform code belongs in `.vega.tsx` / `.vega.ts` (resolved first by the Vega Metro config), `.kepler.ts`, `.android.ts` or `.ios.ts` files, or in the app.
 
 ### Remote Control Implementation
 

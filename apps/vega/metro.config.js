@@ -14,7 +14,13 @@ const workspacePackages = fs
   .readdirSync(packagesRoot)
   .map((dir) => path.join(packagesRoot, dir))
   .filter((dir) => fs.existsSync(path.join(dir, 'package.json')))
-  .map((dir) => ({ dir, name: require(path.join(dir, 'package.json')).name }));
+  .map((dir) => {
+    const { name } = require(path.join(dir, 'package.json'));
+    if (!name) {
+      throw new Error(`Workspace package at ${dir} has no "name" in its package.json`);
+    }
+    return { dir, name };
+  });
 
 /**
  * Metro configuration for Vega workspace
