@@ -10,12 +10,14 @@ A production-ready TV application template built with React Native, supporting A
 
 ## Branches
 
-> [!NOTE]
-> The Vega app on `main` targets **Vega OS 2.0** (Vega SDK 2.0). To build for an earlier Vega OS, use a release branch from the table below once one exists.
+> **Note:** `main` targets **Vega OS 2.0** (Vega SDK 2.0). Use `main` for new development on the latest Vega platform. See the [Vega 2.0 docs](https://developer.amazon.com/docs/vega/2.0/vega-get-started).
 
-| Branch | React Native version (Vega app) | Vega OS version | When to use it |
-| ------ | ------------------------------- | --------------- | -------------- |
-| `main` | 0.83.0                          | 2.0             | Default. Use for new work and for devices running Vega OS 2.0. |
+Each release branch pins a React Native version and Vega OS target. Pick the branch that matches the platform you are shipping to.
+
+| Branch | React Native | Vega OS | When to use it |
+|--------|--------------|---------|----------------|
+| [`main`](https://github.com/AmazonAppDev/react-native-multi-tv-app-sample/tree/main) | 0.83 | [2.0 (Vega SDK 2.0)](https://developer.amazon.com/docs/vega/2.0/vega-get-started) | Latest Vega OS 2.0 development. Start here for new work. |
+| [`release-rn-83`](https://github.com/AmazonAppDev/react-native-multi-tv-app-sample/tree/release-rn-83) | 0.83 | 1.2 | Vega OS 1.2 devices on React Native 0.83. |
 
 ## Table of Contents
 
