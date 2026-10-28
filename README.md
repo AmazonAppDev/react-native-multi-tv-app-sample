@@ -8,8 +8,18 @@ A production-ready TV application template built with React Native, supporting A
 
 ![Demo GIF](./tvdemo.gif)
 
+## Branches
+
+> [!NOTE]
+> The Vega app on `main` targets **Vega OS 2.0** (Vega SDK 2.0). To build for an earlier Vega OS, use a release branch from the table below once one exists.
+
+| Branch | React Native version (Vega app) | Vega OS version | When to use it |
+| ------ | ------------------------------- | --------------- | -------------- |
+| `main` | 0.83.0                          | 2.0             | Default. Use for new work and for devices running Vega OS 2.0. |
+
 ## Table of Contents
 
+- [Branches](#branches)
 - [Features](#features)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
@@ -140,7 +150,7 @@ Before you begin, ensure you have the following installed:
 - **Platform-specific tools**:
   - **Android TV**: Android Studio with Android SDK
   - **Apple TV**: Xcode (macOS required) with tvOS SDK
-  - **Fire TV**: [Amazon Vega SDK 0.24](https://developer.amazon.com/docs/vega/0.24/install-vega-sdk)
+  - **Fire TV**: [Amazon Vega SDK 2.0](https://developer.amazon.com/docs/vega/latest/install-vega-sdk)
   - **Web**: Modern web browser
 
 ### Installation
@@ -176,9 +186,9 @@ yarn dev:web
 
 ### Vega SDK and runtime
 
-The Vega workspace uses SDK 0.24, React Native 0.83.0, and React 19.2.0.
+The Vega workspace uses SDK 2.0, React Native 0.83.0, and React 19.2.0.
 The Expo workspace uses its own Expo SDK 54 / react-native-tvos 0.81 toolchain.
-Use Node.js 22.14.0 or newer and a device or virtual device running Vega OS 1.2.
+Use Node.js 22.14.0 or newer and a device or virtual device running Vega OS 2.0.
 
 ```bash
 vega sdk install 0.24.12112
@@ -345,7 +355,7 @@ Fire TV optimized application using Amazon's Vega SDK.
 
 **Key Technologies:**
 
-- Amazon Vega SDK 0.24 (verified with 0.24.12112), targeting Vega OS 1.2
+- Amazon Vega SDK 2.0, targeting Vega OS 2.0
 - React Native 0.83.0 and React 19.2.0
 - @amazon-devices packages
 - Native Fire TV remote integration
@@ -437,7 +447,7 @@ This project is built with modern React Native and TV development tools:
 | React Navigation          | v7      | Screen navigation          |
 | react-tv-space-navigation | v6.0.0-beta1   | TV focus management        |
 | react-native-video        | Latest  | Video playback             |
-| Amazon Vega SDK           | 0.24    | Fire TV Vega OS            |
+| Amazon Vega SDK           | 2.0     | Fire TV Vega OS            |
 
 ## Contributing
 
