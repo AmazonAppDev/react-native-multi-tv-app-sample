@@ -28,6 +28,9 @@ A production-ready TV application template built with React Native, supporting A
 - **Multi-Platform Support**: Single codebase running on Android TV, Apple TV, Fire TV FOS, Fire TV Vega OS and Web
 - **Video Playback**: Integrated video player with [react-native-video](https://github.com/TheWidlarzGroup/react-native-video)
 - **Spatial Navigation**: TV-optimized focus management with [React TV Space Navigation](https://github.com/bamlab/react-tv-space-navigation)
+- **D-Pad Movie Cards**: Focused cards show clear selection guidance while the hero banner tracks the highlighted movie
+- **Grid Focus Helpers**: `clampFocusIndex` and `getNextFocusIndex` support bounded D-Pad movement and optional looping
+  for custom grid interfaces
 - **Remote Control Support**: Native remote control integration for all TV platforms
 
 ### UI Components
