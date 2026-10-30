@@ -3374,6 +3374,7 @@ __metadata:
     expo-splash-screen: "npm:~0.29.0"
     expo-status-bar: "npm:~2.0.0"
     expo-system-ui: "npm:~4.0.0"
+    expo-tv-accessibility-settings: "github:dusy4/expo-tv-accessibility-settings#v0.1.0"
     expo-web-browser: "npm:~14.0.0"
     husky: "npm:^9.1.6"
     jest: "npm:^29.2.1"
@@ -8081,6 +8082,17 @@ __metadata:
     react-native-web:
       optional: true
   checksum: 10c0/189c8e07aa132b49080a6df324045f34e5492c34666b29ae65eab45059f4ca9c5cee1e561070619d2786df1d1cc1ff39d04e95329d090a6e1b30266abdb48a92
+  languageName: node
+  linkType: hard
+
+"expo-tv-accessibility-settings@github:dusy4/expo-tv-accessibility-settings#v0.1.0":
+  version: 0.1.0
+  resolution: "expo-tv-accessibility-settings@https://github.com/dusy4/expo-tv-accessibility-settings.git#commit=b315aa90d9bdecf4516b00bfc9f67d9a8544fb35"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/4bc3ee48a63259db7be7b38022600b0cfcb88e768749478e33f162b1967b41fa6c929a79cb4cb20a5654768e277b6dca32ce16894558f205f25c3080765e81f0
   languageName: node
   linkType: hard
 
