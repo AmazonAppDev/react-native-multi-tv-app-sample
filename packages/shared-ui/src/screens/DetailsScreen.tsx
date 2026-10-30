@@ -7,7 +7,8 @@ import { useCallback, useMemo } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import FocusablePressable from '../components/FocusablePressable';
 import { RootStackParamList } from '../navigation/types';
-import { safeZones, colors } from '../theme';
+import { safeZones, Theme } from '../theme';
+import { useTheme } from '../components/AccessibilityContext';
 
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 type DetailsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Details'>;
@@ -30,6 +31,8 @@ export default function DetailsScreen() {
   } = route.params;
 
   const isFocused = useIsFocused();
+  const theme = useTheme();
+  const detailsStyles = useMemo(() => createDetailsStyles(theme), [theme]);
 
   // Memoize image source to prevent unnecessary re-renders
   const imageSource = useMemo(() => ({ uri: headerImage }), [headerImage]);
@@ -127,7 +130,8 @@ export default function DetailsScreen() {
   );
 }
 
-const detailsStyles = StyleSheet.create({
+const createDetailsStyles = ({ colors, fontSize, backdropOpacity }: Theme) =>
+  StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background,
@@ -136,7 +140,7 @@ const detailsStyles = StyleSheet.create({
       position: 'absolute',
       width: '100%',
       height: '100%',
-      opacity: 0.25,
+      opacity: backdropOpacity,
     },
     contentContainer: {
       flex: 1,
@@ -153,7 +157,7 @@ const detailsStyles = StyleSheet.create({
       paddingBottom: scaledPixels(20),
     },
     title: {
-      fontSize: scaledPixels(64),
+      fontSize: fontSize(64),
       fontWeight: 'bold',
       color: colors.text,
       marginBottom: scaledPixels(24),
@@ -162,11 +166,11 @@ const detailsStyles = StyleSheet.create({
       textShadowRadius: 12,
     },
     description: {
-      fontSize: scaledPixels(28),
+      fontSize: fontSize(28),
       color: colors.text,
       marginBottom: scaledPixels(32),
       width: '65%',
-      lineHeight: scaledPixels(40),
+      lineHeight: fontSize(40),
       textShadowColor: 'rgba(0, 0, 0, 0.9)',
       textShadowOffset: { width: 0, height: 2 },
       textShadowRadius: 8,
@@ -178,7 +182,7 @@ const detailsStyles = StyleSheet.create({
       gap: scaledPixels(16),
     },
     metadataText: {
-      fontSize: scaledPixels(22),
+      fontSize: fontSize(22),
       color: colors.textSecondary,
       fontWeight: '600',
       textShadowColor: 'rgba(0, 0, 0, 0.8)',
@@ -197,10 +201,10 @@ const detailsStyles = StyleSheet.create({
       paddingVertical: scaledPixels(8),
       borderRadius: scaledPixels(20),
       borderWidth: scaledPixels(1),
-      borderColor: colors.focusBorder,
+      borderColor: colors.text,
     },
     genreText: {
-      fontSize: scaledPixels(18),
+      fontSize: fontSize(18),
       color: colors.text,
       fontWeight: '600',
     },
@@ -214,7 +218,7 @@ const detailsStyles = StyleSheet.create({
       marginBottom: scaledPixels(16),
     },
     crewRole: {
-      fontSize: scaledPixels(20),
+      fontSize: fontSize(20),
       color: colors.textSecondary,
       fontWeight: '600',
       marginBottom: scaledPixels(4),
@@ -223,7 +227,7 @@ const detailsStyles = StyleSheet.create({
       textShadowRadius: 4,
     },
     crewName: {
-      fontSize: scaledPixels(28),
+      fontSize: fontSize(28),
       color: colors.text,
       fontWeight: 'bold',
       textShadowColor: 'rgba(0, 0, 0, 0.8)',
@@ -242,12 +246,12 @@ const detailsStyles = StyleSheet.create({
     },
     watchButtonText: {
       color: colors.text,
-      fontSize: scaledPixels(24),
+      fontSize: fontSize(24),
       fontWeight: 'bold',
     },
     watchButtonTextFocused: {
       color: colors.textOnPrimary,
-      fontSize: scaledPixels(24),
+      fontSize: fontSize(24),
       fontWeight: 'bold',
     },
   });

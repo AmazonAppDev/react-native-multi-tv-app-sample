@@ -9,6 +9,7 @@ export * from './theme';
 export { default as FocusablePressable } from './components/FocusablePressable';
 export { default as LoadingIndicator } from './components/LoadingIndicator';
 export { MenuProvider, useMenuContext } from './components/MenuContext';
+export { AccessibilityProvider, useAccessibility, useTheme } from './components/AccessibilityContext';
 export { default as CustomDrawerContent } from './components/CustomDrawerContent';
 
 // Screens

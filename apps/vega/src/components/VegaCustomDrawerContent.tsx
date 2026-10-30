@@ -1,4 +1,5 @@
-import { scaledPixels, colors, safeZones } from '@multi-tv/shared-ui';
+import { useMemo } from 'react';
+import { scaledPixels, safeZones, useTheme, Theme } from '@multi-tv/shared-ui';
 import { DrawerContentScrollView } from '@amazon-devices/react-navigation__drawer';
 import { View, StyleSheet, Image, Platform, Text } from 'react-native';
 import { DefaultFocus, SpatialNavigationFocusableView, SpatialNavigationRoot } from 'react-tv-space-navigation';
@@ -10,7 +11,8 @@ import { useMenuContext } from '@multi-tv/shared-ui';
 export default function VegaCustomDrawerContent(props: DrawerContentComponentProps) {
   const navigation = props.navigation;
   const { isOpen: isMenuOpen, toggleMenu } = useMenuContext();
-  const styles = drawerStyles;
+  const theme = useTheme();
+  const styles = useMemo(() => createDrawerStyles(theme), [theme]);
 
   const onDirectionHandledWithoutMovement = useCallback((direction: Direction) => {
     if (direction === 'right') {
@@ -103,7 +105,8 @@ export default function VegaCustomDrawerContent(props: DrawerContentComponentPro
   );
 }
 
-const drawerStyles = StyleSheet.create({
+const createDrawerStyles = ({ colors, fontSize, focus }: Theme) =>
+  StyleSheet.create({
     drawerContainer: {
       flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.75)',
@@ -136,13 +139,13 @@ const drawerStyles = StyleSheet.create({
     },
     userName: {
       color: colors.text,
-      fontSize: scaledPixels(36),
+      fontSize: fontSize(36),
       fontWeight: '600',
       marginTop: scaledPixels(20),
     },
     switchAccount: {
       color: colors.textSecondary,
-      fontSize: scaledPixels(22),
+      fontSize: fontSize(22),
       marginTop: scaledPixels(8),
     },
     searchContainer: {
@@ -154,7 +157,7 @@ const drawerStyles = StyleSheet.create({
     },
     searchText: {
       color: colors.textSecondary,
-      fontSize: scaledPixels(20),
+      fontSize: fontSize(20),
     },
     menuItem: {
       flexDirection: 'row',
@@ -165,13 +168,13 @@ const drawerStyles = StyleSheet.create({
       marginVertical: scaledPixels(6),
       borderRadius: scaledPixels(8),
       minHeight: scaledPixels(72),
-      borderWidth: scaledPixels(3),
-      borderColor: 'transparent',
+      borderWidth: focus.borderWidth,
+      borderColor: focus.restingBorderColor,
     },
     menuItemFocused: {
       backgroundColor: colors.focusBackground,
-      borderColor: colors.focusBorder,
-      transform: [{ scale: 1.05 }],
+      borderColor: focus.borderColor,
+      transform: [{ scale: focus.scale }],
       shadowColor: colors.focus,
       shadowOffset: {
         width: 0,
@@ -188,7 +191,7 @@ const drawerStyles = StyleSheet.create({
     },
     menuText: {
       color: colors.text,
-      fontSize: scaledPixels(36),
+      fontSize: fontSize(36),
       fontWeight: '500',
     },
     menuTextFocused: {
@@ -210,13 +213,13 @@ const drawerStyles = StyleSheet.create({
       paddingHorizontal: scaledPixels(safeZones.actionSafe.horizontal),
       borderRadius: scaledPixels(8),
       minHeight: scaledPixels(72),
-      borderWidth: scaledPixels(3),
-      borderColor: 'transparent',
+      borderWidth: focus.borderWidth,
+      borderColor: focus.restingBorderColor,
     },
     settingsButtonFocused: {
       backgroundColor: colors.focusBackground,
-      borderColor: colors.focusBorder,
-      transform: [{ scale: 1.05 }],
+      borderColor: focus.borderColor,
+      transform: [{ scale: focus.scale }],
       shadowColor: colors.focus,
       shadowOffset: {
         width: 0,
@@ -233,7 +236,7 @@ const drawerStyles = StyleSheet.create({
       alignItems: 'center',
     },
     cogIconText: {
-      fontSize: scaledPixels(48),
+      fontSize: fontSize(48),
       color: colors.text,
     },
     cogIconTextFocused: {

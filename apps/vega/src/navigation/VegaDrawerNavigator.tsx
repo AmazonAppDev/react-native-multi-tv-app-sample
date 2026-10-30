@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { createDrawerNavigator } from '@amazon-devices/react-navigation__drawer';
 import { useNavigation, DrawerActions } from '@amazon-devices/react-navigation__native';
-import { useMenuContext, scaledPixels, HomeScreen, ExploreScreen, TVScreen, SettingsScreen } from '@multi-tv/shared-ui';
+import { useMenuContext, useTheme, scaledPixels, HomeScreen, ExploreScreen, TVScreen, SettingsScreen } from '@multi-tv/shared-ui';
 import VegaCustomDrawerContent from '../components/VegaCustomDrawerContent';
 import { DrawerParamList } from './types';
 
@@ -24,6 +24,7 @@ function DrawerSyncWrapper() {
 
 export default function VegaDrawerNavigator() {
   const styles = drawerStyles;
+  const { fontScale } = useTheme();
   return (
     <View style={{ flex: 1 }}>
       <Drawer.Navigator
@@ -35,7 +36,8 @@ export default function VegaDrawerNavigator() {
           drawerActiveBackgroundColor: '#3498db',
           drawerActiveTintColor: '#ffffff',
           drawerInactiveTintColor: '#bdc3c7',
-          drawerStyle: styles.drawerStyle,
+          // The labels are one line long, so the drawer grows with Larger text to keep them whole.
+          drawerStyle: [styles.drawerStyle, { width: scaledPixels(DRAWER_WIDTH * fontScale) }],
           drawerLabelStyle: styles.drawerLabelStyle,
           // Use 'front' type to allow drawer to open/close (collapse/expand)
           // Disable swipe gestures since we use remote control navigation
@@ -79,9 +81,10 @@ export default function VegaDrawerNavigator() {
   );
 }
 
+const DRAWER_WIDTH = 300;
+
 const drawerStyles = StyleSheet.create({
     drawerStyle: {
-      width: scaledPixels(300),
       backgroundColor: '#2c3e50',
       paddingTop: scaledPixels(0),
     },

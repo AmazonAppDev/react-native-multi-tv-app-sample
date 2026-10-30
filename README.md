@@ -16,6 +16,7 @@ A production-ready TV application template built with React Native, supporting A
 - [Building and Running](#building-and-running)
 - [Development](#development)
 - [Project Structure](#project-structure)
+- [Accessibility](#accessibility)
 - [Technologies](#technologies)
 - [Contributing](#contributing)
 - [Troubleshooting](#troubleshooting)
@@ -36,6 +37,7 @@ A production-ready TV application template built with React Native, supporting A
 - **Grid Layouts**: Responsive content grids optimized for TV screens
 - **Dynamic Hero Banner**: Header image that updates based on focused content
 - **Detail Screens**: Rich content detail pages with metadata and actions
+- **Accessibility Settings**: High contrast, larger text and reduced motion, switched on from Settings or picked up from the device ([details](#accessibility))
 
 ### Video Player Features
 
@@ -357,11 +359,11 @@ Shared component library used by both applications.
 
 **Exports:**
 
-- **Components**: `FocusablePressable`, `CustomDrawerContent`, `MenuContext`
+- **Components**: `FocusablePressable`, `CustomDrawerContent`, `MenuContext`, `AccessibilityProvider`
 - **Screens**: `HomeScreen`, `DetailsScreen`, `PlayerScreen`, `ExploreScreen`, `TVScreen`
 - **Navigation**: `DrawerNavigator`, `RootNavigator`, `AppNavigator`
-- **Hooks**: `scaledPixels`, `useMenuContext`
-- **Theme**: Centralized theming configuration
+- **Hooks**: `scaledPixels`, `useMenuContext`, `useAccessibility`, `useTheme`
+- **Theme**: Centralized theming configuration, with a high-contrast preset (`createTheme`, `highContrastColors`, `contrastRatio`)
 - **Remote Control**: Platform-specific remote control managers
 
 ### Adding New Features
@@ -422,6 +424,45 @@ The following keys are supported across all platforms in the video player:
 - **Android TV/Fire TV**: Custom overlay with spatial navigation for all controls
 - **Web**: Keyboard support with arrow keys and spacebar for play/pause
 - **Fire TV Vega**: Hardware-accelerated video with W3C Media APIs
+
+## Accessibility
+
+A television is watched from three metres away, often by people who do not see as well as they used to. **Settings → Accessibility** (the first section of the Settings screen, reached from the cog at the bottom of the drawer) has three switches, each independent of the others:
+
+| Switch            | What changes                                                                                                                                                                         |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **High contrast** | Every text colour is at least **7:1** against the surface it is drawn on (WCAG AAA). Focus becomes a **6 px yellow ring** around a white button with black text, so it is shown by shape as well as colour. Resting buttons and cards get a visible edge. |
+| **Larger text**   | Text drawn through the theme is **25% larger**.                                                                                                                                      |
+| **Reduce motion** | Focused items no longer grow when they receive focus.                                                                                                                                |
+
+**Device settings first.** The switches start from what the device reports, and follow it if it changes while the app is open (except reduce motion on Vega OS, see the table). A choice made in Settings wins over the device until the viewer chooses **Use device settings**.
+
+| Setting       | Android TV / Fire TV (Fire OS)               | Apple TV                              | Fire TV (Vega OS)                     | Web                                  |
+| ------------- | -------------------------------------------- | ------------------------------------- | ------------------------------------- | ------------------------------------ |
+| Reduce motion | `AccessibilityInfo.isReduceMotionEnabled`    | `AccessibilityInfo.isReduceMotionEnabled` | `AccessibilityInfo.isReduceMotionEnabled`, read at launch only: Vega OS sends no `reduceMotionChanged` event, so a change made while the app runs shows after a restart | `prefers-reduced-motion`            |
+| High contrast | `AccessibilityInfo.isHighTextContrastEnabled` | Settings screen only                 | `AccessibilityInfo.isHighTextContrastEnabled` | Settings screen only                 |
+| Larger text   | Settings screen; the system font size already scales `<Text>` | same                      | same                                  | same                                 |
+
+A platform that cannot report a setting, or whose query or listener fails, keeps the switch off. The toggles are announced as switches with their on/off state to screen readers. Like the other Settings toggles in this sample, the choices are kept in memory; persist `overrides` from `useAccessibility()` if your app needs them to survive a restart.
+
+**Using the theme in your own components.** `AppNavigator` (and `VegaAppNavigator`) wrap the app in `AccessibilityProvider`. Read the current theme with `useTheme()` and build styles from it:
+
+```tsx
+import { useMemo } from 'react';
+import { StyleSheet, Text } from 'react-native';
+import { Theme, useTheme } from '@multi-tv/shared-ui';
+
+const createStyles = ({ colors, fontSize }: Theme) =>
+  StyleSheet.create({ title: { color: colors.text, fontSize: fontSize(36) } });
+
+export function Title({ children }: { children: string }) {
+  const theme = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+  return <Text style={styles.title}>{children}</Text>;
+}
+```
+
+`theme.focus` gives the border width, ring colour, resting border colour and focus scale to use for anything focusable. `FocusablePressable`, the drawers, the Settings screen and the Details screen use the theme today; the Home grid and the player overlay still use the standard tokens. The contrast of every high-contrast pair is checked in `apps/expo-multi-tv/__tests__/AccessibilityTheme-test.ts`, so a token edited below 7:1 fails the tests.
 
 ## Technologies
 
