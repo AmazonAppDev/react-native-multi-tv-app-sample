@@ -1,15 +1,30 @@
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require('expo/metro-config');
 const path = require('path');
+const fs = require('fs');
+
+/**
+ * Every workspace package under /packages is watched and resolvable by its
+ * package name, so adding packages/<new-package> needs no Metro changes.
+ */
+const packagesRoot = path.resolve(__dirname, '../../packages');
+const workspacePackages = fs
+  .readdirSync(packagesRoot)
+  .map((dir) => path.join(packagesRoot, dir))
+  .filter((dir) => fs.existsSync(path.join(dir, 'package.json')))
+  .map((dir) => {
+    const { name } = require(path.join(dir, 'package.json'));
+    if (!name) {
+      throw new Error(`Workspace package at ${dir} has no "name" in its package.json`);
+    }
+    return { dir, name };
+  });
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname); // eslint-disable-line no-undef
 
 // Configure Metro to work with Yarn workspaces
-config.watchFolders = [
-  path.resolve(__dirname, '../../packages/shared-ui'),
-  path.resolve(__dirname, '../..'),
-];
+config.watchFolders = [...workspacePackages.map((pkg) => pkg.dir), path.resolve(__dirname, '../..')];
 
 config.resolver = {
   ...config.resolver,
@@ -18,9 +33,7 @@ config.resolver = {
     path.resolve(__dirname, 'node_modules'),
     path.resolve(__dirname, '../../node_modules'),
   ],
-  extraNodeModules: {
-    '@multi-tv/shared-ui': path.resolve(__dirname, '../../packages/shared-ui/src'),
-  },
+  extraNodeModules: Object.fromEntries(workspacePackages.map((pkg) => [pkg.name, pkg.dir])),
 };
 
 // When enabled, the optional code below will allow Metro to resolve

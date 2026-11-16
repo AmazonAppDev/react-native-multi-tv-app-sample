@@ -3,6 +3,24 @@
 
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 const path = require('path');
+const fs = require('fs');
+
+/**
+ * Every workspace package under /packages is watched and resolvable by its
+ * package name, so adding packages/<new-package> needs no Metro changes.
+ */
+const packagesRoot = path.resolve(__dirname, '../../packages');
+const workspacePackages = fs
+  .readdirSync(packagesRoot)
+  .map((dir) => path.join(packagesRoot, dir))
+  .filter((dir) => fs.existsSync(path.join(dir, 'package.json')))
+  .map((dir) => {
+    const { name } = require(path.join(dir, 'package.json'));
+    if (!name) {
+      throw new Error(`Workspace package at ${dir} has no "name" in its package.json`);
+    }
+    return { dir, name };
+  });
 
 /**
  * Metro configuration for Vega workspace
@@ -11,9 +29,7 @@ const path = require('path');
  * @type {import('metro-config').MetroConfig}
  */
 const config = {
-  watchFolders: [
-    path.resolve(__dirname, '../../packages/shared-ui'),
-  ],
+  watchFolders: workspacePackages.map((pkg) => pkg.dir),
   resolver: {
     unstable_enableSymlinks: true,
     sourceExts: ['vega.tsx', 'vega.ts', 'vega.js', 'tsx', 'ts', 'jsx', 'js', 'json'],
@@ -27,6 +43,11 @@ const config = {
         'react-native': path.resolve(__dirname, 'node_modules/react-native'),
         '@babel/runtime': path.resolve(__dirname, 'node_modules/@babel/runtime'),
       };
+
+      // Workspace packages resolve to their source folders.
+      workspacePackages.forEach((pkg) => {
+        modules[pkg.name] = pkg.dir;
+      });
 
       // Map navigation packages to Amazon Devices ports for Vega
       const navigationMappings = {
