@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer, DarkTheme } from '@amazon-devices/react-navigation__native';
 import { Platform } from 'react-native';
 import { GestureHandlerRootView } from '@amazon-devices/react-native-gesture-handler';
-import { MenuProvider } from '@multi-tv/shared-ui';
+import { AccessibilityProvider, MenuProvider } from '@multi-tv/shared-ui';
 import VegaRootNavigator from './VegaRootNavigator';
 
 export interface VegaAppNavigatorProps {
@@ -35,11 +35,13 @@ export default function VegaAppNavigator({ fontsLoaded = true, onReady }: VegaAp
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer theme={DarkTheme}>
-        <MenuProvider>
-          <VegaRootNavigator />
-        </MenuProvider>
-      </NavigationContainer>
+      <AccessibilityProvider>
+        <NavigationContainer theme={DarkTheme}>
+          <MenuProvider>
+            <VegaRootNavigator />
+          </MenuProvider>
+        </NavigationContainer>
+      </AccessibilityProvider>
     </GestureHandlerRootView>
   );
 }

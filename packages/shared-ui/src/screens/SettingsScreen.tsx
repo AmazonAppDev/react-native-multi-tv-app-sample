@@ -8,10 +8,11 @@ import {
 import { DrawerActions, useIsFocused, useNavigation } from '@react-navigation/native';
 import { Direction } from '@bam.tech/lrud';
 import { scaledPixels } from '../hooks/useScale';
-import { colors, safeZones } from '../theme';
+import { colors, safeZones, Theme, AccessibilityPreferences } from '../theme';
 import FocusablePressable from '../components/FocusablePressable';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useMenuContext } from '../components/MenuContext';
+import { useAccessibility } from '../components/AccessibilityContext';
 import { getOpenDrawerDirection } from '../utils/rtl';
 
 export default function SettingsScreen() {
@@ -23,6 +24,13 @@ export default function SettingsScreen() {
   const [autoplay, setAutoplay] = useState(true);
 
   const qualityOptions = ['Auto', '1080p', '720p', '480p'];
+  const { preferences, overrides, setPreference, resetToSystem, theme } = useAccessibility();
+  const themed = useMemo(() => createThemedStyles(theme), [theme]);
+  const accessibilityOptions: { key: keyof AccessibilityPreferences; label: string }[] = [
+    { key: 'highContrast', label: 'High contrast' },
+    { key: 'largerText', label: 'Larger text' },
+    { key: 'reduceMotion', label: 'Reduce motion' },
+  ];
 
   const onDirectionHandledWithoutMovement = useCallback(
     (movement: Direction) => {
@@ -41,37 +49,60 @@ export default function SettingsScreen() {
     >
       <View style={styles.container}>
         <View style={styles.innerContainer}>
-          <Text style={styles.title}>Settings</Text>
+          <Text style={[styles.title, themed.title]} accessibilityRole="header">
+            Settings
+          </Text>
           <SpatialNavigationScrollView style={styles.scrollView}>
             <View style={styles.scrollContent}>
+              {/* Accessibility Section: first, so it is the first thing a viewer who needs it reaches */}
+              <View style={styles.section}>
+                <Text style={[styles.sectionTitle, themed.sectionTitle]} accessibilityRole="header">
+                  Accessibility
+                </Text>
+                <Text style={themed.hint}>
+                  {Object.keys(overrides).length === 0
+                    ? 'Following your device settings.'
+                    : 'Your choices here replace your device settings.'}
+                </Text>
+                <SpatialNavigationNode orientation="vertical">
+                  <View style={styles.optionsColumn}>
+                    {accessibilityOptions.map(({ key, label }, index) => {
+                      const toggle = (
+                        <FocusablePressable
+                          key={key}
+                          text={`${label}: ${preferences[key] ? 'On' : 'Off'}`}
+                          onSelect={() => setPreference(key, !preferences[key])}
+                          accessibilityRole="switch"
+                          accessibilityLabel={label}
+                          accessibilityState={{ checked: preferences[key] }}
+                          style={styles.toggleButton}
+                        />
+                      );
+                      return index === 0 ? <DefaultFocus key={key}>{toggle}</DefaultFocus> : toggle;
+                    })}
+                    {Object.keys(overrides).length > 0 && (
+                      <FocusablePressable
+                        text="Use device settings"
+                        onSelect={resetToSystem}
+                        style={styles.toggleButton}
+                      />
+                    )}
+                  </View>
+                </SpatialNavigationNode>
+              </View>
+
               {/* Video Quality Section */}
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Video Quality</Text>
+                <Text style={[styles.sectionTitle, themed.sectionTitle]}>Video Quality</Text>
                 <SpatialNavigationNode orientation="horizontal">
                   <View style={styles.optionsRow}>
-                    {qualityOptions.map((quality, index) => (
-                      index === 0 ? (
-                        <DefaultFocus key={quality}>
-                          <FocusablePressable
-                            text={quality}
-                            onSelect={() => setSelectedQuality(quality)}
-                            style={[
-                              styles.optionButton,
-                              selectedQuality === quality && styles.selectedOption,
-                            ]}
-                          />
-                        </DefaultFocus>
-                      ) : (
-                        <FocusablePressable
-                          key={quality}
-                          text={quality}
-                          onSelect={() => setSelectedQuality(quality)}
-                          style={[
-                            styles.optionButton,
-                            selectedQuality === quality && styles.selectedOption,
-                          ]}
-                        />
-                      )
+                    {qualityOptions.map((quality) => (
+                      <FocusablePressable
+                        key={quality}
+                        text={quality}
+                        onSelect={() => setSelectedQuality(quality)}
+                        style={[styles.optionButton, selectedQuality === quality && themed.selectedOption]}
+                      />
                     ))}
                   </View>
                 </SpatialNavigationNode>
@@ -79,7 +110,7 @@ export default function SettingsScreen() {
 
               {/* Playback Section */}
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Playback</Text>
+                <Text style={[styles.sectionTitle, themed.sectionTitle]}>Playback</Text>
                 <SpatialNavigationNode orientation="vertical">
                   <View style={styles.optionsColumn}>
                     <FocusablePressable
@@ -98,15 +129,15 @@ export default function SettingsScreen() {
 
               {/* About Section */}
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>About</Text>
-                <View style={styles.infoContainer}>
+                <Text style={[styles.sectionTitle, themed.sectionTitle]}>About</Text>
+                <View style={[styles.infoContainer, themed.infoContainer]}>
                   <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Version</Text>
-                    <Text style={styles.infoValue}>1.0.0</Text>
+                    <Text style={[styles.infoLabel, themed.infoLabel]}>Version</Text>
+                    <Text style={[styles.infoValue, themed.infoValue]}>1.0.0</Text>
                   </View>
                   <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Build</Text>
-                    <Text style={styles.infoValue}>2025.11.04</Text>
+                    <Text style={[styles.infoLabel, themed.infoLabel]}>Build</Text>
+                    <Text style={[styles.infoValue, themed.infoValue]}>2025.11.04</Text>
                   </View>
                 </View>
               </View>
@@ -207,9 +238,6 @@ const styles = StyleSheet.create({
     marginEnd: scaledPixels(12),
     marginBottom: scaledPixels(12),
   },
-  selectedOption: {
-    backgroundColor: colors.primary,
-  },
   toggleButton: {
     alignSelf: 'flex-start',
     minWidth: scaledPixels(300),
@@ -240,3 +268,25 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+// The parts of the screen that change with Settings > Accessibility.
+const createThemedStyles = ({ colors: palette, fontSize, preferences }: Theme) =>
+  StyleSheet.create({
+    title: { color: palette.text, fontSize: fontSize(48) },
+    sectionTitle: { color: palette.text, fontSize: fontSize(28) },
+    hint: {
+      color: palette.textSecondary,
+      fontSize: fontSize(22),
+      marginTop: -scaledPixels(8),
+      marginBottom: scaledPixels(20),
+    },
+    selectedOption: { backgroundColor: palette.primary },
+    infoContainer: {
+      backgroundColor: palette.card,
+      // A visible edge in high contrast: the card is barely lighter than the screen behind it.
+      borderWidth: preferences.highContrast ? scaledPixels(2) : 0,
+      borderColor: palette.border,
+    },
+    infoLabel: { color: palette.textSecondary, fontSize: fontSize(24) },
+    infoValue: { color: palette.text, fontSize: fontSize(24) },
+  });
