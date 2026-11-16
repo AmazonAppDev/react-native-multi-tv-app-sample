@@ -8,8 +8,20 @@ A production-ready TV application template built with React Native, supporting A
 
 ![Demo GIF](./tvdemo.gif)
 
+## Branches
+
+> **Note:** `main` targets **Vega OS 2.0** (Vega SDK 2.0). Use `main` for new development on the latest Vega platform. See the [Vega 2.0 docs](https://developer.amazon.com/docs/vega/2.0/vega-get-started).
+
+Each release branch pins a React Native version and Vega OS target. Pick the branch that matches the platform you are shipping to.
+
+| Branch | React Native | Vega OS | When to use it |
+|--------|--------------|---------|----------------|
+| [`main`](https://github.com/AmazonAppDev/react-native-multi-tv-app-sample/tree/main) | 0.83 | [2.0 (Vega SDK 2.0)](https://developer.amazon.com/docs/vega/2.0/vega-get-started) | Latest Vega OS 2.0 development. Start here for new work. |
+| [`release-rn-83`](https://github.com/AmazonAppDev/react-native-multi-tv-app-sample/tree/release-rn-83) | 0.83 | 1.2 | Vega OS 1.2 devices on React Native 0.83. |
+
 ## Table of Contents
 
+- [Branches](#branches)
 - [Features](#features)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
@@ -140,7 +152,7 @@ Before you begin, ensure you have the following installed:
 - **Platform-specific tools**:
   - **Android TV**: Android Studio with Android SDK
   - **Apple TV**: Xcode (macOS required) with tvOS SDK
-  - **Fire TV**: [Amazon Vega SDK 0.24](https://developer.amazon.com/docs/vega/0.24/install-vega-sdk)
+  - **Fire TV**: [Amazon Vega SDK 2.0](https://developer.amazon.com/docs/vega/latest/install-vega-sdk)
   - **Web**: Modern web browser
 
 ### Installation
@@ -176,9 +188,9 @@ yarn dev:web
 
 ### Vega SDK and runtime
 
-The Vega workspace uses SDK 0.24, React Native 0.83.0, and React 19.2.0.
+The Vega workspace uses SDK 2.0, React Native 0.83.0, and React 19.2.0.
 The Expo workspace uses its own Expo SDK 54 / react-native-tvos 0.81 toolchain.
-Use Node.js 22.14.0 or newer and a device or virtual device running Vega OS 1.2.
+Use Node.js 22.14.0 or newer and a device or virtual device running Vega OS 2.0.
 
 ```bash
 vega sdk install 0.24.12112
@@ -345,7 +357,7 @@ Fire TV optimized application using Amazon's Vega SDK.
 
 **Key Technologies:**
 
-- Amazon Vega SDK 0.24 (verified with 0.24.12112), targeting Vega OS 1.2
+- Amazon Vega SDK 2.0, targeting Vega OS 2.0
 - React Native 0.83.0 and React 19.2.0
 - @amazon-devices packages
 - Native Fire TV remote integration
@@ -437,7 +449,7 @@ This project is built with modern React Native and TV development tools:
 | React Navigation          | v7      | Screen navigation          |
 | react-tv-space-navigation | v6.0.0-beta1   | TV focus management        |
 | react-native-video        | Latest  | Video playback             |
-| Amazon Vega SDK           | 0.24    | Fire TV Vega OS            |
+| Amazon Vega SDK           | 2.0     | Fire TV Vega OS            |
 
 ## Contributing
 
