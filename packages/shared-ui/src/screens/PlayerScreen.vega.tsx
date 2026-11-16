@@ -169,6 +169,7 @@ export default function PlayerScreen() {
       setCurrentTime,
       setDuration,
       setIsVideoBuffering,
+      setPaused,
     );
 
     // Start pre-buffering video
@@ -228,7 +229,14 @@ export default function PlayerScreen() {
             navigateBack();
             break;
           case SupportedKeys.PlayPause:
-            togglePausePlay();
+            // With Kepler Media Controls active, the system already sends this key to the media control handler,
+            // which toggles playback (and the 'play'/'pause' events update `paused`). Toggling here too would undo
+            // it in the same instant, so a paused video could never be resumed from the remote.
+            if (videoHandlerRef.current?.mediaControlsActive) {
+              showControls();
+            } else {
+              togglePausePlay();
+            }
             break;
           default:
             showControls();
