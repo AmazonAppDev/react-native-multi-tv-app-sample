@@ -18,6 +18,7 @@ jest.mock('@multi-tv/shared-ui', () => ({
   ...require('../../../packages/shared-ui/src/components/MenuContext'),
   scaledPixels: value => value,
   colors: {},
+  useTheme: () => require('../../../packages/shared-ui/src/theme/accessibility').defaultTheme,
   safeZones: {titleSafe: {vertical: 0}, actionSafe: {horizontal: 0}},
 }), {virtual: true});
 
