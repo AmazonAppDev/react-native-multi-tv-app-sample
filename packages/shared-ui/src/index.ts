@@ -7,6 +7,7 @@ export * from './theme';
 
 // Components
 export { default as FocusablePressable } from './components/FocusablePressable';
+export { default as TVFocusableCard } from './components/TVFocusableCard';
 export { default as LoadingIndicator } from './components/LoadingIndicator';
 export { MenuProvider, useMenuContext } from './components/MenuContext';
 export { AccessibilityProvider, useAccessibility, useTheme } from './components/AccessibilityContext';
@@ -31,3 +32,5 @@ export * from './navigation/types';
 
 // Hooks
 export { scaledPixels } from './hooks/useScale';
+export { clampFocusIndex, getNextFocusIndex } from './hooks/useTVRemoteFocus';
+export type { FocusDirection, TVRemoteFocusOptions } from './hooks/useTVRemoteFocus';
