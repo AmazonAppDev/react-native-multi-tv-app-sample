@@ -19,7 +19,7 @@ type PlayerScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 
 export default function PlayerScreen() {
   const route = useRoute<PlayerScreenRouteProp>();
   const navigation = useNavigation<PlayerScreenNavigationProp>();
-  const { movie, headerImage } = route.params;
+  const { movie, headerImage, captions, describedMovie } = route.params;
   const isFocused = useIsFocused();
   const [paused, setPaused] = useState<boolean>(false);
   const [controlsVisible, setControlsVisible] = useState<boolean>(false);
@@ -103,6 +103,8 @@ export default function PlayerScreen() {
           ref={videoRef}
           movie={movie}
           headerImage={headerImage}
+          captions={captions}
+          describedMovie={describedMovie}
           paused={paused}
           controls={SHOW_NATIVE_CONTROLS}
           onBuffer={setIsVideoBuffering}
